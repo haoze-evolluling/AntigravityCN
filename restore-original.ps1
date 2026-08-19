@@ -1,6 +1,8 @@
-# AntigravityCN — 还原原始英文版脚本
-# 使用方法：在 PowerShell 中运行 .\restore-original.ps1
+﻿# AntigravityCN — 还原原始英文版脚本
+# 使用方法：在 PowerShell 中运行 .estore-original.ps1
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Stop"
 
 $ASAR_PATH   = "$env:LOCALAPPDATA\Programs\antigravity\resources\app.asar"
@@ -20,7 +22,7 @@ if (-not (Test-Path $BACKUP_PATH)) {
 
 Write-Host "[*] 正在还原原始 app.asar..." -ForegroundColor Yellow
 Copy-Item -Path $BACKUP_PATH -Destination $ASAR_PATH -Force
-Write-Host "[✓] 还原完成。" -ForegroundColor Green
+Write-Host "[OK] 还原完成。" -ForegroundColor Green
 Write-Host ""
 Write-Host "================================================" -ForegroundColor Cyan
 Write-Host "   已还原英文版！请重启 Antigravity。" -ForegroundColor Cyan

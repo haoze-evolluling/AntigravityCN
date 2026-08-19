@@ -268,6 +268,19 @@ electron_1.app
                 click: () => (0, utils_1.showOrCreateWindow)((0, languageServer_1.getLsPort)()),
             },
             {
+                label: '新建窗口',
+                click: () => (0, utils_1.createWindow)(url),
+            },
+            {
+                label: '官方文档',
+                click: () => electron_1.shell.openExternal('https://antigravity.google/docs'),
+            },
+            {
+                label: '检查更新',
+                click: () => (0, updater_1.checkForUpdates)(true),
+            },
+            { type: 'separator' },
+            {
                 label: '退出',
                 click: () => {
                     // Triggers 'before-quit' to run graceful cleanup without confirmation.

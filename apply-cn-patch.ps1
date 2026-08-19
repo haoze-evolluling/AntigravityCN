@@ -1,6 +1,8 @@
-# AntigravityCN — Google Antigravity 桌面端一键汉化脚本
-# 使用方法：在 PowerShell 中运行 .\apply-cn-patch.ps1
+﻿# AntigravityCN — Google Antigravity 桌面端一键汉化脚本
+# 使用方法：在 PowerShell 中运行 .apply-cn-patch.ps1
 
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
 $ErrorActionPreference = "Stop"
 
 $ASAR_PATH    = "$env:LOCALAPPDATA\Programs\antigravity\resources\app.asar"
@@ -30,7 +32,7 @@ if (-not (Test-Path $PATCHES_DIR)) {
 # 3. 检查 Node.js 是否可用
 try {
     $nodeVersion = node --version 2>&1
-    Write-Host "[✓] Node.js 版本：$nodeVersion" -ForegroundColor Green
+    Write-Host "[OK] Node.js 版本：$nodeVersion" -ForegroundColor Green
 } catch {
     Write-Host "[错误] 未检测到 Node.js，请先安装 Node.js。" -ForegroundColor Red
     exit 1
@@ -40,10 +42,10 @@ try {
 if (-not (Test-Path $BACKUP_PATH)) {
     Write-Host "[*] 正在备份原始 app.asar..." -ForegroundColor Yellow
     Copy-Item -Path $ASAR_PATH -Destination $BACKUP_PATH
-    Write-Host "[✓] 备份完成：$BACKUP_PATH" -ForegroundColor Green
+    Write-Host "[OK] 备份完成：$BACKUP_PATH" -ForegroundColor Green
 } else {
-    Write-Host "[✓] 已存在备份文件，跳过备份。" -ForegroundColor Green
-    Write-Host "    备份路径：$BACKUP_PATH"
+    Write-Host "[OK] 已存在备份文件，跳过备份。" -ForegroundColor Green
+    Write-Host "     备份路径：$BACKUP_PATH"
 }
 
 # 5. 清理并重新创建临时解压目录
@@ -59,7 +61,7 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[错误] 解压 app.asar 失败。" -ForegroundColor Red
     exit 1
 }
-Write-Host "[✓] 解压完成。" -ForegroundColor Green
+Write-Host "[OK] 解压完成。" -ForegroundColor Green
 
 # 6. 复制补丁文件
 Write-Host ""
@@ -72,6 +74,7 @@ $patchFiles = @(
     @{ Src = "main.js";                  Dst = "dist\main.js" },
     @{ Src = "ipcHandlers.js";           Dst = "dist\ipcHandlers.js" },
     @{ Src = "loadingOverlay.js";        Dst = "dist\loadingOverlay.js" },
+    @{ Src = "preload.js";               Dst = "dist\preload.js" },
     @{ Src = "ideInstall\wizardHtml.js"; Dst = "dist\ideInstall\wizardHtml.js" }
 )
 
@@ -83,7 +86,7 @@ foreach ($file in $patchFiles) {
         continue
     }
     Copy-Item -Path $srcPath -Destination $dstPath -Force
-    Write-Host "    [✓] $($file.Src)" -ForegroundColor Green
+    Write-Host "    [OK] $($file.Src)" -ForegroundColor Green
 }
 
 # 7. 重新打包为 app.asar
@@ -97,14 +100,14 @@ if ($LASTEXITCODE -ne 0) {
     Write-Host "[错误] 打包 app.asar 失败。" -ForegroundColor Red
     exit 1
 }
-Write-Host "[✓] 打包完成。" -ForegroundColor Green
+Write-Host "[OK] 打包完成。" -ForegroundColor Green
 
 # 8. 覆盖原始 app.asar
 Write-Host ""
 Write-Host "[*] 正在写入汉化版 app.asar..." -ForegroundColor Yellow
 Copy-Item -Path $newAsarPath -Destination $ASAR_PATH -Force
 Remove-Item -Force $newAsarPath
-Write-Host "[✓] 写入完成。" -ForegroundColor Green
+Write-Host "[OK] 写入完成。" -ForegroundColor Green
 
 # 9. 清理临时目录
 Remove-Item -Recurse -Force $EXTRACT_DIR

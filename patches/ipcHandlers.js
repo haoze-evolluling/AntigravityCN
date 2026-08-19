@@ -66,7 +66,7 @@ function registerIpcHandlers(storageManager) {
     electron_1.ipcMain.handle('dialog:open-workspaces', async () => {
         const result = await electron_1.dialog.showOpenDialog({
             properties: ['openDirectory', 'createDirectory', 'multiSelections'],
-            title: '打开工作区',
+            title: '选择工作区文件夹',
         });
         if (result.canceled || result.filePaths.length === 0) {
             return [];
@@ -153,7 +153,7 @@ function registerIpcHandlers(storageManager) {
             return contents;
         }
         catch (err) {
-            return `Failed to read logs: ${String(err)}`;
+            return `读取日志失败: ${String(err)}`;
         }
     });
     // Sidecar extension custom scheme

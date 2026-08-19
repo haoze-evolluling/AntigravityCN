@@ -211,11 +211,48 @@ function initAutoUpdater(isHeadless, settingsService) {
             update: { version: info.version },
         });
         updateMenuState(MenuUpdateStep.RestartToUpdate);
+        if (isManualCheck) {
+            const win = electron_1.BrowserWindow.getFocusedWindow();
+            const options = {
+                type: 'info',
+                title: '更新已就绪',
+                message: `新版本 (${info.version}) 已下载完成！`,
+                detail: '是否立即重启 Antigravity 以应用更新？',
+                buttons: ['立即重启', '稍后'],
+                defaultId: 0,
+                cancelId: 1,
+            };
+            const showMsg = win
+                ? electron_1.dialog.showMessageBox(win, options)
+                : electron_1.dialog.showMessageBox(options);
+            void showMsg.then((res) => {
+                if (res.response === 0) {
+                    quitAndInstall();
+                }
+            });
+        }
+        isManualCheck = false;
     });
     electron_updater_1.autoUpdater.on('error', (err) => {
         console.error('[AutoUpdater] Error:', err.message);
         broadcastState({ type: 'idle' });
         updateMenuState(MenuUpdateStep.CheckForUpdates);
+        if (isManualCheck && !isHeadless) {
+            const win = electron_1.BrowserWindow.getFocusedWindow();
+            const options = {
+                type: 'error',
+                title: '检查更新失败',
+                message: '无法获取更新信息',
+                detail: err.message || '请检查网络连接或稍后重试。',
+                buttons: ['确定'],
+            };
+            if (win) {
+                electron_1.dialog.showMessageBox(win, options);
+            }
+            else {
+                electron_1.dialog.showMessageBox(options);
+            }
+        }
         isManualCheck = false;
     });
     // Schedule periodic checks if needed
