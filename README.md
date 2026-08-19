@@ -40,12 +40,40 @@
 | 加载界面 | Loading Antigravity | 正在加载 Antigravity... |
 | 欢迎向导 | Welcome / Download IDE / Explore | 欢迎使用全新 Antigravity / 下载 IDE / 探索 |
 
-### 3. 应用内 Web 界面深度汉化 (In-App Web UI)
+### 3. 应用内 Web 界面深度全量汉化 (In-App Web UI)
 
-- **设置面板 (Settings)**：账号 (Account)、模型 (Models)、外观 (Appearance)、通用 (General)、工作区设置 (Workspace Settings)、自定义配置 (Customizations) 等分类与描述完整汉化。
-- **权限与安全 (Permissions)**：沙箱模式 (Sandbox Mode)、权限预设 (Permission Preset)、终端命令 (Terminal Commands)、沙箱外命令、MCP 工具 (MCP Tools)、始终允许 (Always Proceed)、每次询问 (Always Ask)、请求审核 (Request Review)、拒绝 (Deny) 等。
-- **对话与智能体 (Chat & Agent)**：新建对话 (New Conversation)、新建工作区 (New Workspace)、对话历史 (Conversation History)、置顶对话 (Pinned Conversations)、派生对话 (Fork Conversation)、思考过程 (Thinking)、接受/取消步骤 (Accept / Cancel Step)、在沙箱中继续 (Proceed in Sandbox)、停止子智能体 (Stop Subagent)、查看差异 (View Diff) 等。
-- **安全过滤**：严格保护代码编辑器、终端原始数据输出、用户输入的文本及技术输出，不受翻译规则干扰。
+- **设置面板 (Settings)**：
+  - **通用 (General)**：默认模型、后台保持运行、防止电脑休眠、系统通知、智能体提示音、Shell 集成、自动展开变更概览、自动打开编辑文件、重载自动启动智能体、Lint 自动修复等。
+  - **账号 (Account)**：Google 账号登录与切换、用量与计费、模型配额 (Model Quota)、套餐详情、服务条款与隐私政策等。
+  - **外观 (Appearance)**：深色 / 浅色 / 跟随系统 / 高对比度主题、对话窗格宽度（紧凑 / 适中 / 宽阔）、字体大小、缩放级别、代码换行与空白符渲染等。
+  - **模型 (Models)**：Gemini 各版本模型选择、参数调节（温度、Top P、思考预算、上下文窗口）、流式响应、中间思考步骤等。
+  - **权限与安全 (Permissions & Security)**：权限预设（严格 / 标准 / 极速 / 自定义）、沙箱模式（终端命令隔离、沙箱联网控制）、非工作区文件访问策略、网络与 URL 白名单/黑名单、MCP 工具权限、人工审核模式（始终审核 / 智能体决定）等。
+  - **自定义配置 (Customizations)**：全局技能、工作区技能、规则 (Rules)、插件 (Plugins)、钩子 (Hooks)、MCP 服务器配置、Jetski 默认配置等。
+  - **应用与系统 (App & System)**：版本号 (CL)、数据存储路径、Electron / 语言服务器日志查看、清除缓存、恢复默认值等。
+
+- **对话与智能体交互 (Chat & Agent Interaction)**：
+  - **对话管理**：新建对话、置顶对话、最近对话、按日期分组（今天/昨天/最近7天/更早）、派生对话（当前工作区/新工作区）、归档、重命名、导出与分享等。
+  - **输入与命令**：智能输入提示、全量斜杠命令 (`/goal`, `/schedule`, `/browser`, `/grill-me`, `/teamwork-preview`, `/learn`, `/diff`, `/clear`, `/compact`, `/mode`, `/help` 等) 及详细中文功能描述。
+  - **上下文引用 (@ Mentions)**：文件与文件夹、终端会话、规则准则、MCP 工具与服务器、技能工作流等分类与描述。
+  - **思考与推理过程**：思考折叠卡片、推理步骤、思考耗时动态转换（如“思考耗时 5.2 秒”）、中间步骤查看等。
+  - **步骤审批与工具执行**：接受/取消步骤、沙箱内继续、始终允许规则、终端实时输出/折叠/截断展开、后台任务状态与控制等。
+
+- **工作区、项目与代码审查 (Workspace, Projects & Diff)**：
+  - **工作区与项目**：工作区切换、项目通用与智能体配置、多文件夹支持、工作树 (Worktrees)、Git 分支管理与状态。
+  - **代码差异审查 (Diff Viewer)**：行内差异 (Inline Diff)、分屏差异 (Side-by-Side Diff)、堆叠差异 (Stacked Diff)、变更概览、修改文件列表、添加/删除行数统计、单文件/全量接受与拒绝、在编辑器中打开等。
+
+- **子智能体与后台/计划任务 (Subagents & Tasks)**：
+  - **子智能体面板**：子智能体状态监控、运行日志/记录查看、单个/全量终止等。
+  - **计划与定时任务**：定时任务 (Cron)、单次计时器、下次/上次触发时间、暂停/恢复/立即执行等。
+
+- **动态模式匹配引擎**：
+  - 智能动态翻译运行状态（如“N 个智能体正在运行”、“N 个后台任务正在运行”）。
+  - 智能动态翻译数量与选中（如“已选择 N / M”、“N 个文件已修改”、“添加了 N 行”、“删除了 N 行”）。
+  - 智能动态翻译相对时间（如“刚刚”、“N 秒前”、“N 分钟前”、“N 小时前”、“N 天前”、“N 分钟后”）。
+  - 智能动态翻译 Token 用量与百分比（如“N 个 Token”、“占上下文窗口 N%”）。
+
+- **代码与数据安全过滤**：
+  - 严格保护 Monaco Editor、Prism、CodeMirror、Highlight.js、xterm 终端、代码块（`pre` / `code`）、用户输入框内容及差异对比源码，杜绝误翻译污染代码与技术输出。
 
 ---
 
