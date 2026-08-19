@@ -414,6 +414,53 @@ const I18N_DICT = {
   "Browser": "浏览器",
   "Developer": "开发者设置",
   "App": "应用设置",
+
+  // 账号与通用设置 (Account & General Settings)
+  "Manage your plan, credentials, and general preferences.": "管理您的方案、凭据和通用偏好设置。",
+  "Manage your plan, credentials, and general preferences": "管理您的方案、凭据和通用偏好设置",
+  "Manage plan, credentials, and general preferences.": "管理方案、凭据和通用偏好设置。",
+  "Manage plan, credentials, and general preferences": "管理方案、凭据和通用偏好设置",
+  "Manage your plan, credentials, and preferences.": "管理您的方案、凭据和偏好设置。",
+  "Manage your plan, credentials, and preferences": "管理您的方案、凭据和偏好设置",
+  "Manage your credentials, plan, and general preferences.": "管理您的凭据、方案和通用偏好设置。",
+  "Manage your credentials, plan, and general preferences": "管理您的凭据、方案和通用偏好设置",
+  "Manage your credentials, plan, and preferences.": "管理您的凭据、方案和偏好设置。",
+  "Manage your credentials, plan, and preferences": "管理您的凭据、方案和偏好设置",
+  "Enable Telemetry": "启用遥测",
+  "Enable telemetry": "启用遥测",
+  "Telemetry": "遥测",
+  "When toggled on, Antigravity collects usage data to help Google enhance performance and features.": "开启后，Antigravity 将收集使用情况数据，以帮助 Google 提升性能和改进功能。",
+  "When toggled on, Antigravity collects usage data to help Google enhance performance and features": "开启后，Antigravity 将收集使用情况数据，以帮助 Google 提升性能和改进功能",
+  "Marketing Emails": "营销邮件",
+  "Marketing emails": "营销邮件",
+  "Marketing Email": "营销邮件",
+  "Marketing email": "营销邮件",
+  "Receive product updates, tips, and promotions from Google Antigravity via email.": "通过电子邮件接收来自 Google Antigravity 的产品更新、使用技巧和促销信息。",
+  "Receive product updates, tips, and promotions from Google Antigravity via email": "通过电子邮件接收来自 Google Antigravity 的产品更新、使用技巧和促销信息",
+  "Receive product updates, tips, and promotions from Antigravity via email.": "通过电子邮件接收来自 Antigravity 的产品更新、使用技巧和促销信息。",
+  "Receive product updates, tips, and promotions from Antigravity via email": "通过电子邮件接收来自 Antigravity 的产品更新、使用技巧和促销信息",
+  "Email": "电子邮箱",
+  "Email Address": "电子邮箱地址",
+  "Email address": "电子邮箱地址",
+  "email": "邮箱",
+  "By using this app, you agree to its": "使用此应用即表示您同意其",
+  "By using this app, you agree to its ": "使用此应用即表示您同意其",
+  "By using this app, you agree to our": "使用此应用即表示您同意我们的",
+  "By using this app, you agree to our ": "使用此应用即表示您同意我们的",
+  "By using this application, you agree to its": "使用此应用程序即表示您同意其",
+  "By using this application, you agree to its ": "使用此应用程序即表示您同意其",
+  "By using this application, you agree to our": "使用此应用程序即表示您同意我们的",
+  "By using this application, you agree to our ": "使用此应用程序即表示您同意我们的",
+  "By signing in, you agree to our": "登录即表示您同意我们的",
+  "By signing in, you agree to our ": "登录即表示您同意我们的",
+  "By continuing, you agree to our": "继续操作即表示您同意我们的",
+  "By continuing, you agree to our ": "继续操作即表示您同意我们的",
+  "By using this app, you agree to its Terms of Service": "使用此应用即表示您同意其服务条款",
+  "By using this app, you agree to its Terms of Service.": "使用此应用即表示您同意其服务条款。",
+  "By using this app, you agree to its Terms of Service and Privacy Policy": "使用此应用即表示您同意其服务条款和隐私政策",
+  "By using this app, you agree to its Terms of Service and Privacy Policy.": "使用此应用即表示您同意其服务条款和隐私政策。",
+  "agree to its": "同意其",
+  "agree to our": "同意我们的",
   "App Settings": "应用设置",
   "Application Settings": "应用设置",
   "Manage application settings.": "管理应用程序设置。",
@@ -980,6 +1027,28 @@ function injectedMainWorldScript(DICT) {
             return str.replace(trimmed, '您尚未消耗' + limitType + '限额。');
         }
 
+        // 1.8 协议条款与使用须知动态匹配
+        if (/^By using this app,\s*you agree to its\s*(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^By using this app,\s*you agree to its\s*(.*)$/i);
+            const rest = m[1] ? translateText(m[1]) : '';
+            return str.replace(trimmed, '使用此应用即表示您同意其 ' + rest).trim();
+        }
+        if (/^By using this application,\s*you agree to its\s*(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^By using this application,\s*you agree to its\s*(.*)$/i);
+            const rest = m[1] ? translateText(m[1]) : '';
+            return str.replace(trimmed, '使用此应用程序即表示您同意其 ' + rest).trim();
+        }
+        if (/^By signing in,\s*you agree to (?:our|its)\s*(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^By signing in,\s*you agree to (?:our|its)\s*(.*)$/i);
+            const rest = m[1] ? translateText(m[1]) : '';
+            return str.replace(trimmed, '登录即表示您同意其 ' + rest).trim();
+        }
+        if (/^By continuing,\s*you agree to (?:our|its)\s*(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^By continuing,\s*you agree to (?:our|its)\s*(.*)$/i);
+            const rest = m[1] ? translateText(m[1]) : '';
+            return str.replace(trimmed, '继续操作即表示您同意其 ' + rest).trim();
+        }
+
         // 2. 智能体与任务运行数量
         if (/^(\d+)\s+agents?\s+running$/i.test(trimmed)) {
             const num = trimmed.match(/^(\d+)/)[1];
@@ -1118,9 +1187,10 @@ function injectedMainWorldScript(DICT) {
         const keys = [
             'placeholder', 'title', 'aria-label', 'aria-placeholder', 'aria-description',
             'label', 'description', 'tooltip', 'data-tooltip', 'data-title', 'data-placeholder',
-            'alt', 'header', 'helperText', 'sublabel', 'subtitle', 'caption', 'text', 'value',
-            'placeholderText', 'emptyText', 'badge', 'hint', 'prompt', 'summary', 'secondaryText',
-            'helper', 'secondaryLabel'
+            'alt', 'header', 'heading', 'subheading', 'subHeading', 'helperText', 'sublabel', 'subtitle',
+            'caption', 'text', 'value', 'placeholderText', 'emptyText', 'badge', 'hint', 'prompt',
+            'summary', 'secondaryText', 'supportingText', 'headline', 'primaryText', 'primaryLabel',
+            'helper', 'secondaryLabel', 'sectionTitle', 'cardTitle', 'statusText', 'message'
         ];
         for (const k of keys) {
             if (typeof props[k] === 'string') {
