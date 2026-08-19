@@ -280,6 +280,25 @@ const I18N_DICT = {
   "Create Branch": "创建分支",
   "Merge Branch": "合并分支",
   "Ask a question or enter a task...": "输入您的问题或任务指令...",
+  "Ask anything, @ to mention, / for actions": "任意提问，输入 @ 提及，输入 / 执行操作",
+  "Ask anything, @ to mention, / for commands": "任意提问，输入 @ 提及，输入 / 调用命令",
+  "Ask anything, @ to mention": "任意提问，输入 @ 提及",
+  "Ask anything": "任意提问",
+  "@ to mention": "@ 提及",
+  "/ for actions": "/ 执行操作",
+  "/ for commands": "/ 调用命令",
+  "Local": "本地",
+  "local": "本地",
+  "Remote": "远程",
+  "remote": "远程",
+  "Cloud": "云端",
+  "cloud": "云端",
+  "Sandbox": "沙箱",
+  "sandbox": "沙箱",
+  "Environment": "运行环境",
+  "Select Environment": "选择运行环境",
+  "Execution Environment": "执行环境",
+  "Change Environment": "切换环境",
   "Type a message...": "输入消息...",
   "Type / for commands, @ for context...": "输入 / 调用命令，输入 @ 添加上下文...",
   "Type / for commands...": "输入 / 查看可用命令...",
@@ -469,6 +488,7 @@ const I18N_DICT = {
   "Chat Settings": "对话设置",
   "Chrome Binary Path": "Chrome 可执行文件路径",
   "Chromium": "Chromium 浏览器",
+  "Choose a predefined security preset for the agent. This controls terminal auto-execution policy, and file access policy.": "选择智能体的预定义安全预设。这控制了终端自动执行策略和文件访问策略。",
   "CitC Clone": "CitC 克隆",
   "CitC Workspace": "CitC 工作区",
   "CitC Workspace Type": "CitC 工作区类型",
@@ -566,10 +586,12 @@ const I18N_DICT = {
   "Enabled": "已启用",
   "Error": "错误",
   "Execute": "执行",
+  "Execution": "执行",
   "Expand All": "全部展开",
   "Export": "导出",
   "External tools the agent can call via Model Context Protocol.": "智能体可通过模型上下文协议 (MCP) 调用的外部工具。",
   "Feedback": "反馈",
+  "File Access Rules": "文件访问规则",
   "File Permissions": "文件权限",
   "Files": "文件",
   "Full machine": "全功能模式",
@@ -592,10 +614,13 @@ const I18N_DICT = {
   "Keep Computer Awake": "防止休眠",
   "Keep computer awake while agents are running": "智能体运行时保持电脑唤醒",
   "Keyboard Shortcuts": "快捷键",
+  "Keyboard shortcuts": "快捷键",
   "Last 30 days": "最近 30 天",
   "Last 7 days": "最近 7 天",
   "Latest Version": "最新版本",
   "Learn more": "了解更多",
+  "Learn more about": "了解更多关于",
+  "Learn more about ": "了解更多关于 ",
   "Light": "浅色",
   "Loading": "加载中",
   "Loading...": "加载中...",
@@ -608,6 +633,7 @@ const I18N_DICT = {
   "Model": "模型",
   "Model Quota": "模型配额",
   "Model Selection": "模型选择",
+  "Network Access Rules": "网络访问规则",
   "Network Permissions": "网络权限",
   "No Model Selected": "未选择模型",
   "No items found": "暂无内容",
@@ -618,6 +644,7 @@ const I18N_DICT = {
   "Offline": "离线",
   "Older": "更早",
   "Online": "在线",
+  "Open": "打开",
   "Open Agent on Reload": "重载时自动打开智能体",
   "Open Electron Logs": "查看 Electron 日志",
   "Open File": "打开文件",
@@ -639,6 +666,7 @@ const I18N_DICT = {
   "Problems": "问题诊断",
   "Proceed": "继续",
   "Prompt for approval before running browser scripts.": "在运行浏览器脚本前提示用户进行审批。",
+  "Queue": "排队",
   "Quick Start": "快速入门",
   "Quota exceeded": "配额已超限",
   "Read URL": "读取 URL",
@@ -667,6 +695,8 @@ const I18N_DICT = {
   "Select a model": "选择模型",
   "Select an agent": "选择智能体",
   "Send Feedback": "发送反馈",
+  "Send Immediately": "立即发送",
+  "Send immediately": "立即发送",
   "Show line numbers": "显示行号",
   "Show intermediate thinking steps": "显示中间思考步骤",
   "Sign out": "退出登录",
@@ -674,6 +704,7 @@ const I18N_DICT = {
   "Sort by": "排序方式",
   "Sort by Date": "按日期排序",
   "Sort by Name": "按名称排序",
+  "Specifies Agent's behavior when asking for review on artifacts, which are documents it creates to enable a richer conversation experience.": "指定智能体在请求审核构件时的行为。构件是智能体为实现更丰富的对话体验而创建的文档。",
   "Status": "状态",
   "Streaming Responses": "流式响应输出",
   "Strict (Always Ask)": "严格模式（每次询问）",
@@ -720,6 +751,12 @@ function injectedMainWorldScript(DICT) {
     if (window.__AGY_CN_INITIALIZED__) return;
     window.__AGY_CN_INITIALIZED__ = true;
 
+    // 构建小写快速索引表以支持不区分大小写匹配
+    const DICT_LOWER = {};
+    for (const k of Object.keys(DICT)) {
+        DICT_LOWER[k.toLowerCase()] = DICT[k];
+    }
+
     function translateText(str) {
         if (typeof str !== 'string') return str;
         const trimmed = str.trim();
@@ -728,6 +765,33 @@ function injectedMainWorldScript(DICT) {
         // 1. 精确词典匹配
         if (DICT[trimmed]) {
             return str.replace(trimmed, DICT[trimmed]);
+        }
+
+        // 1.1 不区分大小写词典匹配
+        const trimmedLower = trimmed.toLowerCase();
+        if (DICT_LOWER[trimmedLower]) {
+            return str.replace(trimmed, DICT_LOWER[trimmedLower]);
+        }
+
+        // 1.2 "Learn more about ..." 动态匹配
+        if (/^Learn more about\s+(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^Learn more about\s+(.*)$/i);
+            const target = translateText(m[1]);
+            return str.replace(trimmed, '了解更多关于 ' + target);
+        }
+        if (/^Learn more about$/i.test(trimmed)) {
+            return str.replace(trimmed, '了解更多关于');
+        }
+
+        // 1.3 输入框与操作提示动态匹配
+        if (/^Ask anything,\s*@\s*to mention,\s*\/\s*for actions$/i.test(trimmed)) {
+            return str.replace(trimmed, '任意提问，输入 @ 提及，输入 / 执行操作');
+        }
+        if (/^Ask anything,\s*@\s*to mention,\s*\/\s*for commands$/i.test(trimmed)) {
+            return str.replace(trimmed, '任意提问，输入 @ 提及，输入 / 调用命令');
+        }
+        if (/^Ask anything,\s*@\s*to mention$/i.test(trimmed)) {
+            return str.replace(trimmed, '任意提问，输入 @ 提及');
         }
 
         // 2. 智能体与任务运行数量
@@ -857,17 +921,38 @@ function injectedMainWorldScript(DICT) {
 
     function translateProps(props) {
         if (!props || typeof props !== 'object') return;
-        const keys = ['placeholder', 'title', 'aria-label', 'label', 'description', 'tooltip', 'data-tooltip', 'data-title', 'alt', 'header', 'helperText'];
+        const keys = [
+            'placeholder', 'title', 'aria-label', 'aria-placeholder', 'aria-description',
+            'label', 'description', 'tooltip', 'data-tooltip', 'data-title', 'data-placeholder',
+            'alt', 'header', 'helperText', 'sublabel', 'subtitle', 'caption', 'text', 'value',
+            'placeholderText', 'emptyText', 'badge', 'hint', 'prompt', 'summary', 'secondaryText',
+            'helper', 'secondaryLabel'
+        ];
         for (const k of keys) {
             if (typeof props[k] === 'string') {
                 props[k] = translateText(props[k]);
             }
         }
-        // 处理 options 数组（用于 HTML 顶部菜单项如 options: [{label: '...'}]）
+        // 处理 props.children（当 JSX 运行时直接将 children 放入 props）
+        if (props.children !== undefined) {
+            props.children = translateChild(props.children);
+        }
+        // 处理 options 数组（用于下拉列表、单选/复选选项等）
         if (Array.isArray(props.options)) {
             for (const opt of props.options) {
-                if (opt && typeof opt === 'object' && typeof opt.label === 'string') {
-                    opt.label = translateText(opt.label);
+                if (opt && typeof opt === 'object') {
+                    if (typeof opt.label === 'string') opt.label = translateText(opt.label);
+                    if (typeof opt.description === 'string') opt.description = translateText(opt.description);
+                    if (typeof opt.title === 'string') opt.title = translateText(opt.title);
+                }
+            }
+        }
+        if (Array.isArray(props.items)) {
+            for (const item of props.items) {
+                if (item && typeof item === 'object') {
+                    if (typeof item.label === 'string') item.label = translateText(item.label);
+                    if (typeof item.description === 'string') item.description = translateText(item.description);
+                    if (typeof item.title === 'string') item.title = translateText(item.title);
                 }
             }
         }
@@ -940,6 +1025,83 @@ function injectedMainWorldScript(DICT) {
                 },
                 set(val) {
                     origSet.call(document, translateText(val));
+                }
+            });
+        }
+    } catch (_) {}
+
+    // DOM 辅助观察器：捕获非 React 虚拟 DOM 渲染的原生节点、编辑器占位符与动态 Tooltip
+    function walkAndTranslate(node) {
+        if (!node) return;
+        if (node.nodeType === 3) { // Text node
+            const val = node.nodeValue;
+            if (val && val.trim()) {
+                const trans = translateText(val);
+                if (trans !== val) {
+                    node.nodeValue = trans;
+                }
+            }
+            return;
+        }
+        if (node.nodeType === 1) { // Element node
+            const tag = node.tagName ? node.tagName.toLowerCase() : '';
+            if (isCodeElement(tag, { className: node.className })) {
+                return;
+            }
+            const attrs = ['placeholder', 'title', 'aria-label', 'data-tooltip', 'data-placeholder'];
+            for (const attr of attrs) {
+                if (node.hasAttribute && node.hasAttribute(attr)) {
+                    const v = node.getAttribute(attr);
+                    if (v) {
+                        const trans = translateText(v);
+                        if (trans !== v) node.setAttribute(attr, trans);
+                    }
+                }
+            }
+            let child = node.firstChild;
+            while (child) {
+                walkAndTranslate(child);
+                child = child.nextSibling;
+            }
+        }
+    }
+
+    try {
+        const observer = new MutationObserver((mutations) => {
+            for (const m of mutations) {
+                if (m.type === 'childList') {
+                    for (let i = 0; i < m.addedNodes.length; i++) {
+                        walkAndTranslate(m.addedNodes[i]);
+                    }
+                } else if (m.type === 'characterData') {
+                    const val = m.target.nodeValue;
+                    if (val && val.trim()) {
+                        const trans = translateText(val);
+                        if (trans !== val) {
+                            m.target.nodeValue = trans;
+                        }
+                    }
+                } else if (m.type === 'attributes') {
+                    const attr = m.attributeName;
+                    if (['placeholder', 'title', 'aria-label', 'data-tooltip', 'data-placeholder'].includes(attr)) {
+                        const v = m.target.getAttribute(attr);
+                        if (v) {
+                            const trans = translateText(v);
+                            if (trans !== v) m.target.setAttribute(attr, trans);
+                        }
+                    }
+                }
+            }
+        });
+
+        if (document.body) {
+            observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title', 'aria-label', 'data-tooltip', 'data-placeholder'] });
+            walkAndTranslate(document.body);
+        } else {
+            document.addEventListener('DOMContentLoaded', () => {
+                if (document.body) {
+                    observer.observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['placeholder', 'title', 'aria-label', 'data-tooltip', 'data-placeholder'] });
+                    walkAndTranslate(document.body);
                 }
             });
         }
