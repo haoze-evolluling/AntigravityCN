@@ -243,29 +243,29 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 	// 4. Copy patch files into extracted directory
 	logFn("[*] 正在注入简体中文汉化补丁...")
 
-	patchMapping := map[string]string{
-		"menu.js":                  "dist/menu.js",
-		"updater.js":               "dist/updater.js",
-		"tray.js":                  "dist/tray.js",
-		"main.js":                  "dist/main.js",
-		"ipcHandlers.js":           "dist/ipcHandlers.js",
-		"loadingOverlay.js":        "dist/loadingOverlay.js",
-		"preload.js":               "dist/preload.js",
-		"ideInstall/wizardHtml.js": "dist/ideInstall/wizardHtml.js",
-	}
-
 	appliedCount := 0
-	for srcRel, dstRel := range patchMapping {
-		patchData, err := fs.ReadFile(patchesFS, srcRel)
-		if err != nil {
-			patchData, err = fs.ReadFile(patchesFS, "patches/"+srcRel)
+	err = fs.WalkDir(patchesFS, ".", func(path string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil {
+			return walkErr
 		}
-		if err != nil {
-			logFn(fmt.Sprintf("    [!] 补丁文件缺失，跳过: %s", srcRel))
-			continue
+		if d.IsDir() {
+			return nil
+		}
+		// Clean relative path (handles both sub-FS and raw embedded FS)
+		rel := strings.TrimPrefix(filepath.ToSlash(path), "patches/")
+		rel = strings.TrimPrefix(rel, "./")
+		if rel == "" || rel == "." {
+			return nil
 		}
 
-		targetFile := filepath.Join(tempExtractDir, filepath.FromSlash(dstRel))
+		patchData, err := fs.ReadFile(patchesFS, path)
+		if err != nil {
+			logFn(fmt.Sprintf("    [!] 读取补丁文件失败，跳过: %s (%v)", rel, err))
+			return nil
+		}
+
+		dstRel := filepath.Join("dist", filepath.FromSlash(rel))
+		targetFile := filepath.Join(tempExtractDir, dstRel)
 		if err := os.MkdirAll(filepath.Dir(targetFile), 0755); err != nil {
 			return fmt.Errorf("创建目标目录失败 %s: %w", targetFile, err)
 		}
@@ -273,8 +273,12 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 		if err := os.WriteFile(targetFile, patchData, 0644); err != nil {
 			return fmt.Errorf("写入补丁文件失败 %s: %w", dstRel, err)
 		}
-		logFn(fmt.Sprintf("    [+] 已应用补丁: %s", dstRel))
+		logFn(fmt.Sprintf("    [+] 已应用补丁: %s", filepath.ToSlash(dstRel)))
 		appliedCount++
+		return nil
+	})
+	if err != nil {
+		return fmt.Errorf("遍历并应用补丁文件失败: %w", err)
 	}
 
 	if appliedCount == 0 {

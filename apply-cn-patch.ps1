@@ -1,4 +1,4 @@
-﻿# AntigravityCN — Google Antigravity 桌面端一键汉化脚本
+# AntigravityCN — Google Antigravity 桌面端一键汉化脚本
 # 使用方法：在 PowerShell 中运行 .apply-cn-patch.ps1
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -67,26 +67,15 @@ Write-Host "[OK] 解压完成。" -ForegroundColor Green
 Write-Host ""
 Write-Host "[*] 正在应用汉化补丁..." -ForegroundColor Yellow
 
-$patchFiles = @(
-    @{ Src = "menu.js";                  Dst = "dist\menu.js" },
-    @{ Src = "updater.js";               Dst = "dist\updater.js" },
-    @{ Src = "tray.js";                  Dst = "dist\tray.js" },
-    @{ Src = "main.js";                  Dst = "dist\main.js" },
-    @{ Src = "ipcHandlers.js";           Dst = "dist\ipcHandlers.js" },
-    @{ Src = "loadingOverlay.js";        Dst = "dist\loadingOverlay.js" },
-    @{ Src = "preload.js";               Dst = "dist\preload.js" },
-    @{ Src = "ideInstall\wizardHtml.js"; Dst = "dist\ideInstall\wizardHtml.js" }
-)
-
-foreach ($file in $patchFiles) {
-    $srcPath = Join-Path $PATCHES_DIR $file.Src
-    $dstPath = Join-Path $EXTRACT_DIR $file.Dst
-    if (-not (Test-Path $srcPath)) {
-        Write-Host "[警告] 补丁文件不存在，跳过：$($file.Src)" -ForegroundColor Yellow
-        continue
+Get-ChildItem -Path $PATCHES_DIR -Recurse -File | ForEach-Object {
+    $rel = $_.FullName.Substring($PATCHES_DIR.Length).TrimStart('\', '/')
+    $dstPath = Join-Path (Join-Path $EXTRACT_DIR "dist") $rel
+    $dstDir = Split-Path -Parent $dstPath
+    if (-not (Test-Path $dstDir)) {
+        New-Item -ItemType Directory -Force -Path $dstDir | Out-Null
     }
-    Copy-Item -Path $srcPath -Destination $dstPath -Force
-    Write-Host "    [OK] $($file.Src)" -ForegroundColor Green
+    Copy-Item -Path $_.FullName -Destination $dstPath -Force
+    Write-Host "    [OK] $rel" -ForegroundColor Green
 }
 
 # 7. 重新打包为 app.asar
