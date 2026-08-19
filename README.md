@@ -77,15 +77,41 @@
 
 ---
 
+---
+
 ## 使用方法
 
-### 环境要求
+### 方式一：便携单文件版 (推荐，双击即用)
+
+> **无需安装 Node.js、npm 或配置 PowerShell，下载即可直接运行！**
+
+1. 下载或编译生成的 **`AntigravityCN.exe`**。
+2. 直接**双击运行** `AntigravityCN.exe`。
+3. 程序会自动检测 Antigravity 的安装路径与运行状态。
+4. 点击 **【🚀 一键安装汉化】** 即可完成自动备份与汉化注入。
+5. 点击 **【✨ 启动 Antigravity】** 即可开始使用简体中文版！
+6. 如需恢复原版，点击 **【🔄 还原英文原版】** 即可。
+
+#### 命令行调用方式 (可选)
+
+```cmd
+AntigravityCN.exe -apply        # 静默执行一键汉化
+AntigravityCN.exe -restore      # 还原官方英文原版
+AntigravityCN.exe -launch       # 启动 Antigravity
+AntigravityCN.exe -path <path>  # 指定自定义 app.asar 路径
+```
+
+---
+
+### 方式二：PowerShell 脚本版 (开发者模式)
+
+#### 环境要求
 
 - Windows 10/11
 - [Node.js](https://nodejs.org/) v16+（用于 `npx asar`）
 - Antigravity 已安装
 
-### 一键汉化
+#### 一键汉化
 
 以**管理员身份**打开 PowerShell，进入本项目目录后运行：
 
@@ -96,7 +122,7 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 脚本执行完毕后，**重启 Antigravity** 即可看到完整中文界面。
 
-### 还原英文版
+#### 还原英文版
 
 ```powershell
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
@@ -105,11 +131,23 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ---
 
+## 编译构建说明
+
+若您克隆了本项目源码并希望自行编译构建便携版 EXE：
+
+1. 确保已安装 [Go](https://go.dev/) 1.22+ 及 [Wails CLI](https://wails.io) (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`)。
+2. 运行构建脚本：
+   ```powershell
+   .\build.ps1
+   ```
+3. 即可在根目录自动生成集成了高颜值 Wails 前端的便携单文件 `AntigravityCN.exe`。
+
+---
+
 ## 注意事项
 
-- **应用更新后**需重新运行 `apply-cn-patch.ps1`，因为更新会覆盖 `app.asar`。
-- 脚本会在首次运行时自动备份原始 `app.asar`（存为 `app.asar.backup`），后续运行跳过备份。
-- 脚本通过 `npx` 自动下载 `asar` 工具，无需手动安装。
+- **应用更新后**需重新运行一键汉化，因为官方更新会覆盖 `app.asar`。
+- 程序会在首次运行时自动备份原始 `app.asar`（存为 `app.asar.backup`），后续运行保留此备份。
 
 ---
 
@@ -117,10 +155,24 @@ Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 ```
 AntigravityCN/
-├── apply-cn-patch.ps1          # 一键汉化脚本
-├── restore-original.ps1        # 还原原版脚本
-├── README.md                   # 本文档
-└── patches/                    # 汉化补丁文件
+├── AntigravityCN.exe           # Wails 现代化单文件可执行程序 (双击即用)
+├── main.go                     # Wails 入口与资源内嵌 (embed)
+├── app.go                      # Wails 后端与前端 Bridge API
+├── wails.json                  # Wails v2 项目配置
+├── build.ps1                   # Wails 一键编译打包发布脚本
+├── frontend/                   # 现代化暗黑高颜值前端 (Glassmorphism UI)
+│   ├── index.html              # 前端主页面与无边框窗体
+│   ├── package.json            # 前端配置
+│   └── src/
+│       ├── style.css           # 科技感深色磨砂玻璃样式与动画
+│       └── main.js             # 前端交互与 Wails 实时流式日志监听
+├── internal/
+│   ├── asar/                   # 纯 Go ASAR 读写与重封引擎
+│   └── patcher/                # 汉化补丁注入、备份与安全还原核心
+├── apply-cn-patch.ps1          # 备用 PowerShell 一键汉化脚本
+├── restore-original.ps1        # 备用 PowerShell 还原原版脚本
+├── README.md                   # 项目文档
+└── patches/                    # 汉化补丁源文件 (编译时自动内嵌进 EXE)
     ├── menu.js                 # 原生系统菜单全量汉化
     ├── updater.js              # 自动更新与提示弹窗汉化
     ├── tray.js                 # 系统托盘汉化

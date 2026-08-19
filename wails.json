@@ -1,0 +1,18 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "AntigravityCN",
+  "outputfilename": "AntigravityCN",
+  "frontend:dir": "frontend",
+  "frontend:install": "",
+  "frontend:build": "",
+  "author": {
+    "name": "AntigravityCN"
+  },
+  "info": {
+    "companyName": "AntigravityCN",
+    "productName": "Google Antigravity 简体中文汉化工具",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright © 2026",
+    "comments": "Google Antigravity 简体中文汉化工具便携版"
+  }
+}
