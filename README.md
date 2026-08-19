@@ -83,9 +83,9 @@
 
 ## 使用方法
 
-### 方式一：便携单文件版 (推荐，双击即用)
+### 便携单文件版 (双击即用)
 
-> **无需安装 Node.js、npm 或配置 PowerShell，下载即可直接运行！**
+> **无需安装 Node.js、npm 或配置环境，下载或编译生成即可直接运行！**
 
 1. 下载或编译生成的 **`AntigravityCN.exe`**。
 2. 直接**双击运行** `AntigravityCN.exe`。
@@ -101,34 +101,6 @@ AntigravityCN.exe -apply        # 静默执行一键汉化
 AntigravityCN.exe -restore      # 还原官方英文原版
 AntigravityCN.exe -launch       # 启动 Antigravity
 AntigravityCN.exe -path <path>  # 指定自定义 app.asar 路径
-```
-
----
-
-### 方式二：PowerShell 脚本版 (开发者模式)
-
-#### 环境要求
-
-- Windows 10/11
-- [Node.js](https://nodejs.org/) v16+（用于 `npx asar`）
-- Antigravity 已安装
-
-#### 一键汉化
-
-以**管理员身份**打开 PowerShell，进入本项目目录后运行：
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\apply-cn-patch.ps1
-```
-
-脚本执行完毕后，**重启 Antigravity** 即可看到完整中文界面。
-
-#### 还原英文版
-
-```powershell
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\restore-original.ps1
 ```
 
 ---
@@ -171,8 +143,6 @@ AntigravityCN/
 ├── internal/
 │   ├── asar/                   # 纯 Go ASAR 读写与重封引擎
 │   └── patcher/                # 汉化补丁注入、备份与安全还原核心
-├── apply-cn-patch.ps1          # 备用 PowerShell 一键汉化脚本
-├── restore-original.ps1        # 备用 PowerShell 还原原版脚本
 ├── README.md                   # 项目文档
 └── patches/                    # 汉化补丁源文件 (编译时自动内嵌进 EXE)
     ├── menu.js                 # 原生系统菜单全量汉化
