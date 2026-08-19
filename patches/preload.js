@@ -741,7 +741,106 @@ const I18N_DICT = {
   "Warning": "警告",
   "Workspace Settings": "工作区设置",
   "Yesterday": "昨天",
-  "Your administrator has disabled MCP servers for this workspace.": "您的管理员已禁用此工作区的 MCP 服务器功能。"
+  "Your administrator has disabled MCP servers for this workspace.": "您的管理员已禁用此工作区的 MCP 服务器功能。",
+
+  // Models & Usage (模型与用量)
+  "Models & Usage": "模型与用量",
+  "Manage your model quota and credits.": "管理您的模型配额与额度。",
+  "Manage your model quota and credits": "管理您的模型配额与额度",
+  "Manage your model quota, plan, and credits.": "管理您的模型配额、套餐方案与额度。",
+  "Plan": "套餐方案",
+  "Your Plan": "当前方案",
+  "Your Plan:": "当前方案：",
+  "Your Plan: Google AI Pro": "当前方案：Google AI Pro",
+  "Your Plan: Google AI Ultra": "当前方案：Google AI Ultra",
+  "Your Plan: Free": "当前方案：免费版",
+  "You can upgrade to a Google AI Ultra plan to receive higher rate limits.": "您可以升级至 Google AI Ultra 方案以获取更高的速率上限。",
+  "You can upgrade to a Google AI Ultra plan to receive higher rate limits": "您可以升级至 Google AI Ultra 方案以获取更高的速率上限",
+  "Upgrade": "升级",
+  "Upgrade to Ultra": "升级至 Ultra",
+  "Model Credits": "模型额度",
+  "Enable AI Credit Overages": "启用 AI 额外额度扣费",
+  "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits.": "开启后，当模型配额用尽时，Antigravity 将使用您的 AI 额度来处理模型请求。Antigravity 将始终优先使用模型配额，然后再使用 AI 额度。",
+  "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits": "开启后，当模型配额用尽时，Antigravity 将使用您的 AI 额度来处理模型请求。Antigravity 将始终优先使用模型配额，然后再使用 AI 额度",
+  "Gemini Models": "Gemini 模型",
+  "Claude and GPT models": "Claude 和 GPT 模型",
+  "Claude and GPT Models": "Claude 和 GPT 模型",
+  "Claude & GPT models": "Claude 和 GPT 模型",
+  "OpenAI Models": "OpenAI 模型",
+  "Anthropic Models": "Anthropic 模型",
+  "Weekly Limit Remaining": "每周剩余限额",
+  "Five Hour Limit Remaining": "5 小时剩余限额",
+  "5-Hour Limit Remaining": "5 小时剩余限额",
+  "Daily Limit Remaining": "每日剩余限额",
+  "Monthly Limit Remaining": "每月剩余限额",
+  "Hourly Limit Remaining": "每小时剩余限额",
+  "Rate Limit Remaining": "速率剩余限额",
+  "Quota Remaining": "剩余配额",
+  "Model Quota Remaining": "模型剩余配额",
+  "Credits Remaining": "剩余额度",
+  "Credits Used": "已用额度",
+  "AI Credits Balance": "AI 额度余额",
+  "Buy Credits": "购买额度",
+  "Add Credits": "充值额度",
+  "Manage Plan": "管理套餐",
+  "Manage Subscription": "管理订阅",
+
+  // Customizations & MCP (自定义配置与 MCP)
+  "Configure default behaviors, skills, and MCP servers.": "配置默认行为、技能和 MCP 服务器。",
+  "Configure default behaviors, skills, and MCP servers": "配置默认行为、技能和 MCP 服务器",
+  "Token Usage": "Token 使用量",
+  "Customization Token Usage": "自定义配置 Token 使用量",
+  "The breakdown below shows token usage from customizations like skills, rules, and MCP. If the budget is exceeded, large customizations will be truncated automatically.": "下面的明细显示了技能、规则和 MCP 等自定义配置的 Token 使用情况。如果超出预算，较大的自定义配置将被自动截断。",
+  "The breakdown below shows token usage from customizations like skills, rules, and MCP.": "下面的明细显示了技能、规则和 MCP 等自定义配置的 Token 使用情况。",
+  "The breakdown below shows token usage from customizations like skills, rules, and MCP": "下面的明细显示了技能、规则和 MCP 等自定义配置的 Token 使用情况",
+  "If the budget is exceeded, large customizations will be truncated automatically.": "如果超出预算，较大的自定义配置将被自动截断。",
+  "If the budget is exceeded, large customizations will be truncated automatically": "如果超出预算，较大的自定义配置将被自动截断",
+  "Show breakdowns": "显示明细",
+  "Hide breakdowns": "隐藏明细",
+  "Installed MCP Servers": "已安装的 MCP 服务器",
+  "Add MCP +": "添加 MCP +",
+  "Add MCP": "添加 MCP",
+  "Open MCP Config": "打开 MCP 配置",
+  "Open MCP Configuration": "打开 MCP 配置",
+  "No MCP Servers": "暂无 MCP 服务器",
+  "You currently don't have any MCP Servers installed. Add an MCP server above or add a custom one via the MCP Config.": "您当前未安装任何 MCP 服务器。请在上方添加 MCP 服务器，或通过 MCP 配置添加自定义服务器。",
+  "You currently don't have any MCP Servers installed.": "您当前未安装任何 MCP 服务器。",
+  "Add an MCP server above or add a custom one via the MCP Config.": "请在上方添加 MCP 服务器，或通过 MCP 配置添加自定义服务器。",
+  "MCP Config": "MCP 配置",
+  "MCP Configuration": "MCP 配置",
+  "Add MCP Server": "添加 MCP 服务器",
+  "Configure MCP Server": "配置 MCP 服务器",
+  "Edit MCP Server": "编辑 MCP 服务器",
+  "Delete MCP Server": "删除 MCP 服务器",
+  "Restart MCP Server": "重启 MCP 服务器",
+  "MCP Server Running": "MCP 服务器运行中",
+  "MCP Server Stopped": "MCP 服务器已停止",
+  "MCP Server Error": "MCP 服务器错误",
+  "MCP Server Connected": "MCP 服务器已连接",
+  "MCP Server Disconnected": "MCP 服务器已断开",
+  "Customization budget": "自定义配置预算",
+  "customization budget": "自定义配置预算",
+  "Customization Token Budget": "自定义配置 Token 预算",
+  "Global Skills": "全局技能",
+  "Workspace Skills": "工作区技能",
+  "Global Rules": "全局规则",
+  "Workspace Rules": "工作区规则",
+  "Active Skills": "活跃技能",
+  "Active Rules": "活跃规则",
+  "Available Skills": "可用技能",
+  "Available Rules": "可用规则",
+  "Create New Skill": "创建新技能",
+  "Create New Rule": "创建新规则",
+  "Add Skill": "添加技能",
+  "Add Rule": "添加规则",
+  "Add Custom Rule": "添加自定义规则",
+  "Add Custom Skill": "添加自定义技能",
+  "Built-in Skills": "内置技能",
+  "Built-in Rules": "内置规则",
+  "Global": "全局",
+  "Workspace": "工作区",
+  "User": "用户",
+  "Project": "项目"
 };
 
 // ---------------------------------------------------------------------------
@@ -792,6 +891,72 @@ function injectedMainWorldScript(DICT) {
         }
         if (/^Ask anything,\s*@\s*to mention$/i.test(trimmed)) {
             return str.replace(trimmed, '任意提问，输入 @ 提及');
+        }
+
+        // 1.4 套餐名称动态匹配 (Your Plan: ...)
+        if (/^Your Plan:\s*(.*)$/i.test(trimmed)) {
+            const m = trimmed.match(/^Your Plan:\s*(.*)$/i);
+            return str.replace(trimmed, '当前方案：' + m[1]);
+        }
+
+        // 1.5 自定义配置 Token 预算可用百分比 (X% of the customization budget is available.)
+        if (/^([\d\.]+)%\s+of\s+(?:the\s+)?customization\s+budget\s+is\s+available\.?$/i.test(trimmed)) {
+            const m = trimmed.match(/^([\d\.]+)%\s+of\s+(?:the\s+)?customization\s+budget\s+is\s+available\.?$/i);
+            return str.replace(trimmed, m[1] + '% 的自定义配置预算可用。');
+        }
+
+        // 1.6 明细折叠/展开动态匹配 (Show N breakdowns / Hide N breakdowns)
+        if (/^Show\s+(\d+)\s+breakdowns?$/i.test(trimmed)) {
+            const m = trimmed.match(/^Show\s+(\d+)\s+breakdowns?$/i);
+            return str.replace(trimmed, '显示 ' + m[1] + ' 项明细');
+        }
+        if (/^Hide\s+(\d+)\s+breakdowns?$/i.test(trimmed)) {
+            const m = trimmed.match(/^Hide\s+(\d+)\s+breakdowns?$/i);
+            return str.replace(trimmed, '隐藏 ' + m[1] + ' 项明细');
+        }
+
+        // 1.7 模型配额使用与刷新时间动态匹配
+        // "You have used some of your weekly limit, it will fully refresh in 6 days, 21 hours."
+        // "You have used some of your 5-hour limit, it will fully refresh in 2 hours, 44 minutes."
+        if (/^You have used (some|all) of your ([\w\-]+) limit,\s*it will fully refresh in (.*?)\.?$/i.test(trimmed)) {
+            const m = trimmed.match(/^You have used (some|all) of your ([\w\-]+) limit,\s*it will fully refresh in (.*?)\.?$/i);
+            const usageType = m[1].toLowerCase() === 'all' ? '已用尽' : '已使用部分';
+            let limitType = m[2].toLowerCase();
+            if (limitType === 'weekly') limitType = '每周';
+            else if (limitType === '5-hour' || limitType === 'five-hour' || limitType === '5hour' || limitType === 'fivehour') limitType = '5 小时';
+            else if (limitType === 'daily') limitType = '每日';
+            else if (limitType === 'monthly') limitType = '每月';
+            else if (limitType === 'hourly') limitType = '每小时';
+            
+            const timeStr = m[3]
+                .replace(/(\d+)\s*days?/gi, '$1 天')
+                .replace(/(\d+)\s*hours?/gi, '$1 小时')
+                .replace(/(\d+)\s*minutes?/gi, '$1 分钟')
+                .replace(/(\d+)\s*seconds?/gi, '$1 秒')
+                .replace(/,\s*/g, ' ')
+                .trim();
+                
+            return str.replace(trimmed, '您' + usageType + limitType + '限额，将在 ' + timeStr + ' 后完全重置。');
+        }
+        if (/^it will fully refresh in (.*?)\.?$/i.test(trimmed)) {
+            const m = trimmed.match(/^it will fully refresh in (.*?)\.?$/i);
+            const timeStr = m[1]
+                .replace(/(\d+)\s*days?/gi, '$1 天')
+                .replace(/(\d+)\s*hours?/gi, '$1 小时')
+                .replace(/(\d+)\s*minutes?/gi, '$1 分钟')
+                .replace(/(\d+)\s*seconds?/gi, '$1 秒')
+                .replace(/,\s*/g, ' ')
+                .trim();
+            return str.replace(trimmed, '将在 ' + timeStr + ' 后完全重置。');
+        }
+        if (/^You (?:have not|haven't) used any of your ([\w\-]+) limit\.?$/i.test(trimmed)) {
+            const m = trimmed.match(/^You (?:have not|haven't) used any of your ([\w\-]+) limit\.?$/i);
+            let limitType = m[1].toLowerCase();
+            if (limitType === 'weekly') limitType = '每周';
+            else if (limitType === '5-hour' || limitType === 'five-hour' || limitType === '5hour' || limitType === 'fivehour') limitType = '5 小时';
+            else if (limitType === 'daily') limitType = '每日';
+            else if (limitType === 'monthly') limitType = '每月';
+            return str.replace(trimmed, '您尚未消耗' + limitType + '限额。');
         }
 
         // 2. 智能体与任务运行数量
@@ -895,6 +1060,14 @@ function injectedMainWorldScript(DICT) {
         if (/^(\d+)%\s+of\s+context\s+window$/i.test(trimmed)) {
             const num = trimmed.match(/^(\d+)/)[1];
             return str.replace(trimmed, '占上下文窗口 ' + num + '%');
+        }
+        if (/^(\d+(?:\.\d+)?)%\s+available$/i.test(trimmed)) {
+            const num = trimmed.match(/^(\d+(?:\.\d+)?)%/)[1];
+            return str.replace(trimmed, '剩余 ' + num + '% 可用');
+        }
+        if (/^(\d+(?:\.\d+)?)%\s+remaining$/i.test(trimmed)) {
+            const num = trimmed.match(/^(\d+(?:\.\d+)?)%/)[1];
+            return str.replace(trimmed, '剩余 ' + num + '%');
         }
 
         return str;
