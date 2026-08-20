@@ -47,13 +47,10 @@ type PROCESSENTRY32W struct {
 // FindAppAsar attempts to find the default app.asar installation path
 func FindAppAsar() string {
 	localAppData := os.Getenv("LOCALAPPDATA")
-	programFiles := os.Getenv("ProgramFiles")
-	programFilesX86 := os.Getenv("ProgramFiles(x86)")
-
 	candidates := []string{
 		filepath.Join(localAppData, "Programs", "antigravity", "resources", "app.asar"),
-		filepath.Join(programFiles, "Antigravity", "resources", "app.asar"),
-		filepath.Join(programFilesX86, "Antigravity", "resources", "app.asar"),
+		filepath.Join(os.Getenv("ProgramFiles"), "Antigravity", "resources", "app.asar"),
+		filepath.Join(os.Getenv("ProgramFiles(x86)"), "Antigravity", "resources", "app.asar"),
 		filepath.Join(localAppData, "Programs", "Antigravity", "resources", "app.asar"),
 	}
 
@@ -63,7 +60,6 @@ func FindAppAsar() string {
 		}
 	}
 
-	// Default fallback path for display
 	if localAppData != "" {
 		return filepath.Join(localAppData, "Programs", "antigravity", "resources", "app.asar")
 	}
@@ -77,23 +73,17 @@ func GetBackupPath(asarPath string) string {
 
 // GetExecutablePath returns the path to Antigravity.exe based on app.asar path
 func GetExecutablePath(asarPath string) string {
-	resourcesDir := filepath.Dir(asarPath)
-	appDir := filepath.Dir(resourcesDir)
-
-	exe1 := filepath.Join(appDir, "Antigravity.exe")
-	if fi, err := os.Stat(exe1); err == nil && !fi.IsDir() {
-		return exe1
+	appDir := filepath.Dir(filepath.Dir(asarPath))
+	for _, name := range []string{"Antigravity.exe", "antigravity.exe"} {
+		exe := filepath.Join(appDir, name)
+		if fi, err := os.Stat(exe); err == nil && !fi.IsDir() {
+			return exe
+		}
 	}
-
-	exe2 := filepath.Join(appDir, "antigravity.exe")
-	if fi, err := os.Stat(exe2); err == nil && !fi.IsDir() {
-		return exe2
-	}
-
-	return exe1
+	return filepath.Join(appDir, "Antigravity.exe")
 }
 
-// IsProcessRunning checks if any process matching the given exe name is currently running
+// IsProcessRunning checks if any process matching the given exe name (case-insensitive) is currently running
 func IsProcessRunning(exeName string) (bool, error) {
 	snapshot, _, err := procCreateToolhelp32Snapshot.Call(uintptr(TH32CS_SNAPPROCESS), 0)
 	if snapshot == uintptr(syscall.InvalidHandle) {
@@ -109,10 +99,9 @@ func IsProcessRunning(exeName string) (bool, error) {
 		return false, nil
 	}
 
-	exeLower := strings.ToLower(exeName)
 	for {
 		name := syscall.UTF16ToString(entry.ExeFile[:])
-		if strings.ToLower(name) == exeLower {
+		if strings.EqualFold(name, exeName) {
 			return true, nil
 		}
 		ret, _, _ = procProcess32NextW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
@@ -124,37 +113,37 @@ func IsProcessRunning(exeName string) (bool, error) {
 	return false, nil
 }
 
-// CloseAntigravityProcess closes running Antigravity processes (only called on explicit user request)
+// CloseAntigravityProcess closes running Antigravity processes in a single snapshot traversal
 func CloseAntigravityProcess() error {
-	for _, name := range []string{"antigravity.exe", "Antigravity.exe"} {
-		snapshot, _, err := procCreateToolhelp32Snapshot.Call(uintptr(TH32CS_SNAPPROCESS), 0)
-		if snapshot == uintptr(syscall.InvalidHandle) {
-			return err
-		}
+	snapshot, _, err := procCreateToolhelp32Snapshot.Call(uintptr(TH32CS_SNAPPROCESS), 0)
+	if snapshot == uintptr(syscall.InvalidHandle) {
+		return err
+	}
+	defer procCloseHandle.Call(snapshot)
 
-		var entry PROCESSENTRY32W
-		entry.Size = uint32(unsafe.Sizeof(entry))
+	var entry PROCESSENTRY32W
+	entry.Size = uint32(unsafe.Sizeof(entry))
 
-		ret, _, _ := procProcess32FirstW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
-		if ret != 0 {
-			exeLower := strings.ToLower(name)
-			for {
-				pName := syscall.UTF16ToString(entry.ExeFile[:])
-				if strings.ToLower(pName) == exeLower {
-					hProcess, _, _ := procOpenProcess.Call(uintptr(PROCESS_TERMINATE), 0, uintptr(entry.ProcessID))
-					if hProcess != 0 {
-						procTerminateProcess.Call(hProcess, 1)
-						procCloseHandle.Call(hProcess)
-					}
-				}
-				ret, _, _ = procProcess32NextW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
-				if ret == 0 {
-					break
-				}
+	ret, _, _ := procProcess32FirstW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
+	if ret == 0 {
+		return nil
+	}
+
+	for {
+		name := syscall.UTF16ToString(entry.ExeFile[:])
+		if strings.EqualFold(name, "antigravity.exe") {
+			hProcess, _, _ := procOpenProcess.Call(uintptr(PROCESS_TERMINATE), 0, uintptr(entry.ProcessID))
+			if hProcess != 0 {
+				procTerminateProcess.Call(hProcess, 1)
+				procCloseHandle.Call(hProcess)
 			}
 		}
-		procCloseHandle.Call(snapshot)
+		ret, _, _ = procProcess32NextW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
+		if ret == 0 {
+			break
+		}
 	}
+
 	return nil
 }
 
@@ -168,29 +157,41 @@ type AppStatus struct {
 // CheckStatus inspects the target asar path and returns current state
 func CheckStatus(asarPath string) AppStatus {
 	status := AppStatus{}
-
 	if fi, err := os.Stat(asarPath); err == nil && !fi.IsDir() {
 		status.AsarExists = true
 	}
-
-	backupPath := GetBackupPath(asarPath)
-	if fi, err := os.Stat(backupPath); err == nil && !fi.IsDir() {
+	if fi, err := os.Stat(GetBackupPath(asarPath)); err == nil && !fi.IsDir() {
 		status.BackupExists = true
+	}
+	status.IsRunning, _ = IsProcessRunning("antigravity.exe")
+	return status
+}
+
+// PatchOptions for applying patch
+type PatchOptions struct {
+	AutoCloseProcess bool
+	SkipProcessCheck bool
+}
+
+// ensureProcessClosed checks if Antigravity is running and closes it if permitted
+func ensureProcessClosed(logFn func(string), opts *PatchOptions) error {
+	if opts != nil && opts.SkipProcessCheck {
+		return nil
 	}
 
 	running, _ := IsProcessRunning("antigravity.exe")
 	if !running {
-		running, _ = IsProcessRunning("Antigravity.exe")
+		return nil
 	}
-	status.IsRunning = running
 
-	return status
-}
+	if opts != nil && opts.AutoCloseProcess {
+		logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
+		_ = CloseAntigravityProcess()
+		logFn("[OK] 进程已关闭。")
+		return nil
+	}
 
-// Options for applying patch
-type PatchOptions struct {
-	AutoCloseProcess bool
-	SkipProcessCheck bool
+	return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
 }
 
 // ApplyPatch applies the Chinese localization patch to app.asar
@@ -203,24 +204,11 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 		return fmt.Errorf("未找到 app.asar 文件：%s", asarPath)
 	}
 
-	// 1. Check if process is running
-	if opts == nil || !opts.SkipProcessCheck {
-		running, _ := IsProcessRunning("antigravity.exe")
-		if !running {
-			running, _ = IsProcessRunning("Antigravity.exe")
-		}
-		if running {
-			if opts != nil && opts.AutoCloseProcess {
-				logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
-				_ = CloseAntigravityProcess()
-				logFn("[OK] 进程已关闭。")
-			} else {
-				return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
-			}
-		}
+	if err := ensureProcessClosed(logFn, opts); err != nil {
+		return err
 	}
 
-	// 2. Backup original app.asar
+	// Backup original app.asar
 	backupPath := GetBackupPath(asarPath)
 	if _, err := os.Stat(backupPath); os.IsNotExist(err) {
 		logFn("[*] 正在备份原始 app.asar...")
@@ -232,7 +220,7 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 		logFn("[OK] 已检测到原始备份文件，跳过备份。")
 	}
 
-	// 3. Extract app.asar to temporary directory
+	// Extract app.asar to temporary directory
 	tempExtractDir, err := os.MkdirTemp("", "antigravity_cn_ext_*")
 	if err != nil {
 		return fmt.Errorf("创建临时目录失败: %w", err)
@@ -245,30 +233,21 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 	}
 	logFn("[OK] app.asar 解包完成。")
 
-	// 4. Copy patch files into extracted directory
+	// Inject patch files into extracted directory
 	logFn("[*] 正在注入简体中文汉化补丁...")
-
 	appliedCount := 0
-	err = fs.WalkDir(patchesFS, ".", func(path string, d fs.DirEntry, walkErr error) error {
-		if walkErr != nil {
+	err = fs.WalkDir(patchesFS, ".", func(p string, d fs.DirEntry, walkErr error) error {
+		if walkErr != nil || d.IsDir() {
 			return walkErr
 		}
-		if d.IsDir() {
-			return nil
-		}
-		// Clean relative path (handles both sub-FS and raw embedded FS)
-		rel := strings.TrimPrefix(filepath.ToSlash(path), "patches/")
+
+		rel := strings.TrimPrefix(filepath.ToSlash(p), "patches/")
 		rel = strings.TrimPrefix(rel, "./")
-		if rel == "" || rel == "." {
+		if rel == "" || rel == "." || strings.HasPrefix(rel, "locales/") || rel == "locales" {
 			return nil
 		}
 
-		// Standalone locales files are bundled directly into preload.js at patch time
-		if strings.HasPrefix(rel, "locales/") || rel == "locales" {
-			return nil
-		}
-
-		patchData, err := fs.ReadFile(patchesFS, path)
+		patchData, err := fs.ReadFile(patchesFS, p)
 		if err != nil {
 			logFn(fmt.Sprintf("    [!] 读取补丁文件失败，跳过: %s (%v)", rel, err))
 			return nil
@@ -294,12 +273,11 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 	if err != nil {
 		return fmt.Errorf("遍历并应用补丁文件失败: %w", err)
 	}
-
 	if appliedCount == 0 {
 		return fmt.Errorf("未成功应用任何补丁，请检查补丁文件")
 	}
 
-	// 5. Repack ASAR
+	// Repack ASAR
 	logFn("[*] 正在重新封装 app.asar...")
 	tempAsarFile := filepath.Join(os.TempDir(), fmt.Sprintf("app_cn_%d.asar", os.Getpid()))
 	defer os.Remove(tempAsarFile)
@@ -309,7 +287,7 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 	}
 	logFn("[OK] app.asar 封装完成。")
 
-	// 6. Overwrite target app.asar
+	// Overwrite target app.asar
 	logFn("[*] 正在写入汉化版文件...")
 	if err := copyFile(tempAsarFile, asarPath); err != nil {
 		return fmt.Errorf("覆盖写入 app.asar 失败: %w", err)
@@ -330,21 +308,8 @@ func RestoreOriginal(asarPath string, logFn func(string), opts *PatchOptions) er
 		return fmt.Errorf("未找到备份文件：%s\n无法进行还原。", backupPath)
 	}
 
-	// Check process
-	if opts == nil || !opts.SkipProcessCheck {
-		running, _ := IsProcessRunning("antigravity.exe")
-		if !running {
-			running, _ = IsProcessRunning("Antigravity.exe")
-		}
-		if running {
-			if opts != nil && opts.AutoCloseProcess {
-				logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
-				_ = CloseAntigravityProcess()
-				logFn("[OK] 进程已关闭。")
-			} else {
-				return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
-			}
-		}
+	if err := ensureProcessClosed(logFn, opts); err != nil {
+		return err
 	}
 
 	logFn("[*] 正在从备份还原原始 app.asar...")
@@ -387,12 +352,9 @@ func copyFile(src, dst string) error {
 	return out.Sync()
 }
 
-// loadLocalesDict loads i18n dictionary from either a modular directory (locales/zh-CN/*.json)
-// or a single standalone file (locales/zh-CN.json).
+// loadLocalesDict loads i18n dictionary from either a modular directory or a single standalone file
 func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, error) {
-	// 1. Try modular directory first
-	dirCandidates := []string{"locales/zh-CN", "patches/locales/zh-CN"}
-	for _, dir := range dirCandidates {
+	for _, dir := range []string{"locales/zh-CN", "patches/locales/zh-CN"} {
 		entries, err := fs.ReadDir(patchesFS, dir)
 		if err == nil && len(entries) > 0 {
 			mergedMap := make(map[string]interface{})
@@ -427,11 +389,8 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 		}
 	}
 
-	// 2. Fallback to standalone single file
-	fileCandidates := []string{"locales/zh-CN.json", "patches/locales/zh-CN.json"}
-	for _, file := range fileCandidates {
-		data, err := fs.ReadFile(patchesFS, file)
-		if err == nil {
+	for _, file := range []string{"locales/zh-CN.json", "patches/locales/zh-CN.json"} {
+		if data, err := fs.ReadFile(patchesFS, file); err == nil {
 			var dummy map[string]interface{}
 			if unmarshalErr := json.Unmarshal(data, &dummy); unmarshalErr != nil {
 				return nil, 0, 0, fmt.Errorf("%s JSON 格式有误: %w", file, unmarshalErr)
@@ -443,7 +402,7 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 	return nil, 0, 0, fmt.Errorf("未找到 locales/zh-CN/ 目录或 locales/zh-CN.json 词典文件")
 }
 
-// getMergedPreloadData bundles the locales dictionary (modular or standalone) into preload.js at patch time
+// getMergedPreloadData bundles the locales dictionary into preload.js at patch time
 func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string)) []byte {
 	dictData, totalKeys, fileCount, err := loadLocalesDict(patchesFS, logFn)
 	if err != nil {
@@ -455,12 +414,10 @@ func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string
 	merged := strings.Replace(string(preloadData), placeholder, string(dictData), 1)
 	if merged == string(preloadData) {
 		logFn("    [!] preload.js 中未找到 /*__I18N_DICT_PLACEHOLDER__*/{} 占位符")
+	} else if fileCount > 1 {
+		logFn(fmt.Sprintf("    [+] 已成功从 zh-CN/ 模块化词典 (%d 个模块文件，%d 条词条) 动态装配至 preload.js", fileCount, totalKeys))
 	} else {
-		if fileCount > 1 {
-			logFn(fmt.Sprintf("    [+] 已成功从 zh-CN/ 模块化词典 (%d 个模块文件，%d 条词条) 动态装配至 preload.js", fileCount, totalKeys))
-		} else {
-			logFn(fmt.Sprintf("    [+] 已成功将 zh-CN 词典 (%d 条词条) 动态装配至 preload.js", totalKeys))
-		}
+		logFn(fmt.Sprintf("    [+] 已成功将 zh-CN 词典 (%d 条词条) 动态装配至 preload.js", totalKeys))
 	}
 	return []byte(merged)
 }

@@ -40,43 +40,25 @@ func main() {
 		targetAsar = patcher.FindAppAsar()
 	}
 
-	patchesSubFS, err := fs.Sub(embeddedPatches, "patches")
-	if err != nil {
+	patchesSubFS, _ := fs.Sub(embeddedPatches, "patches")
+	if patchesSubFS == nil {
 		patchesSubFS = embeddedPatches
 	}
 
 	// CLI Mode
 	if *applyFlag || *restoreFlag || *launchFlag {
-		opts := &patcher.PatchOptions{
-			AutoCloseProcess: *forceCloseFlag,
-		}
+		opts := &patcher.PatchOptions{AutoCloseProcess: *forceCloseFlag}
 
 		if *applyFlag {
-			fmt.Println("================================================")
-			fmt.Println("   AntigravityCN — 正在应用简体中文汉化补丁")
-			fmt.Println("================================================")
-			fmt.Printf("目标路径: %s\n\n", targetAsar)
-
-			err := patcher.ApplyPatch(targetAsar, patchesSubFS, func(msg string) {
-				fmt.Println(msg)
-			}, opts)
-
-			if err != nil {
+			fmt.Printf("================================================\n   AntigravityCN — 正在应用简体中文汉化补丁\n================================================\n目标路径: %s\n\n", targetAsar)
+			if err := patcher.ApplyPatch(targetAsar, patchesSubFS, func(msg string) { fmt.Println(msg) }, opts); err != nil {
 				fmt.Fprintf(os.Stderr, "\n[错误] 汉化失败: %v\n", err)
 				os.Exit(1)
 			}
 			fmt.Println("\n[完成] 汉化成功！请重启或启动 Antigravity。")
 		} else if *restoreFlag {
-			fmt.Println("================================================")
-			fmt.Println("   AntigravityCN — 正在还原官方英文原版")
-			fmt.Println("================================================")
-			fmt.Printf("目标路径: %s\n\n", targetAsar)
-
-			err := patcher.RestoreOriginal(targetAsar, func(msg string) {
-				fmt.Println(msg)
-			}, opts)
-
-			if err != nil {
+			fmt.Printf("================================================\n   AntigravityCN — 正在还原官方英文原版\n================================================\n目标路径: %s\n\n", targetAsar)
+			if err := patcher.RestoreOriginal(targetAsar, func(msg string) { fmt.Println(msg) }, opts); err != nil {
 				fmt.Fprintf(os.Stderr, "\n[错误] 还原失败: %v\n", err)
 				os.Exit(1)
 			}
@@ -94,33 +76,24 @@ func main() {
 		return
 	}
 
-	// Frontend asset sub-FS
-	frontendFS, err := fs.Sub(assets, "frontend")
-	if err != nil {
+	frontendFS, _ := fs.Sub(assets, "frontend")
+	if frontendFS == nil {
 		frontendFS = assets
 	}
 
 	app := NewApp(patchesSubFS)
 
-	err = wails.Run(&options.App{
+	err := wails.Run(&options.App{
 		Title:             "Google Antigravity 简体中文汉化工具 (便携版)",
 		Width:             780,
 		Height:            590,
 		MinWidth:          720,
 		MinHeight:         540,
-		DisableResize:     false,
-		Fullscreen:        false,
 		Frameless:         true,
-		StartHidden:       false,
-		HideWindowOnClose: false,
 		BackgroundColour:  &options.RGBA{R: 11, G: 15, B: 25, A: 255},
-		AssetServer: &assetserver.Options{
-			Assets: frontendFS,
-		},
-		OnStartup: app.startup,
-		Bind: []interface{}{
-			app,
-		},
+		AssetServer:       &assetserver.Options{Assets: frontendFS},
+		OnStartup:         app.startup,
+		Bind:              []interface{}{app},
 		Windows: &windows.Options{
 			WebviewIsTransparent: true,
 			WindowIsTranslucent:  true,

@@ -381,15 +381,15 @@ function updateUIState(state) {
     }
 }
 
-// Execute Apply
-async function executeApply(autoClose) {
+// Common Action Executor
+async function executeAction(actionFn, successMsg, failPrefix) {
     setButtonsDisabled(true);
     try {
-        const res = await window.go.main.App.ApplyPatch(currentPath, autoClose);
-        if (res.success) {
-            showToast("🎉 汉化成功完成！");
+        const res = await actionFn();
+        if (res && res.success) {
+            showToast(successMsg);
         } else {
-            showToast(`汉化失败: ${res.message}`);
+            showToast(`${failPrefix}: ${res ? res.message : '未知错误'}`);
         }
     } catch (err) {
         appendLog(`[错误] 异常: ${err}`);
@@ -399,22 +399,22 @@ async function executeApply(autoClose) {
     }
 }
 
+// Execute Apply
+async function executeApply(autoClose) {
+    await executeAction(
+        () => window.go.main.App.ApplyPatch(currentPath, autoClose),
+        "🎉 汉化成功完成！",
+        "汉化失败"
+    );
+}
+
 // Execute Restore
 async function executeRestore(autoClose) {
-    setButtonsDisabled(true);
-    try {
-        const res = await window.go.main.App.RestoreOriginal(currentPath, autoClose);
-        if (res.success) {
-            showToast("已成功还原英文官方原版！");
-        } else {
-            showToast(`还原失败: ${res.message}`);
-        }
-    } catch (err) {
-        appendLog(`[错误] 异常: ${err}`);
-    } finally {
-        setButtonsDisabled(false);
-        await refreshStatus();
-    }
+    await executeAction(
+        () => window.go.main.App.RestoreOriginal(currentPath, autoClose),
+        "已成功还原英文官方原版！",
+        "还原失败"
+    );
 }
 
 function setButtonsDisabled(disabled) {

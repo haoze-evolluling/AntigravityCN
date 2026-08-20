@@ -44,14 +44,7 @@ func (a *App) startup(ctx context.Context) {
 
 // GetInitialState returns the default state upon startup
 func (a *App) GetInitialState() AppState {
-	path := patcher.FindAppAsar()
-	status := patcher.CheckStatus(path)
-	return AppState{
-		AsarPath:     path,
-		AsarExists:   status.AsarExists,
-		BackupExists: status.BackupExists,
-		IsRunning:    status.IsRunning,
-	}
+	return a.RefreshStatus(patcher.FindAppAsar())
 }
 
 // SelectAsarFile opens native file picker
@@ -80,87 +73,52 @@ func (a *App) RefreshStatus(asarPath string) AppState {
 	}
 }
 
+func (a *App) emitLog(msg string) {
+	wailsRuntime.EventsEmit(a.ctx, "log", msg)
+}
+
 // ApplyPatch applies Chinese localization patch
 func (a *App) ApplyPatch(asarPath string, autoClose bool) ActionResult {
-	opts := &patcher.PatchOptions{
-		AutoCloseProcess: autoClose,
-	}
+	a.emitLog("================================================")
+	a.emitLog("开始执行【一键安装简体中文汉化】...")
 
-	logFn := func(msg string) {
-		wailsRuntime.EventsEmit(a.ctx, "log", msg)
-	}
-
-	logFn("================================================")
-	logFn("开始执行【一键安装简体中文汉化】...")
-
-	err := patcher.ApplyPatch(asarPath, a.patchesFS, logFn, opts)
+	err := patcher.ApplyPatch(asarPath, a.patchesFS, a.emitLog, &patcher.PatchOptions{AutoCloseProcess: autoClose})
 	if err != nil {
-		logFn(fmt.Sprintf("[错误] 汉化失败: %v", err))
-		return ActionResult{
-			Success: false,
-			Message: err.Error(),
-		}
+		a.emitLog(fmt.Sprintf("[错误] 汉化失败: %v", err))
+		return ActionResult{Success: false, Message: err.Error()}
 	}
 
-	logFn("================================================")
-	logFn("🎉 汉化完成！您可以点击【启动 Antigravity】立即体验。")
-	return ActionResult{
-		Success: true,
-		Message: "汉化补丁应用成功！",
-	}
+	a.emitLog("================================================")
+	a.emitLog("🎉 汉化完成！您可以点击【启动 Antigravity】立即体验。")
+	return ActionResult{Success: true, Message: "汉化补丁应用成功！"}
 }
 
 // RestoreOriginal restores original app.asar from backup
 func (a *App) RestoreOriginal(asarPath string, autoClose bool) ActionResult {
-	opts := &patcher.PatchOptions{
-		AutoCloseProcess: autoClose,
-	}
+	a.emitLog("================================================")
+	a.emitLog("开始执行【还原官方英文原版】...")
 
-	logFn := func(msg string) {
-		wailsRuntime.EventsEmit(a.ctx, "log", msg)
-	}
-
-	logFn("================================================")
-	logFn("开始执行【还原官方英文原版】...")
-
-	err := patcher.RestoreOriginal(asarPath, logFn, opts)
+	err := patcher.RestoreOriginal(asarPath, a.emitLog, &patcher.PatchOptions{AutoCloseProcess: autoClose})
 	if err != nil {
-		logFn(fmt.Sprintf("[错误] 还原失败: %v", err))
-		return ActionResult{
-			Success: false,
-			Message: err.Error(),
-		}
+		a.emitLog(fmt.Sprintf("[错误] 还原失败: %v", err))
+		return ActionResult{Success: false, Message: err.Error()}
 	}
 
-	logFn("================================================")
-	logFn("✅ 还原成功！已恢复为官方英文原版。")
-	return ActionResult{
-		Success: true,
-		Message: "已成功还原官方英文原版！",
-	}
+	a.emitLog("================================================")
+	a.emitLog("✅ 还原成功！已恢复为官方英文原版。")
+	return ActionResult{Success: true, Message: "已成功还原官方英文原版！"}
 }
 
 // LaunchAntigravity launches the main Antigravity executable
 func (a *App) LaunchAntigravity(asarPath string) ActionResult {
-	logFn := func(msg string) {
-		wailsRuntime.EventsEmit(a.ctx, "log", msg)
+	a.emitLog("[*] 正在启动 Antigravity...")
+	if err := patcher.LaunchAntigravity(asarPath); err != nil {
+		a.emitLog(fmt.Sprintf("[错误] 启动失败: %v", err))
+		return ActionResult{Success: false, Message: err.Error()}
 	}
 
-	logFn("[*] 正在启动 Antigravity...")
-	err := patcher.LaunchAntigravity(asarPath)
-	if err != nil {
-		logFn(fmt.Sprintf("[错误] 启动失败: %v", err))
-		return ActionResult{
-			Success: false,
-			Message: err.Error(),
-		}
-	}
-
-	logFn("[OK] Antigravity 启动命令已发送。")
-	return ActionResult{
-		Success: true,
-		Message: "Antigravity 启动成功！",
-	}
+	a.emitLog("[OK] Antigravity 启动命令已发送。")
+	return ActionResult{Success: true, Message: "Antigravity 启动成功！"}
 }
 
 // OpenURL opens the specified URL in the user's default browser
