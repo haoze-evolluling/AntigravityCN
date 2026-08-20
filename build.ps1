@@ -30,7 +30,15 @@ if ($runningProc) {
     Write-Host "[OK] 已关闭运行中的进程。" -ForegroundColor Green
 }
 
-# 3. 执行编译构建
+# 3. 检查并确保图标最新
+if (Test-Path "scripts\generate_icon.js") {
+    if (-not (Test-Path "build\windows\icon.ico") -or -not (Test-Path "build\appicon.png")) {
+        Write-Host "[*] 正在从 logo.svg 生成应用图标..." -ForegroundColor Yellow
+        node scripts/generate_icon.js
+    }
+}
+
+# 4. 执行编译构建
 Write-Host "[*] 正在执行 Wails 构建打包..." -ForegroundColor Yellow
 
 wails build -clean -trimpath -o AntigravityCN.exe
@@ -52,6 +60,6 @@ if (Test-Path $binPath) {
     Write-Host "   您可以直接双击根目录下的 AntigravityCN.exe 运行！" -ForegroundColor Cyan
     Write-Host "================================================" -ForegroundColor Cyan
 } else {
-    Write-Host "[错误] 未能找到编译输出文件：$binPath" -ForegroundColor Red
+    Write-Host ("[错误] 未能找到编译输出文件: {0}" -f $binPath) -ForegroundColor Red
     exit 1
 }
