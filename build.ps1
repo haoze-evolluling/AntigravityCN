@@ -1,4 +1,4 @@
-﻿# AntigravityCN Wails v2 现代化便携版编译构建脚本
+# AntigravityCN Wails v2 现代化便携版编译构建脚本
 # 编译生成集成高颜值 Web 前端的 Windows 单文件可执行程序 (EXE)
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
@@ -30,12 +30,10 @@ if ($runningProc) {
     Write-Host "[OK] 已关闭运行中的进程。" -ForegroundColor Green
 }
 
-# 3. 检查并确保图标最新
+# 3. 检查并确保高清图标最新
 if (Test-Path "scripts\generate_icon.js") {
-    if (-not (Test-Path "build\windows\icon.ico") -or -not (Test-Path "build\appicon.png")) {
-        Write-Host "[*] 正在从 logo.svg 生成应用图标..." -ForegroundColor Yellow
-        node scripts/generate_icon.js
-    }
+    Write-Host "[*] 正在从 logo.svg 生成 Windows 高清多分辨率应用图标..." -ForegroundColor Yellow
+    node scripts/generate_icon.js
 }
 
 # 4. 执行编译构建
