@@ -908,7 +908,154 @@ const I18N_DICT = {
   "Global": "全局",
   "Workspace": "工作区",
   "User": "用户",
-  "Project": "项目"
+  "Project": "项目",
+
+  // Appearance & Themes (外观与主题设置)
+  "Select light, dark, or inherit system settings.": "选择浅色、深色或跟随系统设置。",
+  "Select light, dark, or inherit system settings": "选择浅色、深色或跟随系统设置",
+  "Light Theme": "浅色主题",
+  "Light theme": "浅色主题",
+  "Dark Theme": "深色主题",
+  "Dark theme": "深色主题",
+  "High Contrast Theme": "高对比度主题",
+  "System Theme": "跟随系统主题",
+  "Preset": "预设",
+  "Presets": "预设",
+  "Preset:": "预设：",
+  "Default Light": "默认浅色",
+  "Default Dark": "默认深色",
+  "Custom Light": "自定义浅色",
+  "Custom Dark": "自定义深色",
+  "Background": "背景",
+  "Foreground": "前景",
+  "Accent": "强调色",
+  "Border": "边框",
+  "Muted": "次要",
+  "Sidebar": "侧边栏",
+  "Editor": "编辑器",
+  "Reset Colors": "重置颜色",
+  "Reset to Defaults": "恢复默认值",
+  "Reset to default": "恢复默认值",
+  "Custom Colors": "自定义颜色",
+  "Theme Colors": "主题颜色",
+  "Color Theme": "颜色主题",
+  "Color Themes": "颜色主题",
+  "Theme Preset": "主题预设",
+  "Theme Presets": "主题预设",
+  "Compact": "紧凑",
+  "Wide": "宽阔",
+  "Full": "全宽",
+
+  // Security Tooltips & Presets (安全预设与悬浮提示)
+  "A high-risk mode that disables all safety barriers. The agent operates with full system access, auto-executes all terminal commands, and reads or writes to all local files without review prompts.": "一种禁用所有安全屏障的高风险模式。智能体将拥有完整的系统访问权限，自动执行所有终端命令，并在读写所有本地文件时无需审核提示。",
+  "A high-risk mode that disables all safety barriers. The agent operates with full system access, auto-executes all terminal commands, and reads or writes to all local files without review prompts": "一种禁用所有安全屏障的高风险模式。智能体将拥有完整的系统访问权限，自动执行所有终端命令，并在读写所有本地文件时无需审核提示",
+  "A high-risk mode that disables all safety barriers.": "一种禁用所有安全屏障的高风险模式。",
+  "A high-risk mode that disables all safety barriers": "一种禁用所有安全屏障的高风险模式",
+  "The agent operates with full system access, auto-executes all terminal commands, and reads or writes to all local files without review prompts.": "智能体将拥有完整的系统访问权限，自动执行所有终端命令，并在读写所有本地文件时无需审核提示。",
+  "The agent operates with full system access, auto-executes all terminal commands, and reads or writes to all local files without review prompts": "智能体将拥有完整的系统访问权限，自动执行所有终端命令，并在读写所有本地文件时无需审核提示",
+  "A safe mode that prompts for review on all terminal commands and file modifications outside the workspace.": "一种安全模式，在执行所有终端命令和修改工作区外文件时提示人工审核。",
+  "A safe mode that prompts for review on all terminal commands and file modifications outside the workspace": "一种安全模式，在执行所有终端命令和修改工作区外文件时提示人工审核",
+  "A balanced mode that allows safe operations while prompting for approval on potentially destructive actions.": "一种平衡模式，允许安全操作，并在执行潜在高风险操作时提示确认。",
+  "A balanced mode that allows safe operations while prompting for approval on potentially destructive actions": "一种平衡模式，允许安全操作，并在执行潜在高风险操作时提示确认",
+  "A strict mode that prompts for review on all terminal commands and file modifications.": "一种严格模式，在执行所有终端命令和修改文件时提示人工审核。",
+  "Use Enter to send messages immediately, or Cmd/Ctrl+Enter to queue them.": "使用 Enter 立即发送消息，或使用 Cmd/Ctrl+Enter 加入排队。",
+  "Use Enter to send messages immediately, or Ctrl+Enter to queue them.": "使用 Enter 立即发送消息，或使用 Ctrl+Enter 加入排队。",
+  "Use Enter to send messages immediately, or Cmd+Enter to queue them.": "使用 Enter 立即发送消息，或使用 Cmd+Enter 加入排队。",
+  "Strict mode": "严格模式",
+  "Standard mode": "标准模式",
+  "Turbo mode": "极速模式",
+  "Custom mode": "自定义模式",
+  "Strict Mode": "严格模式",
+  "Standard Mode": "标准模式",
+  "Turbo Mode": "极速模式",
+  "Custom Mode": "自定义模式",
+  "Strict": "严格",
+  "Standard": "标准",
+  "Turbo": "极速",
+
+  // Model Tiers (模型档位)
+  "High": "高",
+  "Medium": "中",
+  "Low": "低",
+  "(High)": "(高)",
+  "(Medium)": "(中)",
+  "(Low)": "(低)",
+  "(high)": "(高)",
+  "(medium)": "(中)",
+  "(low)": "(低)",
+  "High (recommended)": "高（推荐）",
+  "High (Recommended)": "高（推荐）",
+  "Medium (recommended)": "中（推荐）",
+  "Medium (Recommended)": "中（推荐）",
+  "Low (recommended)": "低（推荐）",
+  "Low (Recommended)": "低（推荐）",
+  "Thinking Tier": "思考档位",
+  "Thinking Level": "思考档位",
+  "Model Tier": "模型档位",
+  "Model Tiers": "模型档位",
+  "Reasoning Effort": "推理强度",
+  "Reasoning Effort: High": "推理强度：高",
+  "Reasoning Effort: Medium": "推理强度：中",
+  "Reasoning Effort: Low": "推理强度：低",
+  "Thinking: High": "思考：高",
+  "Thinking: Medium": "思考：中",
+  "Thinking: Low": "思考：低",
+  "High thinking": "高思考",
+  "Medium thinking": "中思考",
+  "Low thinking": "低思考",
+  "High Thinking": "高思考",
+  "Medium Thinking": "中思考",
+  "Low Thinking": "低思考",
+  "High Thinking Budget": "高思考预算",
+  "Medium Thinking Budget": "中思考预算",
+  "Low Thinking Budget": "低思考预算",
+  "High reasoning effort": "高推理强度",
+  "Medium reasoning effort": "中推理强度",
+  "Low reasoning effort": "低推理强度",
+  "High effort": "高强度",
+  "Medium effort": "中强度",
+  "Low effort": "低强度",
+  "Thinking effort": "思考强度",
+  "Reasoning effort": "推理强度",
+
+  // Browser Subagent & Settings (浏览器子智能体与设置)
+  "Configure the browser subagent. It requires Google Chrome to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": "配置浏览器子智能体。需要安装 Google Chrome。可以在对话输入框中输入 /browser 调用浏览器子智能体。",
+  "Configure the browser subagent. It requires Google Chrome to be installed. The browser subagent can be invoked by typing /browser in the conversation input box": "配置浏览器子智能体。需要安装 Google Chrome。可以在对话输入框中输入 /browser 调用浏览器子智能体",
+  "Configure the browser subagent. It requires": "配置浏览器子智能体。需要安装",
+  "Configure the browser subagent. It requires ": "配置浏览器子智能体。需要安装 ",
+  "Configure the browser subagent.": "配置浏览器子智能体。",
+  "Configure the browser subagent": "配置浏览器子智能体",
+  "to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": "使用。可以在对话输入框中输入 /browser 调用浏览器子智能体。",
+  " to be installed. The browser subagent can be invoked by typing /browser in the conversation input box.": " 使用。可以在对话输入框中输入 /browser 调用浏览器子智能体。",
+  "to be installed. The browser subagent can be invoked by typing /browser in the conversation input box": "使用。可以在对话输入框中输入 /browser 调用浏览器子智能体",
+  " to be installed. The browser subagent can be invoked by typing /browser in the conversation input box": " 使用。可以在对话输入框中输入 /browser 调用浏览器子智能体",
+  "The browser subagent can be invoked by typing /browser in the conversation input box.": "可以在对话输入框中输入 /browser 调用浏览器子智能体。",
+  "The browser subagent can be invoked by typing /browser in the conversation input box": "可以在对话输入框中输入 /browser 调用浏览器子智能体",
+  "It requires Google Chrome to be installed.": "需要安装 Google Chrome。",
+  "It requires Google Chrome to be installed": "需要安装 Google Chrome",
+  "to be installed.": "。",
+  "to be installed": "",
+
+  // Queued Message Shortcuts & Tooltips (排队消息快捷键提示)
+  "Enter Queues after the turn": "Enter 本轮结束后排队",
+  "Enter Sends immediately": "Enter 立即发送",
+  "Alt+Enter Sends immediately": "Alt+Enter 立即发送",
+  "Alt+Enter Queues after the turn": "Alt+Enter 本轮结束后排队",
+  "Ctrl+Enter Sends immediately": "Ctrl+Enter 立即发送",
+  "Ctrl+Enter Queues after the turn": "Ctrl+Enter 本轮结束后排队",
+  "Cmd+Enter Sends immediately": "Cmd+Enter 立即发送",
+  "Cmd+Enter Queues after the turn": "Cmd+Enter 本轮结束后排队",
+  "Option+Enter Sends immediately": "Option+Enter 立即发送",
+  "Option+Enter Queues after the turn": "Option+Enter 本轮结束后排队",
+  "Shift+Enter Sends immediately": "Shift+Enter 立即发送",
+  "Shift+Enter Queues after the turn": "Shift+Enter 本轮结束后排队",
+  "Alt+Enter On empty prompt, sends next in queue": "Alt+Enter 输入为空时，发送队列中的下一条消息",
+  "Ctrl+Enter On empty prompt, sends next in queue": "Ctrl+Enter 输入为空时，发送队列中的下一条消息",
+  "Cmd+Enter On empty prompt, sends next in queue": "Cmd+Enter 输入为空时，发送队列中的下一条消息",
+  "Option+Enter On empty prompt, sends next in queue": "Option+Enter 输入为空时，发送队列中的下一条消息",
+  "On empty prompt, sends next in queue": "输入为空时，发送队列中的下一条消息",
+  "Queues after the turn": "本轮结束后排队",
+  "Sends immediately": "立即发送"
 };
 
 // ---------------------------------------------------------------------------
@@ -938,6 +1085,68 @@ function injectedMainWorldScript(DICT) {
         const trimmedLower = trimmed.toLowerCase();
         if (DICT_LOWER[trimmedLower]) {
             return str.replace(trimmed, DICT_LOWER[trimmedLower]);
+        }
+
+        // 1.1.5 空白规范化词典匹配（支持多行/换行/多空格文本与提示）
+        const normalized = trimmed.replace(/\s+/g, ' ');
+        if (DICT[normalized]) {
+            return str.replace(trimmed, DICT[normalized]);
+        }
+        const normalizedLower = normalized.toLowerCase();
+        if (DICT_LOWER[normalizedLower]) {
+            return str.replace(trimmed, DICT_LOWER[normalizedLower]);
+        }
+
+        // 1.1.6 快捷键排队/发送提示动态匹配
+        if (/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)\s+Queues after the turn$/i.test(trimmed)) {
+            const m = trimmed.match(/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)/i);
+            return str.replace(trimmed, m[1] + ' 本轮结束后排队');
+        }
+        if (/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)\s+Sends immediately$/i.test(trimmed)) {
+            const m = trimmed.match(/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)/i);
+            return str.replace(trimmed, m[1] + ' 立即发送');
+        }
+        if (/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)\s+On empty prompt,\s*sends next in queue$/i.test(trimmed)) {
+            const m = trimmed.match(/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)/i);
+            return str.replace(trimmed, m[1] + ' 输入为空时，发送队列中的下一条消息');
+        }
+
+        // 1.1.7 模型档位动态匹配 (Model Selection Tiers & Parentheses)
+        // 例如 "Gemini 3.7 Flash (High)" -> "Gemini 3.7 Flash (高)"
+        // 例如 "Gemini 3.7 Flash Thinking (High)" -> "Gemini 3.7 Flash 思考 (高)"
+        // 例如 "Claude 3.7 Sonnet (Thinking High)" -> "Claude 3.7 Sonnet (高思考)"
+        if (/^(.*?)\s*\(\s*(?:Thinking\s+)?(High|Medium|Low)\s*(?:Thinking)?\s*\)$/i.test(trimmed)) {
+            const m = trimmed.match(/^(.*?)\s*\(\s*(?:(Thinking)\s+)?(High|Medium|Low)(?:\s+(Thinking))?\s*\)$/i);
+            if (m) {
+                let modelPrefix = m[1];
+                const hasThinking = Boolean(m[2] || m[4]);
+                const tierRaw = m[3].toLowerCase();
+                let tierCn = '高';
+                if (tierRaw === 'medium') tierCn = '中';
+                else if (tierRaw === 'low') tierCn = '低';
+
+                const suffix = hasThinking ? (tierCn + '思考') : tierCn;
+                if (modelPrefix.endsWith(' Thinking')) {
+                    modelPrefix = modelPrefix.slice(0, -9) + ' 思考';
+                }
+                return str.replace(trimmed, modelPrefix + ' (' + suffix + ')');
+            }
+        }
+        if (/^(High|Medium|Low)\s+(Thinking|Reasoning)(?:\s+Budget)?$/i.test(trimmed)) {
+            const m = trimmed.match(/^(High|Medium|Low)\s+(Thinking|Reasoning)(?:\s+Budget)?$/i);
+            const tierRaw = m[1].toLowerCase();
+            let tierCn = '高';
+            if (tierRaw === 'medium') tierCn = '中';
+            else if (tierRaw === 'low') tierCn = '低';
+            return str.replace(trimmed, tierCn + '思考预算');
+        }
+        if (/^(?:Thinking|Reasoning)(?:\s+(?:Budget|Effort|Level|Tier))?\s*:\s*(High|Medium|Low)$/i.test(trimmed)) {
+            const m = trimmed.match(/^(?:Thinking|Reasoning)(?:\s+(?:Budget|Effort|Level|Tier))?\s*:\s*(High|Medium|Low)$/i);
+            const tierRaw = m[1].toLowerCase();
+            let tierCn = '高';
+            if (tierRaw === 'medium') tierCn = '中';
+            else if (tierRaw === 'low') tierCn = '低';
+            return str.replace(trimmed, '思考强度：' + tierCn);
         }
 
         // 1.2 "Learn more about ..." 动态匹配
@@ -1190,7 +1399,8 @@ function injectedMainWorldScript(DICT) {
             'alt', 'header', 'heading', 'subheading', 'subHeading', 'helperText', 'sublabel', 'subtitle',
             'caption', 'text', 'value', 'placeholderText', 'emptyText', 'badge', 'hint', 'prompt',
             'summary', 'secondaryText', 'supportingText', 'headline', 'primaryText', 'primaryLabel',
-            'helper', 'secondaryLabel', 'sectionTitle', 'cardTitle', 'statusText', 'message'
+            'helper', 'secondaryLabel', 'sectionTitle', 'cardTitle', 'statusText', 'message',
+            'content', 'tip', 'popover', 'overlayText', 'info', 'helpText', 'explanation', 'details'
         ];
         for (const k of keys) {
             if (typeof props[k] === 'string') {
@@ -1258,7 +1468,8 @@ function injectedMainWorldScript(DICT) {
     }
 
     // 拦截全局 React 对象加载
-    let _react = window.React || self.React;
+    let _react = (typeof window !== 'undefined' ? window.React : undefined) || 
+                 (typeof globalThis !== 'undefined' ? globalThis.React : undefined);
     if (_react) {
         hookReact(_react);
     } else {
