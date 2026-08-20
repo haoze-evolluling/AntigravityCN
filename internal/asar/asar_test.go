@@ -58,3 +58,35 @@ func TestPackAndExtract(t *testing.T) {
 		t.Fatalf("Data mismatch in world.js: got %q, want %q", string(read2), string(data2))
 	}
 }
+
+func TestRealAsar(t *testing.T) {
+	localAppData := os.Getenv("LOCALAPPDATA")
+	if localAppData == "" {
+		t.Skip("No LOCALAPPDATA")
+	}
+	realAsar := filepath.Join(localAppData, "Programs", "antigravity", "resources", "app.asar")
+	if _, err := os.Stat(realAsar); err != nil {
+		t.Skip("No real asar found")
+	}
+
+	header, payloadOffset, err := ReadHeader(realAsar)
+	if err != nil {
+		t.Fatalf("ReadHeader failed: %v", err)
+	}
+	t.Logf("Header read successfully, payload offset: %d, files: %d", payloadOffset, len(header.Files))
+
+	tmpExt := t.TempDir()
+	err = Extract(realAsar, tmpExt)
+	if err != nil {
+		t.Fatalf("Extract failed: %v", err)
+	}
+	t.Logf("Extract succeeded!")
+
+	tmpRepack := filepath.Join(t.TempDir(), "repack.asar")
+	err = Pack(tmpExt, tmpRepack)
+	if err != nil {
+		t.Fatalf("Pack failed: %v", err)
+	}
+	t.Logf("Pack succeeded!")
+}
+

@@ -33,6 +33,7 @@ type Entry struct {
 	Offset     string            `json:"offset,omitempty"`
 	Executable bool              `json:"executable,omitempty"`
 	Unpacked   bool              `json:"unpacked,omitempty"`
+	Link       string            `json:"link,omitempty"`
 	Integrity  *IntegrityInfo    `json:"integrity,omitempty"`
 	Files      map[string]*Entry `json:"files,omitempty"`
 }
@@ -121,8 +122,10 @@ func Extract(asarPath, destDir string) error {
 	}
 	defer f.Close()
 
-	var extractEntry func(currentPath string, entry *Entry) error
-	extractEntry = func(currentPath string, entry *Entry) error {
+	unpackedDir := asarPath + ".unpacked"
+
+	var extractEntry func(currentPath string, relPath string, entry *Entry) error
+	extractEntry = func(currentPath string, relPath string, entry *Entry) error {
 		if entry.Files != nil {
 			// Directory
 			if err := os.MkdirAll(currentPath, 0755); err != nil {
@@ -130,21 +133,55 @@ func Extract(asarPath, destDir string) error {
 			}
 			for name, child := range entry.Files {
 				childPath := filepath.Join(currentPath, name)
-				if err := extractEntry(childPath, child); err != nil {
+				childRel := filepath.Join(relPath, name)
+				if err := extractEntry(childPath, childRel, child); err != nil {
 					return err
 				}
 			}
 			return nil
 		}
 
-		// File
+		if err := os.MkdirAll(filepath.Dir(currentPath), 0755); err != nil {
+			return err
+		}
+
+		// Handle unpacked files (located in <asarPath>.unpacked)
+		if entry.Unpacked {
+			unpackedFile := filepath.Join(unpackedDir, relPath)
+			if srcF, err := os.Open(unpackedFile); err == nil {
+				defer srcF.Close()
+				out, err := os.Create(currentPath)
+				if err != nil {
+					return err
+				}
+				defer out.Close()
+				if _, err := io.Copy(out, srcF); err != nil {
+					return fmt.Errorf("copy unpacked file failed for %s: %w", currentPath, err)
+				}
+				return nil
+			}
+
+			// If not found in .unpacked directory, create a blank placeholder
+			out, err := os.Create(currentPath)
+			if err != nil {
+				return err
+			}
+			return out.Close()
+		}
+
+		// Handle zero-size file with empty offset
+		if entry.Size == 0 && entry.Offset == "" {
+			out, err := os.Create(currentPath)
+			if err != nil {
+				return err
+			}
+			return out.Close()
+		}
+
+		// Regular archive file
 		offset, err := strconv.ParseInt(entry.Offset, 10, 64)
 		if err != nil {
 			return fmt.Errorf("invalid file offset %q for %s: %w", entry.Offset, currentPath, err)
-		}
-
-		if err := os.MkdirAll(filepath.Dir(currentPath), 0755); err != nil {
-			return err
 		}
 
 		out, err := os.Create(currentPath)
@@ -171,7 +208,7 @@ func Extract(asarPath, destDir string) error {
 
 	for name, entry := range header.Files {
 		targetPath := filepath.Join(destDir, name)
-		if err := extractEntry(targetPath, entry); err != nil {
+		if err := extractEntry(targetPath, name, entry); err != nil {
 			return err
 		}
 	}
