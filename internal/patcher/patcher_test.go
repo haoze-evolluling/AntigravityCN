@@ -109,7 +109,7 @@ func TestApplyPatchAndRestore(t *testing.T) {
 	_ = mockFS
 }
 
-func TestGetMergedPreloadData(t *testing.T) {
+func TestGetMergedPreloadData_StandaloneFile(t *testing.T) {
 	mockFS := fstest.MapFS{
 		"locales/zh-CN.json": &fstest.MapFile{
 			Data: []byte(`{"File":"文件","Edit":"编辑"}`),
@@ -130,12 +130,47 @@ console.log(I18N_DICT);
 	merged := getMergedPreloadData(mockFS, rawPreload, logFn)
 	mergedStr := string(merged)
 
-	if !strings.Contains(mergedStr, `const I18N_DICT = {"File":"文件","Edit":"编辑"};`) {
+	if !strings.Contains(mergedStr, `"File":"文件"`) || !strings.Contains(mergedStr, `"Edit":"编辑"`) {
 		t.Fatalf("Placeholder was not correctly replaced. Got:\n%s", mergedStr)
 	}
 }
 
-func TestApplyPatchWithPreloadAndLocales(t *testing.T) {
+func TestGetMergedPreloadData_ModularDirectory(t *testing.T) {
+	mockFS := fstest.MapFS{
+		"locales/zh-CN/common.json": &fstest.MapFile{
+			Data: []byte(`{"Save":"保存","Delete":"删除"}`),
+		},
+		"locales/zh-CN/menu.json": &fstest.MapFile{
+			Data: []byte(`{"File":"文件","Edit":"编辑"}`),
+		},
+	}
+
+	rawPreload := []byte(`
+const electron = require('electron');
+const I18N_DICT = /*__I18N_DICT_PLACEHOLDER__*/{};
+console.log(I18N_DICT);
+`)
+
+	var logs []string
+	logFn := func(msg string) {
+		logs = append(logs, msg)
+	}
+
+	merged := getMergedPreloadData(mockFS, rawPreload, logFn)
+	mergedStr := string(merged)
+
+	if strings.Contains(mergedStr, "/*__I18N_DICT_PLACEHOLDER__*/{}") {
+		t.Fatalf("Placeholder was not replaced in modular preload.js")
+	}
+
+	for _, expected := range []string{`"Save":"保存"`, `"Delete":"删除"`, `"File":"文件"`, `"Edit":"编辑"`} {
+		if !strings.Contains(mergedStr, expected) {
+			t.Fatalf("Expected %s in merged preload, got:\n%s", expected, mergedStr)
+		}
+	}
+}
+
+func TestApplyPatchWithPreloadAndModularLocales(t *testing.T) {
 	tmpDir := t.TempDir()
 
 	// 1. Create a dummy app.asar
@@ -153,13 +188,16 @@ func TestApplyPatchWithPreloadAndLocales(t *testing.T) {
 		t.Fatalf("Failed to pack dummy asar: %v", err)
 	}
 
-	// 2. Prepare mock patch FS with preload.js and standalone locales/zh-CN.json
+	// 2. Prepare mock patch FS with preload.js and modular locales/zh-CN/*.json
 	mockFS := fstest.MapFS{
 		"preload.js": &fstest.MapFile{
 			Data: []byte(`const I18N_DICT = /*__I18N_DICT_PLACEHOLDER__*/{};`),
 		},
-		"locales/zh-CN.json": &fstest.MapFile{
-			Data: []byte(`{"Hello":"你好"}`),
+		"locales/zh-CN/common.json": &fstest.MapFile{
+			Data: []byte(`{"Save":"保存"}`),
+		},
+		"locales/zh-CN/chat.json": &fstest.MapFile{
+			Data: []byte(`{"Send":"发送"}`),
 		},
 	}
 
@@ -184,8 +222,9 @@ func TestApplyPatchWithPreloadAndLocales(t *testing.T) {
 		t.Fatalf("Failed to read dist/preload.js: %v", err)
 	}
 
-	if string(patchedPreload) != `const I18N_DICT = {"Hello":"你好"};` {
-		t.Fatalf("Unexpected patched preload content: %s", string(patchedPreload))
+	patchedStr := string(patchedPreload)
+	if !strings.Contains(patchedStr, `"Save":"保存"`) || !strings.Contains(patchedStr, `"Send":"发送"`) {
+		t.Fatalf("Unexpected patched preload content: %s", patchedStr)
 	}
 
 	// Verify dist/locales does not exist
@@ -214,9 +253,25 @@ func TestRealPatchesPreloadAssembly(t *testing.T) {
 		t.Fatalf("Placeholder was not replaced in real preload.js")
 	}
 
-	if !strings.Contains(mergedStr, `"File": "文件"`) {
-		t.Fatalf("Real zh-CN dictionary entries not found in merged preload.js")
+	// Verify sample entries across various functional modules
+	sampleKeys := []string{
+		`"File":"文件"`,                     // navigation
+		`"Save":"保存"`,                     // common
+		`"Ask anything":"任意提问"`,           // chat
+		`"Dark Theme":"深色主题"`,             // settings
+		`"Gemini Models":"Gemini 模型"`,     // models
+		`"Global Skills":"全局技能"`,          // customizations
+		`"MCP Servers":"MCP 服务器"`,         // mcp
+		`"Source Control":"源代码管理"`,        // workspace
+		`"Browser Settings":"浏览器设置"`,      // subagents
+	}
+
+	for _, sample := range sampleKeys {
+		if !strings.Contains(mergedStr, sample) {
+			t.Fatalf("Sample key %s not found in merged real preload.js", sample)
+		}
 	}
 }
+
 
 

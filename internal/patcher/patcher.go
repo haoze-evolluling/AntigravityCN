@@ -7,6 +7,7 @@ import (
 	"io/fs"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -386,23 +387,67 @@ func copyFile(src, dst string) error {
 	return out.Sync()
 }
 
-// getMergedPreloadData bundles the standalone locales/zh-CN.json into preload.js at patch time
-func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string)) []byte {
-	// Attempt to read locales/zh-CN.json from patchesFS
-	dictData, err := fs.ReadFile(patchesFS, "locales/zh-CN.json")
-	if err != nil {
-		// Fallback check with patches/ prefix
-		dictData, err = fs.ReadFile(patchesFS, "patches/locales/zh-CN.json")
-	}
-	if err != nil {
-		logFn(fmt.Sprintf("    [!] 未找到 locales/zh-CN.json 词典文件 (%v)，将保持原样", err))
-		return preloadData
+// loadLocalesDict loads i18n dictionary from either a modular directory (locales/zh-CN/*.json)
+// or a single standalone file (locales/zh-CN.json).
+func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, error) {
+	// 1. Try modular directory first
+	dirCandidates := []string{"locales/zh-CN", "patches/locales/zh-CN"}
+	for _, dir := range dirCandidates {
+		entries, err := fs.ReadDir(patchesFS, dir)
+		if err == nil && len(entries) > 0 {
+			mergedMap := make(map[string]interface{})
+			fileCount := 0
+			for _, entry := range entries {
+				if entry.IsDir() || !strings.HasSuffix(strings.ToLower(entry.Name()), ".json") {
+					continue
+				}
+				filePath := path.Join(dir, entry.Name())
+				fileData, readErr := fs.ReadFile(patchesFS, filePath)
+				if readErr != nil {
+					logFn(fmt.Sprintf("    [!] 读取词典模块 %s 失败: %v", entry.Name(), readErr))
+					continue
+				}
+				var fileMap map[string]interface{}
+				if unmarshalErr := json.Unmarshal(fileData, &fileMap); unmarshalErr != nil {
+					logFn(fmt.Sprintf("    [!] 词典模块 %s JSON 格式有误: %v", entry.Name(), unmarshalErr))
+					continue
+				}
+				for k, v := range fileMap {
+					mergedMap[k] = v
+				}
+				fileCount++
+			}
+			if fileCount > 0 {
+				dictJSON, marshalErr := json.Marshal(mergedMap)
+				if marshalErr != nil {
+					return nil, 0, 0, marshalErr
+				}
+				return dictJSON, len(mergedMap), fileCount, nil
+			}
+		}
 	}
 
-	// Validate JSON format
-	var dummy map[string]interface{}
-	if err := json.Unmarshal(dictData, &dummy); err != nil {
-		logFn(fmt.Sprintf("    [!] locales/zh-CN.json JSON 格式有误 (%v)，跳过合并", err))
+	// 2. Fallback to standalone single file
+	fileCandidates := []string{"locales/zh-CN.json", "patches/locales/zh-CN.json"}
+	for _, file := range fileCandidates {
+		data, err := fs.ReadFile(patchesFS, file)
+		if err == nil {
+			var dummy map[string]interface{}
+			if unmarshalErr := json.Unmarshal(data, &dummy); unmarshalErr != nil {
+				return nil, 0, 0, fmt.Errorf("%s JSON 格式有误: %w", file, unmarshalErr)
+			}
+			return data, len(dummy), 1, nil
+		}
+	}
+
+	return nil, 0, 0, fmt.Errorf("未找到 locales/zh-CN/ 目录或 locales/zh-CN.json 词典文件")
+}
+
+// getMergedPreloadData bundles the locales dictionary (modular or standalone) into preload.js at patch time
+func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string)) []byte {
+	dictData, totalKeys, fileCount, err := loadLocalesDict(patchesFS, logFn)
+	if err != nil {
+		logFn(fmt.Sprintf("    [!] 词典装配跳过: %v，将保持 preload.js 原样", err))
 		return preloadData
 	}
 
@@ -411,8 +456,13 @@ func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string
 	if merged == string(preloadData) {
 		logFn("    [!] preload.js 中未找到 /*__I18N_DICT_PLACEHOLDER__*/{} 占位符")
 	} else {
-		logFn(fmt.Sprintf("    [+] 已成功将 zh-CN 词典 (%d 条词条) 动态装配至 preload.js", len(dummy)))
+		if fileCount > 1 {
+			logFn(fmt.Sprintf("    [+] 已成功从 zh-CN/ 模块化词典 (%d 个模块文件，%d 条词条) 动态装配至 preload.js", fileCount, totalKeys))
+		} else {
+			logFn(fmt.Sprintf("    [+] 已成功将 zh-CN 词典 (%d 条词条) 动态装配至 preload.js", totalKeys))
+		}
 	}
 	return []byte(merged)
 }
+
 

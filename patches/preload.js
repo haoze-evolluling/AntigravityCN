@@ -126,7 +126,7 @@ electron_1.contextBridge.exposeInMainWorld('electronNative', electronNativeAPI);
 electron_1.contextBridge.exposeInMainWorld('ide', ideAPI);
 
 // ---------------------------------------------------------------------------
-// 2. 全量汉化字典占位符 (由 Patcher 注入时自动合并 patches/locales/zh-CN.json)
+// 2. 全量汉化字典占位符 (由 Patcher 注入时自动扫描并合并 patches/locales/zh-CN/ 模块化词典)
 // ---------------------------------------------------------------------------
 const I18N_DICT = /*__I18N_DICT_PLACEHOLDER__*/{};
 
