@@ -74,5 +74,22 @@
   "Inherits your General settings when working in this project.": "在此项目中工作时继承您的通用设置。",
   "Non-Workspace File Access": "非工作区文件访问",
   "Open Storage Folder": "打开数据存储文件夹",
-  "Workspace Settings": "工作区设置"
+  "Workspace Settings": "工作区设置",
+  "Git Repository": "Git 仓库",
+  "Repository": "代码仓库",
+  "Create Worktree": "创建工作树",
+  "Delete Worktree": "删除工作树",
+  "Remove Worktree": "移除工作树",
+  "CitC Client": "CitC 客户端",
+  "Select CitC Client": "选择 CitC 客户端",
+  "CitC Client Path": "CitC 客户端路径",
+  "Create CitC Workspace": "创建 CitC 工作区",
+  "Delete CitC Workspace": "删除 CitC 工作区",
+  "Discard all changes": "放弃所有更改",
+  "Discard All Changes": "放弃所有更改",
+  "Stage All Changes": "暂存所有更改",
+  "Unstage All Changes": "取消暂存所有更改",
+  "Stage Change": "暂存更改",
+  "Unstage Change": "取消暂存更改",
+  "Discard Change": "放弃更改"
 }

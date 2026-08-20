@@ -1,6 +1,7 @@
 package patcher
 
 import (
+	"encoding/json"
 	"os"
 	"path/filepath"
 	"strings"
@@ -271,6 +272,39 @@ func TestRealPatchesPreloadAssembly(t *testing.T) {
 			t.Fatalf("Sample key %s not found in merged real preload.js", sample)
 		}
 	}
+}
+
+func TestValidateAllLocales(t *testing.T) {
+	localesDir := filepath.Join("..", "..", "patches", "locales", "zh-CN")
+	entries, err := os.ReadDir(localesDir)
+	if err != nil {
+		t.Fatalf("ReadDir failed: %v", err)
+	}
+	totalEntries := 0
+	for _, entry := range entries {
+		if entry.IsDir() || !strings.HasSuffix(entry.Name(), ".json") {
+			continue
+		}
+		data, err := os.ReadFile(filepath.Join(localesDir, entry.Name()))
+		if err != nil {
+			t.Fatalf("Failed to read %s: %v", entry.Name(), err)
+		}
+		var dict map[string]string
+		if err := json.Unmarshal(data, &dict); err != nil {
+			t.Fatalf("Failed to unmarshal %s: %v", entry.Name(), err)
+		}
+		for k, v := range dict {
+			if strings.TrimSpace(k) == "" {
+				t.Fatalf("Empty key in %s", entry.Name())
+			}
+			if strings.TrimSpace(v) == "" && k != "to be installed" {
+				t.Fatalf("Empty value for key %q in %s", k, entry.Name())
+			}
+		}
+		t.Logf("Validated %s: %d entries", entry.Name(), len(dict))
+		totalEntries += len(dict)
+	}
+	t.Logf("Total entries across all modules: %d", totalEntries)
 }
 
 
