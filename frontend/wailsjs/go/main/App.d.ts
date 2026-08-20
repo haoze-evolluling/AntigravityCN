@@ -8,6 +8,8 @@ export function GetInitialState():Promise<main.AppState>;
 
 export function LaunchAntigravity(arg1:string):Promise<main.ActionResult>;
 
+export function OpenURL(arg1:string):Promise<boolean>;
+
 export function RefreshStatus(arg1:string):Promise<main.AppState>;
 
 export function RestoreOriginal(arg1:string,arg2:boolean):Promise<main.ActionResult>;

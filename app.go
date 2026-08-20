@@ -162,3 +162,12 @@ func (a *App) LaunchAntigravity(asarPath string) ActionResult {
 		Message: "Antigravity 启动成功！",
 	}
 }
+
+// OpenURL opens the specified URL in the user's default browser
+func (a *App) OpenURL(url string) bool {
+	if a.ctx != nil {
+		wailsRuntime.BrowserOpenURL(a.ctx, url)
+		return true
+	}
+	return false
+}

@@ -2,6 +2,8 @@
 // AntigravityCN - Frontend Controller & Wails Bridge
 // ==========================================================
 
+const GITHUB_REPO_URL = "https://github.com/haoze-evolluling/AntigravityCN";
+
 let currentPath = "";
 let currentStatus = {
     asarExists: false,
@@ -9,12 +11,150 @@ let currentStatus = {
     isRunning: false
 };
 let pendingAction = null; // "apply" or "restore"
+let currentThemeMode = "system"; // "system" | "light" | "dark"
 
 document.addEventListener("DOMContentLoaded", async () => {
+    initThemeSystem();
+    initNavigation();
     initWindowControls();
     initEventListeners();
     await loadInitialState();
 });
+
+// ==========================================================
+// Theme Management System
+// ==========================================================
+function initThemeSystem() {
+    const savedTheme = localStorage.getItem("antigravity_theme") || "system";
+    setThemeMode(savedTheme, false);
+
+    // Bind theme card clicks
+    const optSystem = document.getElementById("theme-opt-system");
+    const optLight = document.getElementById("theme-opt-light");
+    const optDark = document.getElementById("theme-opt-dark");
+
+    if (optSystem) optSystem.addEventListener("click", () => setThemeMode("system", true));
+    if (optLight) optLight.addEventListener("click", () => setThemeMode("light", true));
+    if (optDark) optDark.addEventListener("click", () => setThemeMode("dark", true));
+
+    // Watch OS system theme changes
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    mediaQuery.addEventListener("change", () => {
+        if (currentThemeMode === "system") {
+            applyThemeToDOM("system");
+        }
+    });
+}
+
+function setThemeMode(mode, showFeedback = true) {
+    if (!["system", "light", "dark"].includes(mode)) {
+        mode = "system";
+    }
+    currentThemeMode = mode;
+    localStorage.setItem("antigravity_theme", mode);
+
+    applyThemeToDOM(mode);
+    updateThemeSelectorUI(mode);
+
+    // Synchronize native window theme if Wails runtime supports it
+    if (window.runtime) {
+        try {
+            if (mode === "light" && window.runtime.WindowSetLightTheme) {
+                window.runtime.WindowSetLightTheme();
+            } else if (mode === "dark" && window.runtime.WindowSetDarkTheme) {
+                window.runtime.WindowSetDarkTheme();
+            } else if (mode === "system" && window.runtime.WindowSetSystemDefaultTheme) {
+                window.runtime.WindowSetSystemDefaultTheme();
+            }
+        } catch (e) {
+            console.debug("Wails window theme API call ignored:", e);
+        }
+    }
+
+    if (showFeedback) {
+        const names = {
+            system: "跟随系统",
+            light: "浅色模式",
+            dark: "深色模式"
+        };
+        showToast(`已切换为【${names[mode]}】`);
+    }
+}
+
+function applyThemeToDOM(mode) {
+    const isDarkOS = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    let effectiveTheme = mode;
+    if (mode === "system") {
+        effectiveTheme = isDarkOS ? "dark" : "light";
+    }
+
+    document.documentElement.setAttribute("data-theme", effectiveTheme);
+    document.body.setAttribute("data-theme", effectiveTheme);
+}
+
+function updateThemeSelectorUI(mode) {
+    const cards = {
+        system: document.getElementById("theme-opt-system"),
+        light: document.getElementById("theme-opt-light"),
+        dark: document.getElementById("theme-opt-dark")
+    };
+
+    Object.keys(cards).forEach((key) => {
+        const el = cards[key];
+        if (el) {
+            if (key === mode) {
+                el.classList.add("active");
+            } else {
+                el.classList.remove("active");
+            }
+        }
+    });
+
+    const label = document.getElementById("current-theme-label");
+    if (label) {
+        const labels = {
+            system: "跟随系统",
+            light: "浅色模式",
+            dark: "深色模式"
+        };
+        label.textContent = labels[mode] || "跟随系统";
+    }
+}
+
+// ==========================================================
+// Page View Navigation (Dashboard <-> Settings)
+// ==========================================================
+function initNavigation() {
+    const btnToggleSettings = document.getElementById("btn-toggle-settings");
+    const btnBackDashboard = document.getElementById("btn-back-dashboard");
+    const viewDashboard = document.getElementById("view-dashboard");
+    const viewSettings = document.getElementById("view-settings");
+
+    function switchView(target) {
+        if (target === "settings") {
+            viewDashboard.classList.remove("active");
+            viewSettings.classList.add("active");
+            if (btnToggleSettings) btnToggleSettings.classList.add("active");
+        } else {
+            viewSettings.classList.remove("active");
+            viewDashboard.classList.add("active");
+            if (btnToggleSettings) btnToggleSettings.classList.remove("active");
+        }
+    }
+
+    if (btnToggleSettings) {
+        btnToggleSettings.addEventListener("click", () => {
+            const isSettings = viewSettings.classList.contains("active");
+            switchView(isSettings ? "dashboard" : "settings");
+        });
+    }
+
+    if (btnBackDashboard) {
+        btnBackDashboard.addEventListener("click", () => {
+            switchView("dashboard");
+        });
+    }
+}
 
 // Window Minimise & Close
 function initWindowControls() {
@@ -66,9 +206,17 @@ function initEventListeners() {
     const btnLaunch = document.getElementById("btn-launch");
     const btnClearLog = document.getElementById("btn-clear-log");
     const btnCopyLog = document.getElementById("btn-copy-log");
+    const btnOpenGithub = document.getElementById("btn-open-github");
 
     const modalCancel = document.getElementById("modal-btn-cancel");
     const modalAutoClose = document.getElementById("modal-btn-autoclose");
+
+    // Open GitHub Repo
+    if (btnOpenGithub) {
+        btnOpenGithub.addEventListener("click", () => {
+            openExternalUrl(GITHUB_REPO_URL);
+        });
+    }
 
     // Browse file
     btnBrowse.addEventListener("click", async () => {
@@ -169,6 +317,18 @@ function initEventListeners() {
         }
         pendingAction = null;
     });
+}
+
+// Open External URL
+function openExternalUrl(url) {
+    if (window.runtime && window.runtime.BrowserOpenURL) {
+        window.runtime.BrowserOpenURL(url);
+    } else if (window.go && window.go.main && window.go.main.App && window.go.main.App.OpenURL) {
+        window.go.main.App.OpenURL(url);
+    } else {
+        window.open(url, "_blank");
+    }
+    showToast("已在默认浏览器中打开 GitHub 仓库");
 }
 
 // Refresh status

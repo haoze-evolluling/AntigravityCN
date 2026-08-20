@@ -14,6 +14,10 @@ export function LaunchAntigravity(arg1) {
   return window['go']['main']['App']['LaunchAntigravity'](arg1);
 }
 
+export function OpenURL(arg1) {
+  return window['go']['main']['App']['OpenURL'](arg1);
+}
+
 export function RefreshStatus(arg1) {
   return window['go']['main']['App']['RefreshStatus'](arg1);
 }
