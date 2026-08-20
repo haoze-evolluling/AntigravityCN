@@ -169,6 +169,32 @@ function injectedMainWorldScript(DICT) {
             return str.replace(trimmed, DICT_LOWER[normalizedLower]);
         }
 
+        // 1.1.5.5 末尾标点智能降级匹配（句号 . / 冒号 :）
+        if (trimmed.endsWith('.') && !trimmed.endsWith('..')) {
+            const noDot = trimmed.slice(0, -1).trim();
+            const trans = DICT[noDot] || DICT_LOWER[noDot.toLowerCase()];
+            if (trans) {
+                const transClean = trans.replace(/[.。]+$/, '');
+                return str.replace(trimmed, transClean + '。');
+            }
+        } else {
+            const withDot = trimmed + '.';
+            const trans = DICT[withDot] || DICT_LOWER[withDot.toLowerCase()];
+            if (trans) {
+                const transClean = trans.replace(/[.。]+$/, '');
+                return str.replace(trimmed, transClean);
+            }
+        }
+
+        if (trimmed.endsWith(':')) {
+            const noColon = trimmed.slice(0, -1).trim();
+            const trans = DICT[noColon] || DICT_LOWER[noColon.toLowerCase()];
+            if (trans) {
+                const transClean = trans.replace(/[:：]+$/, '');
+                return str.replace(trimmed, transClean + '：');
+            }
+        }
+
         // 1.1.6 快捷键排队/发送提示动态匹配
         if (/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)\s+Queues after the turn$/i.test(trimmed)) {
             const m = trimmed.match(/^(Enter|Alt\+Enter|Ctrl\+Enter|Cmd\+Enter|Option\+Enter|Shift\+Enter)/i);
