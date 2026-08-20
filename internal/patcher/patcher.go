@@ -1,6 +1,7 @@
 package patcher
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/fs"
@@ -188,6 +189,7 @@ func CheckStatus(asarPath string) AppStatus {
 // Options for applying patch
 type PatchOptions struct {
 	AutoCloseProcess bool
+	SkipProcessCheck bool
 }
 
 // ApplyPatch applies the Chinese localization patch to app.asar
@@ -201,17 +203,19 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 	}
 
 	// 1. Check if process is running
-	running, _ := IsProcessRunning("antigravity.exe")
-	if !running {
-		running, _ = IsProcessRunning("Antigravity.exe")
-	}
-	if running {
-		if opts != nil && opts.AutoCloseProcess {
-			logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
-			_ = CloseAntigravityProcess()
-			logFn("[OK] 进程已关闭。")
-		} else {
-			return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
+	if opts == nil || !opts.SkipProcessCheck {
+		running, _ := IsProcessRunning("antigravity.exe")
+		if !running {
+			running, _ = IsProcessRunning("Antigravity.exe")
+		}
+		if running {
+			if opts != nil && opts.AutoCloseProcess {
+				logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
+				_ = CloseAntigravityProcess()
+				logFn("[OK] 进程已关闭。")
+			} else {
+				return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
+			}
 		}
 	}
 
@@ -258,10 +262,19 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 			return nil
 		}
 
+		// Standalone locales files are bundled directly into preload.js at patch time
+		if strings.HasPrefix(rel, "locales/") || rel == "locales" {
+			return nil
+		}
+
 		patchData, err := fs.ReadFile(patchesFS, path)
 		if err != nil {
 			logFn(fmt.Sprintf("    [!] 读取补丁文件失败，跳过: %s (%v)", rel, err))
 			return nil
+		}
+
+		if filepath.Base(rel) == "preload.js" {
+			patchData = getMergedPreloadData(patchesFS, patchData, logFn)
 		}
 
 		dstRel := filepath.Join("dist", filepath.FromSlash(rel))
@@ -317,17 +330,19 @@ func RestoreOriginal(asarPath string, logFn func(string), opts *PatchOptions) er
 	}
 
 	// Check process
-	running, _ := IsProcessRunning("antigravity.exe")
-	if !running {
-		running, _ = IsProcessRunning("Antigravity.exe")
-	}
-	if running {
-		if opts != nil && opts.AutoCloseProcess {
-			logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
-			_ = CloseAntigravityProcess()
-			logFn("[OK] 进程已关闭。")
-		} else {
-			return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
+	if opts == nil || !opts.SkipProcessCheck {
+		running, _ := IsProcessRunning("antigravity.exe")
+		if !running {
+			running, _ = IsProcessRunning("Antigravity.exe")
+		}
+		if running {
+			if opts != nil && opts.AutoCloseProcess {
+				logFn("[*] 检测到 Antigravity 正在运行，正在关闭进程以防文件被占用...")
+				_ = CloseAntigravityProcess()
+				logFn("[OK] 进程已关闭。")
+			} else {
+				return fmt.Errorf("检测到 Antigravity 正在运行中！\n请先保存工作并退出 Antigravity，再执行汉化或还原操作（避免文件锁定冲突）。")
+			}
 		}
 	}
 
@@ -370,3 +385,34 @@ func copyFile(src, dst string) error {
 	}
 	return out.Sync()
 }
+
+// getMergedPreloadData bundles the standalone locales/zh-CN.json into preload.js at patch time
+func getMergedPreloadData(patchesFS fs.FS, preloadData []byte, logFn func(string)) []byte {
+	// Attempt to read locales/zh-CN.json from patchesFS
+	dictData, err := fs.ReadFile(patchesFS, "locales/zh-CN.json")
+	if err != nil {
+		// Fallback check with patches/ prefix
+		dictData, err = fs.ReadFile(patchesFS, "patches/locales/zh-CN.json")
+	}
+	if err != nil {
+		logFn(fmt.Sprintf("    [!] 未找到 locales/zh-CN.json 词典文件 (%v)，将保持原样", err))
+		return preloadData
+	}
+
+	// Validate JSON format
+	var dummy map[string]interface{}
+	if err := json.Unmarshal(dictData, &dummy); err != nil {
+		logFn(fmt.Sprintf("    [!] locales/zh-CN.json JSON 格式有误 (%v)，跳过合并", err))
+		return preloadData
+	}
+
+	placeholder := "/*__I18N_DICT_PLACEHOLDER__*/{}"
+	merged := strings.Replace(string(preloadData), placeholder, string(dictData), 1)
+	if merged == string(preloadData) {
+		logFn("    [!] preload.js 中未找到 /*__I18N_DICT_PLACEHOLDER__*/{} 占位符")
+	} else {
+		logFn(fmt.Sprintf("    [+] 已成功将 zh-CN 词典 (%d 条词条) 动态装配至 preload.js", len(dummy)))
+	}
+	return []byte(merged)
+}
+
