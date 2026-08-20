@@ -1,4 +1,4 @@
-﻿# Antigravity 简体中文本地化词典 (zh-CN)
+# Antigravity 简体中文本地化词典 (zh-CN)
 
 本目录为 Antigravity 桌面端全功能汉化词典，采用 **Go Patcher 原生动态合并机制**。
 
@@ -15,7 +15,7 @@
 | models.json | 90 | 模型选择、Thinking 档位与推理强度配置、模型配额与额度计费 | Gemini Models, Claude and GPT models, Thinking Tier, Quota Remaining |
 | 
 avigation.json | 67 | 顶部菜单栏、窗口与窗格控制、快捷键设置与提示、命令面板 (Command Palette) 操作 | File, Edit, Open Command Palette, Split Conversation Vertically |
-| settings.json | 174 | 外观与颜色主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略、遥测与账号偏好 | Appearance, Dark Theme, Security Preset, Strict, Standard, Autonomous |
+| settings.json | 184 | 外观与颜色主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略、遥测与账号偏好 | Appearance, Dark Theme, Security Preset, Strict, Standard, Autonomous |
 | subagents.json | 89 | 浏览器子智能体 (/browser)、终端管理、后台任务、系统日志与诊断工具 | Browser Settings, Terminal output, Kill Terminal, Download Diagnostics |
 | workspace.json | 76 | 工作区管理、项目设置、CitC 工作区、Git 源代码管理、分支与 Worktree | Workspaces, Projects, CitC Workspace, Source Control, Git Status |
 
