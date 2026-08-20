@@ -43,7 +43,6 @@
   "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits.": "开启后，当模型配额用尽时，Antigravity 将使用您的 AI 额度来处理模型请求。Antigravity 将始终优先使用模型配额，然后再使用 AI 额度。",
   "When toggled on, Antigravity will use your AI credits to fulfill model requests once you're out of model quota. Antigravity will always use your model quota first before using AI credits": "开启后，当模型配额用尽时，Antigravity 将使用您的 AI 额度来处理模型请求。Antigravity 将始终优先使用模型配额，然后再使用 AI 额度",
   "Gemini Models": "Gemini 模型",
-  "Claude and GPT models": "Claude 和 GPT 模型",
   "Claude and GPT Models": "Claude 和 GPT 模型",
   "Claude & GPT models": "Claude 和 GPT 模型",
   "OpenAI Models": "OpenAI 模型",
@@ -75,9 +74,6 @@
   "Thinking: High": "思考：高",
   "Thinking: Medium": "思考：中",
   "Thinking: Low": "思考：低",
-  "High thinking": "高思考",
-  "Medium thinking": "中思考",
-  "Low thinking": "低思考",
   "High Thinking": "高思考",
   "Medium Thinking": "中思考",
   "Low Thinking": "低思考",
@@ -87,6 +83,5 @@
   "High reasoning effort": "高推理强度",
   "Medium reasoning effort": "中推理强度",
   "Low reasoning effort": "低推理强度",
-  "Thinking effort": "思考强度",
-  "Reasoning effort": "推理强度"
+  "Thinking effort": "思考强度"
 }

@@ -22,4 +22,6 @@
 
 1. **直接编辑对应模块**：根据功能界面打开对应的 zh-CN/<module>.json，直接新增或修改 "English Text": "简体中文翻译" 键值对。
 2. **无需额外编译步骤**：修改后运行测试 go test ./... 或执行汉化补丁时，Go Patcher 将在内存中即时合并并注入。
-3. **保持键名精准**：键名严格对应 Antigravity 界面中的英文原文本（包括空格与大小写）。
+3. **大小写自动兼容（方案1）**：运行时注入引擎已内置 `DICT_LOWER` 小写索引降级查找机制。对于同一英文词条，无需重复配置全小写、全大写或首字母大写变体（例如只需配置 `"Local": "本地"`，即可自动匹配并翻译 `"local"` 和 `"LOCAL"`）。
+4. **词典去重与清理脚本**：可通过 `node scripts/deduplicate_locales.js`（预览）或 `node scripts/deduplicate_locales.js --apply`（应用）一键对词典中的大小写冗余项进行自动清洗。
+
