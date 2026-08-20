@@ -35,18 +35,35 @@
                     <span class="version-badge">v1.7.0 便携版</span>
                 </div>
             </div>
-            <div class="window-controls" style="--wails-draggable:no-drag">
-                <button id="btn-toggle-settings" class="ctrl-btn" title="偏好与设置">
-                    <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                        <path fill-rule="evenodd" d="M8.34 1.804A1 1 0 0 1 9.32 1h1.36a1 1 0 0 1 .98.804l.295 1.473c.497.144.971.342 1.416.587l1.394-.668a1 1 0 0 1 1.202.28l.962 1.324a1 1 0 0 1-.164 1.282l-1.127.973c.094.498.134 1.01.118 1.528l1.127.973a1 1 0 0 1 .164 1.282l-.962 1.324a1 1 0 0 1-1.202.28l-1.394-.668a7.07 7.07 0 0 1-1.416.587l-.295 1.473a1 1 0 0 1-.98.804H9.32a1 1 0 0 1-.98-.804l-.295-1.473a7.07 7.07 0 0 1-1.416-.587l-1.394.668a1 1 0 0 1-1.202-.28l-.962-1.324a1 1 0 0 1 .164-1.282l1.127-.973a7.07 7.07 0 0 1-.118-1.528l-1.127-.973a1 1 0 0 1-.164-1.282l.962-1.324a1 1 0 0 1 1.202-.28l1.394.668c.445-.245.919-.443 1.416-.587l.295-1.473ZM10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" clip-rule="evenodd"/>
-                    </svg>
-                </button>
-                <button id="btn-minimize" class="ctrl-btn" title="最小化">
-                    <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M2 8h12v1H2z"/></svg>
-                </button>
-                <button id="btn-close" class="ctrl-btn close-btn" title="关闭">
-                    <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>
-                </button>
+            <!-- Titlebar Actions & Controls (No Drag) -->
+            <div class="titlebar-right" style="--wails-draggable:no-drag">
+                <nav class="titlebar-tabs">
+                    <button id="nav-btn-dashboard" class="tab-item active" title="汉化主控制台">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="3" width="7" height="7"></rect>
+                            <rect x="14" y="14" width="7" height="7"></rect>
+                            <rect x="3" y="14" width="7" height="7"></rect>
+                        </svg>
+                        <span>主页</span>
+                    </button>
+                    <button id="nav-btn-settings" class="tab-item" title="软件设置与偏好">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                        </svg>
+                        <span>设置</span>
+                    </button>
+                </nav>
+                <div class="titlebar-divider"></div>
+                <div class="window-controls">
+                    <button id="btn-minimize" class="ctrl-btn" title="最小化">
+                        <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M2 8h12v1H2z"/></svg>
+                    </button>
+                    <button id="btn-close" class="ctrl-btn close-btn" title="关闭">
+                        <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>
+                    </button>
+                </div>
             </div>
         </header>
 

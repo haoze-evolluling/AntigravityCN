@@ -125,7 +125,8 @@ function updateThemeSelectorUI(mode) {
 // Page View Navigation (Dashboard <-> Settings)
 // ==========================================================
 function initNavigation() {
-    const btnToggleSettings = document.getElementById("btn-toggle-settings");
+    const navBtnDashboard = document.getElementById("nav-btn-dashboard");
+    const navBtnSettings = document.getElementById("nav-btn-settings");
     const btnBackDashboard = document.getElementById("btn-back-dashboard");
     const viewDashboard = document.getElementById("view-dashboard");
     const viewSettings = document.getElementById("view-settings");
@@ -134,25 +135,26 @@ function initNavigation() {
         if (target === "settings") {
             viewDashboard.classList.remove("active");
             viewSettings.classList.add("active");
-            if (btnToggleSettings) btnToggleSettings.classList.add("active");
+            if (navBtnDashboard) navBtnDashboard.classList.remove("active");
+            if (navBtnSettings) navBtnSettings.classList.add("active");
         } else {
             viewSettings.classList.remove("active");
             viewDashboard.classList.add("active");
-            if (btnToggleSettings) btnToggleSettings.classList.remove("active");
+            if (navBtnDashboard) navBtnDashboard.classList.add("active");
+            if (navBtnSettings) navBtnSettings.classList.remove("active");
         }
     }
 
-    if (btnToggleSettings) {
-        btnToggleSettings.addEventListener("click", () => {
-            const isSettings = viewSettings.classList.contains("active");
-            switchView(isSettings ? "dashboard" : "settings");
-        });
+    if (navBtnDashboard) {
+        navBtnDashboard.addEventListener("click", () => switchView("dashboard"));
+    }
+
+    if (navBtnSettings) {
+        navBtnSettings.addEventListener("click", () => switchView("settings"));
     }
 
     if (btnBackDashboard) {
-        btnBackDashboard.addEventListener("click", () => {
-            switchView("dashboard");
-        });
+        btnBackDashboard.addEventListener("click", () => switchView("dashboard"));
     }
 }
 

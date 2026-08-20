@@ -6,12 +6,12 @@
 :root,
 [data-theme="dark"] {
     --bg-main: #0b0f19;
-    --app-container-bg: rgba(11, 15, 25, 0.7);
-    --titlebar-bg: rgba(15, 23, 42, 0.4);
+    --app-container-bg: rgba(11, 15, 25, 0.72);
+    --titlebar-bg: rgba(15, 23, 42, 0.45);
     
     --bg-card: rgba(18, 24, 38, 0.75);
     --bg-card-hover: rgba(26, 34, 52, 0.85);
-    --bg-card-subtle: rgba(0, 0, 0, 0.25);
+    --bg-card-subtle: rgba(0, 0, 0, 0.3);
     --border-subtle: rgba(255, 255, 255, 0.08);
     --border-highlight: rgba(99, 102, 241, 0.35);
 
@@ -62,19 +62,23 @@
     --theme-card-active-bg: rgba(99, 102, 241, 0.12);
     --theme-card-active-border: #6366f1;
 
+    --tab-active-bg: rgba(99, 102, 241, 0.25);
+    --tab-active-text: #ffffff;
+    --tab-active-border: rgba(99, 102, 241, 0.4);
+
     --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
 }
 
 [data-theme="light"] {
     --bg-main: #f1f5f9;
-    --app-container-bg: rgba(248, 250, 252, 0.78);
-    --titlebar-bg: rgba(255, 255, 255, 0.7);
+    --app-container-bg: rgba(248, 250, 252, 0.82);
+    --titlebar-bg: rgba(255, 255, 255, 0.75);
 
-    --bg-card: rgba(255, 255, 255, 0.82);
-    --bg-card-hover: rgba(255, 255, 255, 0.95);
-    --bg-card-subtle: rgba(241, 245, 249, 0.7);
-    --border-subtle: rgba(203, 213, 225, 0.7);
+    --bg-card: rgba(255, 255, 255, 0.85);
+    --bg-card-hover: rgba(255, 255, 255, 0.96);
+    --bg-card-subtle: rgba(226, 232, 240, 0.6);
+    --border-subtle: rgba(203, 213, 225, 0.75);
     --border-highlight: rgba(99, 102, 241, 0.5);
 
     --primary-grad: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #c026d3 100%);
@@ -123,6 +127,10 @@
     --theme-card-hover: rgba(255, 255, 255, 0.95);
     --theme-card-active-bg: rgba(79, 70, 229, 0.08);
     --theme-card-active-border: #4f46e5;
+
+    --tab-active-bg: rgba(79, 70, 229, 0.15);
+    --tab-active-text: #4338ca;
+    --tab-active-border: rgba(79, 70, 229, 0.35);
 }
 
 * {
@@ -202,7 +210,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 16px;
+    padding: 0 14px;
     border-bottom: 1px solid var(--border-subtle);
     background: var(--titlebar-bg);
     transition: background 0.25s ease, border-color 0.25s ease;
@@ -247,15 +255,72 @@ body {
     font-weight: 500;
 }
 
+/* Titlebar Right: Tabs + Window Controls */
+.titlebar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.titlebar-tabs {
+    display: flex;
+    align-items: center;
+    background: var(--bg-card-subtle);
+    padding: 3px;
+    border-radius: 8px;
+    border: 1px solid var(--border-subtle);
+    gap: 3px;
+}
+
+.tab-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-item svg {
+    flex-shrink: 0;
+    display: block;
+}
+
+.tab-item:hover {
+    color: var(--text-main);
+    background: rgba(125, 125, 125, 0.12);
+}
+
+.tab-item.active {
+    color: var(--tab-active-text);
+    background: var(--tab-active-bg);
+    border-color: var(--tab-active-border);
+    font-weight: 600;
+}
+
+.titlebar-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border-subtle);
+}
+
 .window-controls {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .ctrl-btn {
-    width: 32px;
-    height: 30px;
+    width: 30px;
+    height: 28px;
     border-radius: 6px;
     border: none;
     background: transparent;
@@ -267,14 +332,14 @@ body {
     transition: all 0.15s ease;
 }
 
+.ctrl-btn svg {
+    display: block;
+    flex-shrink: 0;
+}
+
 .ctrl-btn:hover {
     background: rgba(125, 125, 125, 0.12);
     color: var(--text-main);
-}
-
-.ctrl-btn.active {
-    background: rgba(99, 102, 241, 0.18);
-    color: #6366f1;
 }
 
 .ctrl-btn.close-btn:hover {
