@@ -172,5 +172,17 @@
   "Strict Mode": "严格模式",
   "Standard Mode": "标准模式",
   "Strict": "严格",
-  "Standard": "标准"
+  "Standard": "标准",
+
+  "Useful for tasks that require file access across your full machine. The agent has full read and write access to all local files, but all proposed terminal commands require manual review and approval before running.": "适用于需要跨整台机器进行文件访问的任务。智能体拥有对所有本地文件的完整读写权限，但所有建议的终端命令在运行前均需手动审查与批准。",
+  "Useful for tasks that require file access across your full machine. The agent has full read and write access to all local files, but all proposed terminal commands require manual review and approval before running": "适用于需要跨整台机器进行文件访问的任务。智能体拥有对所有本地文件的完整读写权限，但所有建议的终端命令在运行前均需手动审查与批准",
+
+  "Requires manual review for all terminal commands and file accesses outside of the working folders.": "需要对工作文件夹外的所有终端命令和文件访问进行手动审查。",
+  "Requires manual review for all terminal commands and file accesses outside of the working folders": "需要对工作文件夹外的所有终端命令和文件访问进行手动审查",
+
+  "All terminal commands require review. The agent can read or write to any file in the machine.": "所有终端命令都需要审查。智能体可以读取或写入机器上的任意文件。",
+  "All terminal commands require review. The agent can read or write to any file in the machine": "所有终端命令都需要审查。智能体可以读取或写入机器上的任意文件",
+
+  "Disables all safety barriers for maximal iteration velocity.": "禁用所有安全屏障以实现最大迭代速度。",
+  "Disables all safety barriers for maximal iteration velocity": "禁用所有安全屏障以实现最大迭代速度"
 }

@@ -198,5 +198,20 @@
   "High effort": "高强度",
   "Medium effort": "中强度",
   "Low effort": "低强度",
-  "Queues after the turn": "本轮结束后排队"
+  "Queues after the turn": "本轮结束后排队",
+
+  "Provide Feedback": "提供反馈",
+  "Feedback Type": "反馈类型",
+  "Bug Report": "错误报告",
+  "Feature Request": "功能请求",
+  "Auth and Billing": "账户与计费",
+  "General Feedback": "一般反馈",
+  "Description": "描述",
+  "Please describe the issue in detail. The more actionable your feedback, the quicker our team can address your request. Some helpful information includes:": "请详细描述问题。您的反馈越具体可操作，我们的团队就能越快处理您的请求。以下是一些有用的信息：",
+  "Steps to reproduce the issue": "复现问题的步骤",
+  "Expected behavior": "预期行为",
+  "Actual behavior": "实际行为",
+  "Any error messages": "任何错误信息",
+  "Any relevant information": "任何相关信息",
+  "Describe the bug you encountered...": "请描述您遇到的问题..."
 }
