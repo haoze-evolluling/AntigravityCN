@@ -110,9 +110,11 @@ AntigravityCN.exe -path <path>  # 指定自定义 app.asar 路径
 若您克隆了本项目源码并希望自行编译构建便携版 EXE：
 
 1. 确保已安装 [Go](https://go.dev/) 1.22+ 及 [Wails CLI](https://wails.io) (`go install github.com/wailsapp/wails/v2/cmd/wails@latest`)。
-2. 运行构建脚本：
+2. 运行构建脚本（可在资源管理器中双击 `build.bat` 或在终端运行）：
    ```powershell
    .\build.ps1
+   # 或
+   .\build.bat
    ```
 3. 即可在根目录自动生成集成了高颜值 Wails 前端的便携单文件 `AntigravityCN.exe`。
 
