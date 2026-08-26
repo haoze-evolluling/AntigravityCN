@@ -170,7 +170,6 @@
   "Inherit from workspace": "继承工作区设置",
 
   "Application": "应用程序",
-  "Scan the code to open this device in Remote Control": "扫描二维码以在远程控制中打开此设备",
   "Manage Antigravity app settings.": "管理 Antigravity 应用程序设置",
   "Remote Control": "远程控制",
   "Enable Remote Control": "启用远程控制",
@@ -183,5 +182,6 @@
   "Browse and enable plugins from the Build With Google catalog.": "从 Build With Google 目录浏览并启用插件",
   "Local Permissions": "本地权限",
   "Also includes global settings when working in this project.": "在项目中工作时，也包括全局设置",
-  "Agent settings and permissions for conversations outside of projects.": "智能体设置和权限（项目外）"  
+  "Agent settings and permissions for conversations outside of projects.": "智能体设置和权限（项目外）",
+  "Work with local agents from another device.": "从其他设备工作与本地智能体"
 }
