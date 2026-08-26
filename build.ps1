@@ -7,7 +7,8 @@
 
 [CmdletBinding()]
 param(
-    [switch]$NoPause
+    [switch]$NoPause,
+    [switch]$ForceIcon
 )
 
 # 确保控制台输出使用 UTF-8 编码
@@ -66,19 +67,44 @@ try {
         Write-Host "[OK] 已关闭运行中的进程。" -ForegroundColor Green
     }
 
-    # 4. 检查并生成高清图标
-    if (Test-Path "scripts\generate_icon.js") {
-        $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
-        if ($nodeCmd) {
-            Write-Host "[*] 正在从 logo.svg 生成 Windows 高清多分辨率应用图标..." -ForegroundColor Yellow
-            try {
-                & node scripts/generate_icon.js
-            } catch {
-                Write-Host "[!] 图标生成脚本执行异常，将使用现有预置图标继续构建。" -ForegroundColor DarkYellow
-            }
-        } else {
-            Write-Host "[*] 未检测到 Node.js，跳过图标重新生成，使用现有预置图标构建。" -ForegroundColor Gray
+    # 4. 检查并生成高清图标 (智能增量跳过，极大加快构建速度)
+    $iconFile = "build\windows\icon.ico"
+    $appIconFile = "build\appicon.png"
+    $svgFile = "logo.svg"
+    $scriptFile = "scripts\generate_icon.js"
+
+    $needRegenIcon = $false
+    if ($ForceIcon) {
+        $needRegenIcon = $true
+    } elseif (-not (Test-Path $iconFile) -or -not (Test-Path $appIconFile)) {
+        $needRegenIcon = $true
+    } elseif (Test-Path $svgFile) {
+        $svgMtime = (Get-Item $svgFile).LastWriteTime
+        $icoMtime = (Get-Item $iconFile).LastWriteTime
+        $appMtime = (Get-Item $appIconFile).LastWriteTime
+        $scriptMtime = if (Test-Path $scriptFile) { (Get-Item $scriptFile).LastWriteTime } else { [DateTime]::MinValue }
+
+        if ($svgMtime -gt $icoMtime -or $svgMtime -gt $appMtime -or $scriptMtime -gt $icoMtime) {
+            $needRegenIcon = $true
         }
+    }
+
+    if ($needRegenIcon) {
+        if (Test-Path $scriptFile) {
+            $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+            if ($nodeCmd) {
+                Write-Host "[*] 检测到源文件变更或指定了强制生成，正在从 logo.svg 生成 Windows 高清多分辨率应用图标..." -ForegroundColor Yellow
+                try {
+                    & node scripts/generate_icon.js --force
+                } catch {
+                    Write-Host "[!] 图标生成脚本执行异常，将使用现有预置图标继续构建。" -ForegroundColor DarkYellow
+                }
+            } else {
+                Write-Host "[*] 未检测到 Node.js，跳过图标重新生成，使用现有预置图标构建。" -ForegroundColor Gray
+            }
+        }
+    } else {
+        Write-Host "[OK] 应用图标已是最新，跳过重新生成 (使用 .\build.ps1 -ForceIcon 可强制重新生成)。" -ForegroundColor Green
     }
 
     # 5. 执行编译构建

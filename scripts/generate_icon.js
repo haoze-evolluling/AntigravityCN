@@ -14,7 +14,9 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
-const { execSync } = require('child_process');
+const { exec } = require('child_process');
+const util = require('util');
+const execPromise = util.promisify(exec);
 
 const rootDir = path.resolve(__dirname, '..');
 const svgPath = path.join(rootDir, 'logo.svg');
@@ -22,30 +24,27 @@ const buildDir = path.join(rootDir, 'build');
 const windowsBuildDir = path.join(buildDir, 'windows');
 const tempDir = path.join(process.env.TEMP || '.', 'antigravity_icon_build');
 
+const isForce = process.argv.includes('--force') || process.argv.includes('-f');
+const icoDest = path.join(windowsBuildDir, 'icon.ico');
+const appIconDest = path.join(buildDir, 'appicon.png');
+
+// 智能增量检查：如果图标已生成且 logo.svg 未变更，则直接跳过
+if (!isForce && fs.existsSync(icoDest) && fs.existsSync(appIconDest) && fs.existsSync(svgPath)) {
+    const svgMtime = fs.statSync(svgPath).mtimeMs;
+    const icoMtime = fs.statSync(icoDest).mtimeMs;
+    const appIconMtime = fs.statSync(appIconDest).mtimeMs;
+    if (icoMtime >= svgMtime && appIconMtime >= svgMtime) {
+        console.log('[OK] 应用图标已是最新，跳过生成 (添加 --force 可强制重新生成)。');
+        process.exit(0);
+    }
+}
+
 if (!fs.existsSync(tempDir)) {
     fs.mkdirSync(tempDir, { recursive: true });
 }
 if (!fs.existsSync(windowsBuildDir)) {
     fs.mkdirSync(windowsBuildDir, { recursive: true });
 }
-
-console.log('[*] 正在从 logo.svg 渲染各分辨率高质量 PNG 图像...');
-
-// 覆盖 Windows 所有标准 DPI 缩放分辨率
-const allSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256, 512];
-const rendered = [];
-
-for (const size of allSizes) {
-    const pngFile = path.join(tempDir, `icon_${size}.png`);
-    execSync(`npx --yes @resvg/resvg-js-cli --fit-width ${size} --fit-height ${size} "${svgPath}" "${pngFile}"`, { stdio: 'ignore' });
-    const buffer = fs.readFileSync(pngFile);
-    rendered.push({ size, path: pngFile, buffer });
-}
-
-// 1. 保存 512x512 渲染图为 build/appicon.png
-const png512 = rendered.find(r => r.size === 512);
-fs.writeFileSync(path.join(buildDir, 'appicon.png'), png512.buffer);
-console.log('[OK] 已生成 build/appicon.png (512x512)');
 
 /**
  * 纯 JS PNG 8-bit RGBA 解码器 (无需额外原生依赖)
@@ -182,60 +181,107 @@ function rgbaToDib(decoded) {
     return buffer;
 }
 
-// 2. 组装多分辨率 Windows ICO 图标文件
-const icoSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256];
-const iconEntries = [];
+async function main() {
+    console.log('[*] 正在从 logo.svg 渲染各分辨率高质量 PNG 图像...');
 
-for (const size of icoSizes) {
-    const item = rendered.find(r => r.size === size);
-    let payload;
-    let isDib = false;
+    // 覆盖 Windows 所有标准 DPI 缩放分辨率
+    const allSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256, 512];
+    const rendered = [];
 
-    if (size === 256) {
-        payload = item.buffer; // 256x256 使用压缩 PNG 格式
-    } else {
-        const decoded = decodePngRgba(item.buffer);
-        payload = rgbaToDib(decoded); // < 256 使用 32 位 DIB/BMP 格式
-        isDib = true;
+    // 优先尝试直接加载本地 @resvg/resvg-js
+    let resvgLib = null;
+    try {
+        resvgLib = require('@resvg/resvg-js');
+    } catch (e) {
+        // 未本地安装
     }
-    iconEntries.push({ size, payload, isDib });
+
+    if (resvgLib && resvgLib.Resvg) {
+        const svgData = fs.readFileSync(svgPath);
+        for (const size of allSizes) {
+            const resvg = new resvgLib.Resvg(svgData, {
+                fitTo: { mode: 'width', value: size }
+            });
+            const pngData = resvg.render();
+            rendered.push({ size, buffer: pngData.asPng() });
+        }
+    } else {
+        // 并发执行各分辨率渲染任务，避免串行 npx 启动开销累计
+        const renderTasks = allSizes.map(async (size) => {
+            const pngFile = path.join(tempDir, `icon_${size}.png`);
+            await execPromise(`npx --prefer-offline --yes @resvg/resvg-js-cli --fit-width ${size} --fit-height ${size} "${svgPath}" "${pngFile}"`, { windowsHide: true });
+            const buffer = fs.readFileSync(pngFile);
+            return { size, path: pngFile, buffer };
+        });
+
+        const results = await Promise.all(renderTasks);
+        rendered.push(...results);
+    }
+
+    // 1. 保存 512x512 渲染图为 build/appicon.png
+    const png512 = rendered.find(r => r.size === 512);
+    fs.writeFileSync(appIconDest, png512.buffer);
+    console.log('[OK] 已生成 build/appicon.png (512x512)');
+
+    // 2. 组装多分辨率 Windows ICO 图标文件
+    const icoSizes = [16, 20, 24, 32, 40, 48, 64, 96, 128, 256];
+    const iconEntries = [];
+
+    for (const size of icoSizes) {
+        const item = rendered.find(r => r.size === size);
+        let payload;
+        let isDib = false;
+
+        if (size === 256) {
+            payload = item.buffer; // 256x256 使用压缩 PNG 格式
+        } else {
+            const decoded = decodePngRgba(item.buffer);
+            payload = rgbaToDib(decoded); // < 256 使用 32 位 DIB/BMP 格式
+            isDib = true;
+        }
+        iconEntries.push({ size, payload, isDib });
+    }
+
+    const headerSize = 6;
+    const dirEntrySize = 16;
+    const entriesSize = dirEntrySize * iconEntries.length;
+    let currentOffset = headerSize + entriesSize;
+
+    const header = Buffer.alloc(headerSize);
+    header.writeUInt16LE(0, 0); // Reserved
+    header.writeUInt16LE(1, 2); // Type 1 = ICO
+    header.writeUInt16LE(iconEntries.length, 4); // Count
+
+    const entryBuffers = [];
+    const imageBuffers = [];
+
+    for (const entry of iconEntries) {
+        const dirEntry = Buffer.alloc(dirEntrySize);
+        const w = entry.size >= 256 ? 0 : entry.size;
+        const h = entry.size >= 256 ? 0 : entry.size;
+
+        dirEntry.writeUInt8(w, 0); // Width
+        dirEntry.writeUInt8(h, 1); // Height
+        dirEntry.writeUInt8(0, 2); // Color palette
+        dirEntry.writeUInt8(0, 3); // Reserved
+        dirEntry.writeUInt16LE(1, 4); // Color planes
+        dirEntry.writeUInt16LE(32, 6); // Bits per pixel
+        dirEntry.writeUInt32LE(entry.payload.length, 8); // Data size
+        dirEntry.writeUInt32LE(currentOffset, 12); // Data offset
+
+        entryBuffers.push(dirEntry);
+        imageBuffers.push(entry.payload);
+        currentOffset += entry.payload.length;
+    }
+
+    const icoBuffer = Buffer.concat([header, ...entryBuffers, ...imageBuffers]);
+    fs.writeFileSync(icoDest, icoBuffer);
+
+    console.log(`[OK] 已成功生成 Windows 高清多规格图标: ${icoDest}`);
+    console.log(`     包含 ${iconEntries.length} 种分辨率规格: ${icoSizes.join(', ')} px`);
 }
 
-const headerSize = 6;
-const dirEntrySize = 16;
-const entriesSize = dirEntrySize * iconEntries.length;
-let currentOffset = headerSize + entriesSize;
-
-const header = Buffer.alloc(headerSize);
-header.writeUInt16LE(0, 0); // Reserved
-header.writeUInt16LE(1, 2); // Type 1 = ICO
-header.writeUInt16LE(iconEntries.length, 4); // Count
-
-const entryBuffers = [];
-const imageBuffers = [];
-
-for (const entry of iconEntries) {
-    const dirEntry = Buffer.alloc(dirEntrySize);
-    const w = entry.size >= 256 ? 0 : entry.size;
-    const h = entry.size >= 256 ? 0 : entry.size;
-
-    dirEntry.writeUInt8(w, 0); // Width
-    dirEntry.writeUInt8(h, 1); // Height
-    dirEntry.writeUInt8(0, 2); // Color palette
-    dirEntry.writeUInt8(0, 3); // Reserved
-    dirEntry.writeUInt16LE(1, 4); // Color planes
-    dirEntry.writeUInt16LE(32, 6); // Bits per pixel
-    dirEntry.writeUInt32LE(entry.payload.length, 8); // Data size
-    dirEntry.writeUInt32LE(currentOffset, 12); // Data offset
-
-    entryBuffers.push(dirEntry);
-    imageBuffers.push(entry.payload);
-    currentOffset += entry.payload.length;
-}
-
-const icoBuffer = Buffer.concat([header, ...entryBuffers, ...imageBuffers]);
-const icoDest = path.join(windowsBuildDir, 'icon.ico');
-fs.writeFileSync(icoDest, icoBuffer);
-
-console.log(`[OK] 已成功生成 Windows 高清多规格图标: ${icoDest}`);
-console.log(`     包含 ${iconEntries.length} 种分辨率规格: ${icoSizes.join(', ')} px`);
+main().catch(err => {
+    console.error('[!] 图标生成失败:', err);
+    process.exit(1);
+});
