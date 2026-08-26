@@ -25,8 +25,8 @@ func TestLoadLocalesDictWithChineseFilenames(t *testing.T) {
 		t.Fatalf("loadLocalesDict failed: %v", err)
 	}
 
-	if fileCount != 9 {
-		t.Errorf("Expected 9 locale module files, got %d", fileCount)
+	if fileCount != 4 {
+		t.Errorf("Expected 4 locale module files, got %d", fileCount)
 	}
 
 	if totalKeys < 900 {

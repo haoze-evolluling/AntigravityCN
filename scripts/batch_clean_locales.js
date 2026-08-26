@@ -9,12 +9,7 @@ const MODULE_PRIORITY = [
     '通用.json',
     '对话.json',
     '设置.json',
-    '工作区.json',
-    '子智能体.json',
-    '模型.json',
-    '导航.json',
-    '自定义.json',
-    'MCP.json'
+    '工作区.json'
 ];
 
 // 已知微小语义冲突的标准决策表

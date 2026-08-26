@@ -8,15 +8,10 @@
 
 | 模块文件 | 包含词条数量 | 职责与归类范围 | 典型词条示例 |
 | :--- | :--- | :--- | :--- |
-| 对话.json | 176 | 对话管理、输入框交互、Agent 运行状态、Thinking 思考过程展示、Diff 审查与变更审批 | Ask anything..., Agent is thinking..., Thinking process, Review Changes |
-| 通用.json | 258 | 全局通用基础词条、常用动作按钮、通用状态指示、通用单位与时间 | Save, Delete, Loading..., Success, Error, Enabled, Today |
-| 自定义.json | 71 | 自定义系统：Skills 技能、Rules 规则、Hooks 钩子、UI Plugins 插件、Token 预算及官方技能说明 | Skills & Workflows, Built-in Skills, Workspace Rules, Global Rules |
-| MCP.json | 32 | MCP (Model Context Protocol) 模块：MCP 服务器连接、配置、状态管理与工具调用 | MCP Servers, MCP Tools, Installed MCP Servers, Add MCP + |
-| 模型.json | 90 | 模型选择、Thinking 档位与推理强度配置、模型配额与额度计费 | Gemini Models, Claude and GPT models, Thinking Tier, Quota Remaining |
-| 导航.json | 67 | 顶部菜单栏、窗口与窗格控制、快捷键设置与提示、命令面板 (Command Palette) 操作 | File, Edit, Open Command Palette, Split Conversation Vertically |
-| 设置.json | 227 | 外观与颜色主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略、遥测与账号偏好 | Appearance, Dark Theme, Security Preset, Strict, Standard, Autonomous |
-| 子智能体.json | 108 | 浏览器子智能体 (/browser)、终端管理、后台任务、系统日志与诊断工具 | Browser Settings, Terminal output, Kill Terminal, Download Diagnostics |
-| 工作区.json | 93 | 工作区管理、项目设置、CitC 工作区、Git 源代码管理、分支与 Worktree | Workspaces, Projects, CitC Workspace, Source Control, Git Status |
+| 通用.json | 281 | 全局通用基础词条、常用动作按钮、通用状态指示、单位与时间、顶部菜单栏、窗口与窗格控制、命令面板 (Command Palette) 操作与快捷键提示 | Save, Delete, Loading..., Success, File, Edit, Open Command Palette, Split Conversation Vertically |
+| 对话.json | 236 | 对话管理、输入框交互、Agent 运行状态、Thinking 思考过程展示、Diff 审查与变更审批、浏览器子智能体 (/browser)、终端管理、后台任务、系统日志与诊断工具 | Ask anything..., Agent is thinking..., Thinking process, Review Changes, Browser Settings, Terminal output, Kill Terminal |
+| 设置.json | 240 | 外观与颜色主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略、模型选择与配置、Thinking 档位与推理强度、模型配额与额度计费 | Appearance, Dark Theme, Security Preset, Strict, Standard, Gemini Models, Thinking Tier, Quota Remaining |
+| 工作区.json | 186 | 工作区管理、项目设置、CitC 工作区、Git 源代码管理、分支与 Worktree、自定义系统 (Skills, Rules, Hooks, UI Plugins, Token 预算)、MCP 服务器与工具调用 | Workspaces, Projects, Git Status, Skills & Workflows, Built-in Skills, MCP Servers, MCP Tools |
 
 ## 维护与新增翻译规范
 
