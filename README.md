@@ -56,15 +56,15 @@
 
 | 模块文件 | 覆盖功能范围 |
 | :--- | :--- |
-| **`chat.json`** | 对话交互、输入框、智能体状态、Thinking 思考过程展示、Diff 审查与变更审批 |
-| **`common.json`** | 全局通用词条、通用操作按钮、状态提示、通用单位与时间表达 |
-| **`customizations.json`** | 自定义系统：Skills 技能、Rules 规则、Hooks 钩子、UI Plugins 插件、Token 预算等 |
-| **`mcp.json`** | MCP (Model Context Protocol) 服务器连接、配置、状态管理与工具调用 |
-| **`models.json`** | 模型选择、Thinking 档位与推理强度配置、模型配额与额度计费 |
-| **`navigation.json`** | 顶部导航栏、窗口与窗格控制、快捷键提示、命令面板 (Command Palette) |
-| **`settings.json`** | 外观主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略等 |
-| **`subagents.json`** | 浏览器子智能体 (`/browser`)、终端管理、后台任务、系统日志与诊断 |
-| **`workspace.json`** | 工作区管理、项目设置、Git 源代码管理、Worktree 与分支切换 |
+| **`对话.json`** | 对话交互、输入框、智能体状态、Thinking 思考过程展示、Diff 审查与变更审批 |
+| **`通用.json`** | 全局通用词条、通用操作按钮、状态提示、通用单位与时间表达 |
+| **`自定义.json`** | 自定义系统：Skills 技能、Rules 规则、Hooks 钩子、UI Plugins 插件、Token 预算等 |
+| **`MCP.json`** | MCP (Model Context Protocol) 服务器连接、配置、状态管理与工具调用 |
+| **`模型.json`** | 模型选择、Thinking 档位与推理强度配置、模型配额与额度计费 |
+| **`导航.json`** | 顶部导航栏、窗口与窗格控制、快捷键提示、命令面板 (Command Palette) |
+| **`设置.json`** | 外观主题、通用偏好、安全预设 (Security Preset)、沙箱与网络策略等 |
+| **`子智能体.json`** | 浏览器子智能体 (`/browser`)、终端管理、后台任务、系统日志与诊断 |
+| **`工作区.json`** | 工作区管理、项目设置、Git 源代码管理、Worktree 与分支切换 |
 
 > **开发说明**：
 > 1. **即改即用**：直接修改或新增对应 JSON 文件中的词条，Go Patcher 在应用补丁时会自动即时合并装配，无需单独的词典构建流程。

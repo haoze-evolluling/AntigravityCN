@@ -6,15 +6,15 @@ const preloadFile = path.resolve(__dirname, '../patches/preload.js');
 
 // 模块优先级（跨文件去重时，通用/核心模块优先保留）
 const MODULE_PRIORITY = [
-    'common.json',
-    'chat.json',
-    'settings.json',
-    'workspace.json',
-    'subagents.json',
-    'models.json',
-    'navigation.json',
-    'customizations.json',
-    'mcp.json'
+    '通用.json',
+    '对话.json',
+    '设置.json',
+    '工作区.json',
+    '子智能体.json',
+    '模型.json',
+    '导航.json',
+    '自定义.json',
+    'MCP.json'
 ];
 
 // 已知微小语义冲突的标准决策表
