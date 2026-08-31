@@ -3,8 +3,10 @@
   "name": "AntigravityCN",
   "outputfilename": "AntigravityCN",
   "frontend:dir": "frontend",
-  "frontend:install": "",
-  "frontend:build": "",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
   "author": {
     "name": "AntigravityCN"
   },

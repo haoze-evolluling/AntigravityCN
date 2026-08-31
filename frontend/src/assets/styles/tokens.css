@@ -1,0 +1,173 @@
+/* ==========================================================
+   AntigravityCN - Design Tokens & Theme Matrix
+   现代东方水墨 · 宣纸质感 · 杂志排版设计令牌
+   ========================================================== */
+
+:root,
+[data-theme="dark"] {
+    --theme-name: "dark";
+
+    /* Backgrounds & Paper Surfaces (玄青古砚 · 墨玉层) */
+    --bg-base: #0f1115;
+    --app-bg: rgba(16, 18, 23, 0.94);
+    --titlebar-bg: rgba(14, 16, 21, 0.85);
+
+    --card-bg: rgba(23, 26, 33, 0.82);
+    --card-bg-hover: rgba(28, 32, 41, 0.92);
+    --card-subtle: rgba(255, 255, 255, 0.035);
+
+    /* Ink Wash Borders & Dividers (砚线 · 裁边) */
+    --border-ink: rgba(235, 230, 220, 0.11);
+    --border-ink-strong: rgba(235, 230, 220, 0.22);
+    --border-subtle: rgba(255, 255, 255, 0.06);
+
+    /* Ink Gradient & Typography (宣白 · 云灰 · 暮云) */
+    --text-primary: #edeae3;
+    --text-secondary: #aba498;
+    --text-dim: #6d675e;
+    --text-on-accent: #ffffff;
+
+    /* Oriental Accents (朱砂印泥 · 松烟翠竹 · 霜铁砚台) */
+    --cinnabar: #d94b38;
+    --cinnabar-hover: #ea5c49;
+    --cinnabar-active: #c43d2b;
+    --cinnabar-bg: rgba(217, 75, 56, 0.14);
+    --cinnabar-border: rgba(217, 75, 56, 0.35);
+    --cinnabar-shadow: rgba(217, 75, 56, 0.28);
+
+    --pine-jade: #2d8972;
+    --pine-jade-hover: #37a187;
+    --pine-jade-active: #237460;
+    --pine-jade-bg: rgba(45, 137, 114, 0.14);
+    --pine-jade-border: rgba(45, 137, 114, 0.35);
+    --pine-jade-shadow: rgba(45, 137, 114, 0.25);
+
+    --inkstone-btn-bg: rgba(255, 255, 255, 0.07);
+    --inkstone-btn-hover: rgba(255, 255, 255, 0.12);
+    --inkstone-btn-border: rgba(255, 255, 255, 0.12);
+    --inkstone-btn-text: #e2ded5;
+
+    --amber-ink: #d49539;
+    --indigo-ink: #5b84ad;
+    --status-ok: #34d399;
+    --status-warn: #fbbf24;
+    --status-err: #f87171;
+
+    /* Seal & Editorial Badges */
+    --seal-bg: rgba(217, 75, 56, 0.12);
+    --seal-border: rgba(217, 75, 56, 0.32);
+    --seal-text: #e2614f;
+
+    --input-bg: rgba(10, 12, 16, 0.7);
+    --input-border: rgba(255, 255, 255, 0.1);
+    --input-text: #e2ded5;
+    --input-focus-border: #d94b38;
+
+    /* Terminal Console */
+    --term-bg: #0b0d11;
+    --term-border: rgba(255, 255, 255, 0.08);
+    --term-header-bg: #14171e;
+    --term-header-border: rgba(255, 255, 255, 0.06);
+
+    /* Modal & Toast */
+    --modal-bg: #161920;
+    --modal-border: rgba(255, 255, 255, 0.14);
+    --toast-bg: rgba(22, 25, 33, 0.96);
+    --toast-border: rgba(217, 75, 56, 0.35);
+    --toast-text: #edeae3;
+
+    /* Shadows & Aura */
+    --paper-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+    --paper-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --ink-blob-1: radial-gradient(circle at 10% 20%, rgba(217, 75, 56, 0.07) 0%, transparent 60%);
+    --ink-blob-2: radial-gradient(circle at 90% 80%, rgba(45, 137, 114, 0.06) 0%, transparent 60%);
+    --grain-opacity: 0.035;
+    --grain-blend: screen;
+}
+
+[data-theme="light"] {
+    --theme-name: "light";
+
+    /* Backgrounds & Paper Surfaces (素宣白 · 绢帛米白) */
+    --bg-base: #f6f4ee;
+    --app-bg: rgba(248, 246, 240, 0.95);
+    --titlebar-bg: rgba(242, 239, 231, 0.88);
+
+    --card-bg: rgba(255, 255, 255, 0.88);
+    --card-bg-hover: #ffffff;
+    --card-subtle: rgba(44, 40, 35, 0.035);
+
+    /* Ink Wash Borders & Dividers (淡墨 · 细辑线) */
+    --border-ink: rgba(44, 40, 35, 0.12);
+    --border-ink-strong: rgba(44, 40, 35, 0.22);
+    --border-subtle: rgba(44, 40, 35, 0.06);
+
+    /* Ink Gradient & Typography (焦墨 · 浓墨 · 淡墨) */
+    --text-primary: #1c1a18;
+    --text-secondary: #4a463f;
+    --text-dim: #858076;
+    --text-on-accent: #ffffff;
+
+    /* Oriental Accents (朱砂印泥 · 松烟黛绿 · 古墨砚台) */
+    --cinnabar: #b83b26;
+    --cinnabar-hover: #a1321f;
+    --cinnabar-active: #8b2817;
+    --cinnabar-bg: rgba(184, 59, 38, 0.08);
+    --cinnabar-border: rgba(184, 59, 38, 0.28);
+    --cinnabar-shadow: rgba(184, 59, 38, 0.2);
+
+    --pine-jade: #216153;
+    --pine-jade-hover: #194e42;
+    --pine-jade-active: #133f35;
+    --pine-jade-bg: rgba(33, 97, 83, 0.08);
+    --pine-jade-border: rgba(33, 97, 83, 0.25);
+    --pine-jade-shadow: rgba(33, 97, 83, 0.18);
+
+    --inkstone-btn-bg: rgba(44, 40, 35, 0.06);
+    --inkstone-btn-hover: rgba(44, 40, 35, 0.1);
+    --inkstone-btn-border: rgba(44, 40, 35, 0.14);
+    --inkstone-btn-text: #1c1a18;
+
+    --amber-ink: #b37418;
+    --indigo-ink: #335473;
+    --status-ok: #059669;
+    --status-warn: #d97706;
+    --status-err: #dc2626;
+
+    /* Seal & Editorial Badges */
+    --seal-bg: rgba(184, 59, 38, 0.07);
+    --seal-border: rgba(184, 59, 38, 0.24);
+    --seal-text: #b83b26;
+
+    --input-bg: rgba(255, 255, 255, 0.95);
+    --input-border: rgba(44, 40, 35, 0.14);
+    --input-text: #1c1a18;
+    --input-focus-border: #b83b26;
+
+    /* Terminal Console */
+    --term-bg: #1c1e22;
+    --term-border: rgba(44, 40, 35, 0.12);
+    --term-header-bg: #272a30;
+    --term-header-border: rgba(255, 255, 255, 0.06);
+
+    /* Modal & Toast */
+    --modal-bg: #ffffff;
+    --modal-border: rgba(44, 40, 35, 0.14);
+    --toast-bg: rgba(28, 26, 24, 0.94);
+    --toast-border: rgba(184, 59, 38, 0.4);
+    --toast-text: #f7f5ef;
+
+    /* Shadows & Aura */
+    --paper-shadow: 0 4px 20px rgba(44, 38, 30, 0.07), 0 1px 3px rgba(44, 38, 30, 0.04);
+    --paper-shadow-sm: 0 2px 8px rgba(44, 38, 30, 0.05);
+    --ink-blob-1: radial-gradient(circle at 10% 20%, rgba(184, 59, 38, 0.04) 0%, transparent 60%);
+    --ink-blob-2: radial-gradient(circle at 90% 80%, rgba(33, 97, 83, 0.04) 0%, transparent 60%);
+    --grain-opacity: 0.045;
+    --grain-blend: multiply;
+}
+
+:root {
+    --font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun", "STSong", "Hiragino Mincho ProN", serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+    --font-mono: "Cascadia Code", "JetBrains Mono", "SF Mono", Consolas, "Courier New", monospace;
+}

@@ -14,7 +14,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/windows"
 )
 
-//go:embed all:frontend
+//go:embed all:frontend/dist
 var assets embed.FS
 
 //go:embed all:patches
@@ -76,7 +76,7 @@ func main() {
 		return
 	}
 
-	frontendFS, _ := fs.Sub(assets, "frontend")
+	frontendFS, _ := fs.Sub(assets, "frontend/dist")
 	if frontendFS == nil {
 		frontendFS = assets
 	}
