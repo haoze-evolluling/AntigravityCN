@@ -39,7 +39,7 @@ function closeWindow() {
         <span class="editorial-sep">/</span>
         <span class="title-sub">简体中文汉化</span>
       </div>
-      <div class="seal-badge">便携版 · v2.2.1</div>
+      <div class="seal-badge">便携版 · v2.5</div>
     </div>
 
     <!-- Titlebar Tabs & Window Controls -->
