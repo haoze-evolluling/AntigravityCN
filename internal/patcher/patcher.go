@@ -83,38 +83,9 @@ func GetExecutablePath(asarPath string) string {
 	return filepath.Join(appDir, "Antigravity.exe")
 }
 
-// IsProcessRunning checks if any process matching the given exe name (case-insensitive) is currently running
-func IsProcessRunning(exeName string) (bool, error) {
-	snapshot, _, err := procCreateToolhelp32Snapshot.Call(uintptr(TH32CS_SNAPPROCESS), 0)
-	if snapshot == uintptr(syscall.InvalidHandle) {
-		return false, err
-	}
-	defer procCloseHandle.Call(snapshot)
-
-	var entry PROCESSENTRY32W
-	entry.Size = uint32(unsafe.Sizeof(entry))
-
-	ret, _, _ := procProcess32FirstW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
-	if ret == 0 {
-		return false, nil
-	}
-
-	for {
-		name := syscall.UTF16ToString(entry.ExeFile[:])
-		if strings.EqualFold(name, exeName) {
-			return true, nil
-		}
-		ret, _, _ = procProcess32NextW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
-		if ret == 0 {
-			break
-		}
-	}
-
-	return false, nil
-}
-
-// CloseAntigravityProcess closes running Antigravity processes in a single snapshot traversal
-func CloseAntigravityProcess() error {
+// enumProcesses iterates over running Win32 processes and calls visitor for each.
+// If visitor returns false, iteration stops early.
+func enumProcesses(visitor func(pid uint32, exeName string) bool) error {
 	snapshot, _, err := procCreateToolhelp32Snapshot.Call(uintptr(TH32CS_SNAPPROCESS), 0)
 	if snapshot == uintptr(syscall.InvalidHandle) {
 		return err
@@ -131,12 +102,8 @@ func CloseAntigravityProcess() error {
 
 	for {
 		name := syscall.UTF16ToString(entry.ExeFile[:])
-		if strings.EqualFold(name, "antigravity.exe") {
-			hProcess, _, _ := procOpenProcess.Call(uintptr(PROCESS_TERMINATE), 0, uintptr(entry.ProcessID))
-			if hProcess != 0 {
-				procTerminateProcess.Call(hProcess, 1)
-				procCloseHandle.Call(hProcess)
-			}
+		if !visitor(entry.ProcessID, name) {
+			break
 		}
 		ret, _, _ = procProcess32NextW.Call(snapshot, uintptr(unsafe.Pointer(&entry)))
 		if ret == 0 {
@@ -145,6 +112,33 @@ func CloseAntigravityProcess() error {
 	}
 
 	return nil
+}
+
+// IsProcessRunning checks if any process matching the given exe name (case-insensitive) is currently running
+func IsProcessRunning(exeName string) (bool, error) {
+	found := false
+	err := enumProcesses(func(_ uint32, name string) bool {
+		if strings.EqualFold(name, exeName) {
+			found = true
+			return false
+		}
+		return true
+	})
+	return found, err
+}
+
+// CloseAntigravityProcess closes running Antigravity processes in a single snapshot traversal
+func CloseAntigravityProcess() error {
+	return enumProcesses(func(pid uint32, name string) bool {
+		if strings.EqualFold(name, "antigravity.exe") {
+			hProcess, _, _ := procOpenProcess.Call(uintptr(PROCESS_TERMINATE), 0, uintptr(pid))
+			if hProcess != 0 {
+				procTerminateProcess.Call(hProcess, 1)
+				procCloseHandle.Call(hProcess)
+			}
+		}
+		return true
+	})
 }
 
 // AppStatus holds status information about the current installation
@@ -279,17 +273,22 @@ func ApplyPatch(asarPath string, patchesFS fs.FS, logFn func(string), opts *Patc
 
 	// Repack ASAR
 	logFn("[*] 正在重新封装 app.asar...")
-	tempAsarFile := filepath.Join(os.TempDir(), fmt.Sprintf("app_cn_%d.asar", os.Getpid()))
-	defer os.Remove(tempAsarFile)
+	tempAsarFile, err := os.CreateTemp("", "app_cn_*.asar")
+	if err != nil {
+		return fmt.Errorf("创建临时 asar 文件失败: %w", err)
+	}
+	tempAsarPath := tempAsarFile.Name()
+	_ = tempAsarFile.Close()
+	defer os.Remove(tempAsarPath)
 
-	if err := asar.Pack(tempExtractDir, tempAsarFile); err != nil {
+	if err := asar.Pack(tempExtractDir, tempAsarPath); err != nil {
 		return fmt.Errorf("重新封装 app.asar 失败: %w", err)
 	}
 	logFn("[OK] app.asar 封装完成。")
 
 	// Overwrite target app.asar
 	logFn("[*] 正在写入汉化版文件...")
-	if err := copyFile(tempAsarFile, asarPath); err != nil {
+	if err := copyFile(tempAsarPath, asarPath); err != nil {
 		return fmt.Errorf("覆盖写入 app.asar 失败: %w", err)
 	}
 	logFn("[OK] 汉化补丁写入成功！")
@@ -357,7 +356,7 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 	for _, dir := range []string{"locales/zh-CN", "patches/locales/zh-CN"} {
 		entries, err := fs.ReadDir(patchesFS, dir)
 		if err == nil && len(entries) > 0 {
-			mergedMap := make(map[string]interface{})
+			mergedMap := make(map[string]string)
 			fileCount := 0
 			for _, entry := range entries {
 				if entry.IsDir() || !strings.HasSuffix(strings.ToLower(entry.Name()), ".json") {
@@ -369,7 +368,7 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 					logFn(fmt.Sprintf("    [!] 读取词典模块 %s 失败: %v", entry.Name(), readErr))
 					continue
 				}
-				var fileMap map[string]interface{}
+				var fileMap map[string]string
 				if unmarshalErr := json.Unmarshal(fileData, &fileMap); unmarshalErr != nil {
 					logFn(fmt.Sprintf("    [!] 词典模块 %s JSON 格式有误: %v", entry.Name(), unmarshalErr))
 					continue
@@ -391,11 +390,11 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 
 	for _, file := range []string{"locales/zh-CN.json", "patches/locales/zh-CN.json"} {
 		if data, err := fs.ReadFile(patchesFS, file); err == nil {
-			var dummy map[string]interface{}
-			if unmarshalErr := json.Unmarshal(data, &dummy); unmarshalErr != nil {
+			var singleMap map[string]string
+			if unmarshalErr := json.Unmarshal(data, &singleMap); unmarshalErr != nil {
 				return nil, 0, 0, fmt.Errorf("%s JSON 格式有误: %w", file, unmarshalErr)
 			}
-			return data, len(dummy), 1, nil
+			return data, len(singleMap), 1, nil
 		}
 	}
 

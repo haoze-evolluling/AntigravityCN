@@ -201,9 +201,9 @@ body {
     align-items: center;
     background: var(--card-subtle);
     padding: 3px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     border: 1px solid var(--border-subtle);
-    gap: 2px;
+    gap: 3px;
 }
 
 .tab-item {
@@ -211,9 +211,9 @@ body {
     align-items: center;
     justify-content: center;
     gap: 6px;
-    height: 26px;
-    padding: 0 10px;
-    border-radius: 4px;
+    height: 28px;
+    padding: 0 12px;
+    border-radius: var(--radius-sm);
     font-size: 12px;
     font-weight: 500;
     color: var(--text-secondary);
@@ -255,13 +255,13 @@ body {
 .window-controls {
     display: flex;
     align-items: center;
-    gap: 2px;
+    gap: 3px;
 }
 
 .ctrl-btn {
-    width: 28px;
-    height: 26px;
-    border-radius: 4px;
+    width: 30px;
+    height: 28px;
+    border-radius: var(--radius-sm);
     border: none;
     background: transparent;
     color: var(--text-secondary);
@@ -331,7 +331,7 @@ body {
 .paper-card {
     background: var(--card-bg);
     border: 1px solid var(--border-ink);
-    border-radius: 10px;
+    border-radius: var(--radius-xl);
     padding: 14px 16px;
     box-shadow: var(--paper-shadow-sm);
     position: relative;
@@ -389,15 +389,18 @@ body {
 .paper-action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    height: var(--btn-h-sm);
     background: var(--card-subtle);
     border: 1px solid var(--border-ink);
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     color: var(--text-secondary);
-    font-size: 11.5px;
-    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 0 12px;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    white-space: nowrap;
 }
 
 .paper-action-btn:hover {
@@ -408,7 +411,7 @@ body {
 }
 
 .paper-action-btn:active {
-    transform: scale(0.97);
+    transform: scale(0.96);
 }
 
 /* ----------------------------------------------------------
@@ -416,7 +419,9 @@ body {
    ---------------------------------------------------------- */
 .path-input-row {
     display: flex;
-    gap: 8px;
+    align-items: stretch;
+    gap: 10px;
+    height: var(--btn-h-md);
     margin-bottom: 12px;
 }
 
@@ -425,30 +430,33 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+    height: 100%;
 }
 
 .input-tag {
     position: absolute;
-    left: 10px;
+    left: 11px;
     font-family: var(--font-mono);
     font-size: 9.5px;
     font-weight: 700;
     color: var(--text-dim);
     letter-spacing: 0.5px;
     pointer-events: none;
+    z-index: 2;
 }
 
 .text-input {
     width: 100%;
-    height: 38px;
+    height: 100%;
     background: var(--input-bg);
     border: 1px solid var(--input-border);
-    border-radius: 6px;
+    border-radius: var(--radius-md);
     padding: 0 12px 0 46px;
     color: var(--input-text);
     font-size: 12px;
     font-family: var(--font-mono);
     outline: none;
+    box-sizing: border-box;
     transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -458,9 +466,16 @@ body {
 }
 
 .browse-btn {
-    height: 38px;
-    padding: 0 14px;
+    height: 100% !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0 16px;
+    font-size: 12.5px;
+    font-weight: 550;
     white-space: nowrap;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* ----------------------------------------------------------
@@ -469,17 +484,17 @@ body {
 .status-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+    gap: 10px;
 }
 
 .status-pill {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 7px;
     background: var(--card-subtle);
     border: 1px solid var(--border-ink);
-    border-radius: 6px;
-    padding: 6px 10px;
+    border-radius: var(--radius-md);
+    padding: 7px 12px;
     font-size: 11.5px;
     transition: all 0.25s ease;
 }
@@ -495,7 +510,7 @@ body {
 .status-dot {
     width: 7px;
     height: 7px;
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
     background: var(--text-dim);
     transition: all 0.25s ease;
 }
@@ -571,16 +586,16 @@ body {
    ---------------------------------------------------------- */
 .actions-container {
     display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
 }
 
 .btn {
-    height: 42px;
-    border-radius: 8px;
+    height: var(--btn-h-md);
+    border-radius: var(--radius-md);
     border: none;
     font-family: var(--font-sans);
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
@@ -592,10 +607,19 @@ body {
     transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
     overflow: hidden;
+    white-space: nowrap;
+}
+
+.actions-container .btn,
+.btn-lg {
+    height: var(--btn-h-lg);
+    border-radius: var(--radius-lg);
+    font-size: 13.5px;
+    padding: 0 18px;
 }
 
 .btn:active {
-    transform: scale(0.972);
+    transform: scale(0.975);
 }
 
 .btn:disabled {
@@ -614,13 +638,13 @@ body {
 
 .btn-primary:hover {
     background: var(--cinnabar-hover);
-    box-shadow: 0 5px 16px var(--cinnabar-shadow);
+    box-shadow: 0 5px 18px var(--cinnabar-shadow);
     transform: translateY(-1.5px);
 }
 
 .btn-primary:active {
     background: var(--cinnabar-active);
-    transform: scale(0.972);
+    transform: scale(0.975);
 }
 
 .btn-ink-shimmer {
@@ -629,7 +653,7 @@ body {
     left: -100%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.16), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
     pointer-events: none;
 }
 
@@ -651,7 +675,7 @@ body {
 }
 
 .btn-inkstone:active {
-    transform: scale(0.972);
+    transform: scale(0.975);
 }
 
 .btn-pine {
@@ -663,13 +687,13 @@ body {
 
 .btn-pine:hover {
     background: var(--pine-jade-hover);
-    box-shadow: 0 5px 16px var(--pine-jade-shadow);
+    box-shadow: 0 5px 18px var(--pine-jade-shadow);
     transform: translateY(-1.5px);
 }
 
 .btn-pine:active {
     background: var(--pine-jade-active);
-    transform: scale(0.972);
+    transform: scale(0.975);
 }
 
 .btn-secondary {
@@ -685,7 +709,7 @@ body {
 }
 
 .btn-secondary:active {
-    transform: scale(0.972);
+    transform: scale(0.975);
 }
 
 /* ----------------------------------------------------------
@@ -717,19 +741,6 @@ body {
     gap: 7px;
 }
 
-.terminal-seal {
-    width: 15px;
-    height: 15px;
-    border-radius: 3px;
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--text-secondary);
-    font-family: var(--font-serif);
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .terminal-title {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -740,22 +751,25 @@ body {
 
 .terminal-actions {
     display: flex;
-    gap: 4px;
+    align-items: center;
+    gap: 6px;
 }
 
 .term-btn {
-    height: 22px;
-    padding: 0 7px;
-    border-radius: 4px;
+    height: var(--btn-h-xs);
+    padding: 0 9px;
+    border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.04);
     color: #94a3b8;
     font-size: 11px;
+    font-weight: 500;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     transition: all 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+    white-space: nowrap;
 }
 
 .term-btn:hover {
@@ -817,8 +831,12 @@ body {
 }
 
 .back-nav-btn {
-    font-weight: 500;
-    padding: 5px 12px;
+    height: var(--btn-h-sm);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 550;
+    padding: 0 12px;
+    gap: 6px;
 }
 
 .settings-title-wrap {
@@ -866,7 +884,7 @@ body {
 .theme-option-card {
     background: var(--card-subtle);
     border: 1.5px solid var(--border-ink);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 14px 12px;
     cursor: pointer;
     display: flex;
@@ -907,7 +925,7 @@ body {
 .theme-card-icon {
     width: 32px;
     height: 32px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     background: var(--card-subtle);
     border: 1px solid var(--border-ink);
     color: var(--text-primary);
@@ -931,7 +949,7 @@ body {
 .theme-seal-check {
     width: 16px;
     height: 16px;
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
     border: 1.5px solid var(--border-ink-strong);
     display: flex;
     align-items: center;
@@ -947,7 +965,7 @@ body {
 .seal-dot {
     width: 5px;
     height: 5px;
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
     background: #ffffff;
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -1015,7 +1033,7 @@ body {
     background: var(--seal-bg);
     border: 1px solid var(--seal-border);
     padding: 3px 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     width: fit-content;
 }
 
@@ -1025,10 +1043,13 @@ body {
 }
 
 .github-btn {
-    height: 38px;
+    height: var(--btn-h-md);
+    border-radius: var(--radius-md);
     font-size: 12.5px;
+    font-weight: 550;
     padding: 0 16px;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .editorial-notes {
@@ -1049,7 +1070,7 @@ body {
 .note-seal {
     width: 15px;
     height: 15px;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
     background: var(--seal-bg);
     border: 1px solid var(--seal-border);
     color: var(--cinnabar);
@@ -1065,7 +1086,7 @@ body {
 .note-item code {
     font-family: var(--font-mono);
     padding: 1px 4px;
-    border-radius: 3px;
+    border-radius: var(--radius-xs);
     background: var(--card-subtle);
     border: 1px solid var(--border-ink);
     font-size: 11px;
@@ -1103,7 +1124,7 @@ body {
 .modal-card {
     background: var(--modal-bg);
     border: 1px solid var(--modal-border);
-    border-radius: 12px;
+    border-radius: var(--radius-xl);
     padding: 24px;
     width: 420px;
     max-width: 90%;
@@ -1120,7 +1141,7 @@ body {
 .modal-seal-badge {
     width: 44px;
     height: 44px;
-    border-radius: 50%;
+    border-radius: var(--radius-pill);
     background: rgba(217, 75, 56, 0.12);
     border: 1.5px solid rgba(217, 75, 56, 0.35);
     color: var(--cinnabar);
@@ -1154,7 +1175,7 @@ body {
 
 .modal-actions {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     justify-content: center;
     width: 100%;
 }
@@ -1162,11 +1183,11 @@ body {
 .modal-action-btn {
     flex: 1;
     min-width: 140px;
-    height: 40px;
-    padding: 0 16px;
+    height: 42px;
+    padding: 0 18px;
     font-size: 13px;
     font-weight: 600;
-    border-radius: 7px;
+    border-radius: var(--radius-lg);
     white-space: nowrap;
 }
 

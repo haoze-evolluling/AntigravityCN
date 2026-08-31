@@ -8,7 +8,6 @@ const { logs, clearLogs, copyLogs } = useTerminalLog()
   <section class="paper-card terminal-card">
     <div class="terminal-header">
       <div class="terminal-meta">
-        <span class="terminal-seal">录</span>
         <span class="terminal-title">执行记录与运行日志 · EXECUTION LOGS</span>
       </div>
       <div class="terminal-actions">

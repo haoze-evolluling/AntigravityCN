@@ -109,6 +109,70 @@ func ReadHeader(asarPath string) (*Header, uint32, error) {
 	return &header, payloadOffset, nil
 }
 
+// extractFileEntry writes an archive entry or unpacked file to the target path
+func extractFileEntry(currentPath, relPath, unpackedDir string, entry *Entry, asarFile *os.File, payloadOffset uint32) error {
+	if err := os.MkdirAll(filepath.Dir(currentPath), 0755); err != nil {
+		return err
+	}
+
+	// Handle unpacked files (located in <asarPath>.unpacked)
+	if entry.Unpacked {
+		unpackedFile := filepath.Join(unpackedDir, relPath)
+		srcF, err := os.Open(unpackedFile)
+		if err == nil {
+			defer srcF.Close()
+			out, err := os.Create(currentPath)
+			if err != nil {
+				return err
+			}
+			defer out.Close()
+			if _, err := io.Copy(out, srcF); err != nil {
+				return fmt.Errorf("copy unpacked file failed for %s: %w", currentPath, err)
+			}
+			return nil
+		}
+
+		// If not found in .unpacked directory, create a blank placeholder
+		out, err := os.Create(currentPath)
+		if err != nil {
+			return err
+		}
+		return out.Close()
+	}
+
+	// Handle zero-size file with empty offset
+	if entry.Size == 0 && entry.Offset == "" {
+		out, err := os.Create(currentPath)
+		if err != nil {
+			return err
+		}
+		return out.Close()
+	}
+
+	// Regular archive file
+	offset, err := strconv.ParseInt(entry.Offset, 10, 64)
+	if err != nil {
+		return fmt.Errorf("invalid file offset %q for %s: %w", entry.Offset, currentPath, err)
+	}
+
+	out, err := os.Create(currentPath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	absOffset := int64(payloadOffset) + offset
+	if _, err := asarFile.Seek(absOffset, io.SeekStart); err != nil {
+		return fmt.Errorf("seek failed for %s: %w", currentPath, err)
+	}
+
+	if _, err := io.CopyN(out, asarFile, entry.Size); err != nil {
+		return fmt.Errorf("copy failed for %s: %w", currentPath, err)
+	}
+
+	return nil
+}
+
 // Extract extracts all files from an ASAR archive into the specified destination directory
 func Extract(asarPath, destDir string) error {
 	header, payloadOffset, err := ReadHeader(asarPath)
@@ -141,65 +205,7 @@ func Extract(asarPath, destDir string) error {
 			return nil
 		}
 
-		if err := os.MkdirAll(filepath.Dir(currentPath), 0755); err != nil {
-			return err
-		}
-
-		// Handle unpacked files (located in <asarPath>.unpacked)
-		if entry.Unpacked {
-			unpackedFile := filepath.Join(unpackedDir, relPath)
-			if srcF, err := os.Open(unpackedFile); err == nil {
-				defer srcF.Close()
-				out, err := os.Create(currentPath)
-				if err != nil {
-					return err
-				}
-				defer out.Close()
-				if _, err := io.Copy(out, srcF); err != nil {
-					return fmt.Errorf("copy unpacked file failed for %s: %w", currentPath, err)
-				}
-				return nil
-			}
-
-			// If not found in .unpacked directory, create a blank placeholder
-			out, err := os.Create(currentPath)
-			if err != nil {
-				return err
-			}
-			return out.Close()
-		}
-
-		// Handle zero-size file with empty offset
-		if entry.Size == 0 && entry.Offset == "" {
-			out, err := os.Create(currentPath)
-			if err != nil {
-				return err
-			}
-			return out.Close()
-		}
-
-		// Regular archive file
-		offset, err := strconv.ParseInt(entry.Offset, 10, 64)
-		if err != nil {
-			return fmt.Errorf("invalid file offset %q for %s: %w", entry.Offset, currentPath, err)
-		}
-
-		out, err := os.Create(currentPath)
-		if err != nil {
-			return err
-		}
-		defer out.Close()
-
-		absOffset := int64(payloadOffset) + offset
-		if _, err := f.Seek(absOffset, io.SeekStart); err != nil {
-			return fmt.Errorf("seek failed for %s: %w", currentPath, err)
-		}
-
-		if _, err := io.CopyN(out, f, entry.Size); err != nil {
-			return fmt.Errorf("copy failed for %s: %w", currentPath, err)
-		}
-
-		return nil
+		return extractFileEntry(currentPath, relPath, unpackedDir, entry, f, payloadOffset)
 	}
 
 	if err := os.MkdirAll(destDir, 0755); err != nil {
@@ -219,8 +225,6 @@ func Extract(asarPath, destDir string) error {
 type fileInfo struct {
 	relPath  string // Forward-slash normalized path relative to root
 	fullPath string
-	size     int64
-	data     []byte // If loaded in memory or nil if streaming
 }
 
 // Pack packs a source directory into an ASAR file
@@ -239,17 +243,10 @@ func Pack(srcDir, asarPath string) error {
 		if err != nil {
 			return err
 		}
-		relNorm := filepath.ToSlash(rel)
-
-		info, err := d.Info()
-		if err != nil {
-			return err
-		}
 
 		files = append(files, fileInfo{
-			relPath:  relNorm,
+			relPath:  filepath.ToSlash(rel),
 			fullPath: p,
-			size:     info.Size(),
 		})
 		return nil
 	})
