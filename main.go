@@ -90,7 +90,7 @@ func main() {
 		MinWidth:          720,
 		MinHeight:         540,
 		Frameless:         true,
-		BackgroundColour:  &options.RGBA{R: 11, G: 15, B: 25, A: 255},
+		BackgroundColour:  &options.RGBA{R: 15, G: 17, B: 21, A: 255},
 		AssetServer:       &assetserver.Options{Assets: frontendFS},
 		OnStartup:         app.startup,
 		Bind:              []interface{}{app},

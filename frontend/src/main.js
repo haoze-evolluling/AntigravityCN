@@ -74,8 +74,8 @@ function setThemeMode(mode, showFeedback = true) {
     if (showFeedback) {
         const names = {
             system: "跟随系统",
-            light: "浅色模式",
-            dark: "深色模式"
+            light: "浅色 · 素宣",
+            dark: "深色 · 玄青"
         };
         showToast(`已切换为【${names[mode]}】`);
     }
@@ -114,8 +114,8 @@ function updateThemeSelectorUI(mode) {
     if (label) {
         const labels = {
             system: "跟随系统",
-            light: "浅色模式",
-            dark: "深色模式"
+            light: "浅色 · 素宣",
+            dark: "深色 · 玄青"
         };
         label.textContent = labels[mode] || "跟随系统";
     }

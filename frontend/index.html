@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-    <!-- Background Glow Orbs -->
-    <div class="glow-orb orb-1"></div>
-    <div class="glow-orb orb-2"></div>
-    <div class="glow-orb orb-3"></div>
+    <!-- Subtle Xuan Paper Grain & Ink Aura Background -->
+    <div class="ink-ambient-layer">
+        <div class="ink-blob blob-top"></div>
+        <div class="ink-blob blob-bottom"></div>
+        <div class="paper-grain-overlay"></div>
+    </div>
 
     <div class="app-container">
-        <!-- Titlebar (Draggable) -->
+        <!-- Titlebar (Editorial Masthead Style) -->
         <header class="titlebar" style="--wails-draggable:drag">
             <div class="brand">
                 <div class="logo-icon">
@@ -22,36 +24,31 @@
                 </div>
                 <div class="brand-text">
                     <span class="title">AntigravityCN</span>
-                    <span class="version-badge">v2.2.1 便携版</span>
+                    <span class="editorial-sep">/</span>
+                    <span class="title-sub">简体中文汉化</span>
                 </div>
+                <div class="seal-badge">便携版 · v2.2.1</div>
             </div>
-            <!-- Titlebar Actions & Controls (No Drag) -->
+
+            <!-- Titlebar Tabs & Window Controls -->
             <div class="titlebar-right" style="--wails-draggable:no-drag">
                 <nav class="titlebar-tabs">
                     <button id="nav-btn-dashboard" class="tab-item active" title="汉化主控制台">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                        <span>主页</span>
+                        <span class="tab-index">01</span>
+                        <span>汉化中枢</span>
                     </button>
                     <button id="nav-btn-settings" class="tab-item" title="软件设置与偏好">
-                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3"></circle>
-                            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                        </svg>
-                        <span>设置</span>
+                        <span class="tab-index">02</span>
+                        <span>偏好设置</span>
                     </button>
                 </nav>
                 <div class="titlebar-divider"></div>
                 <div class="window-controls">
                     <button id="btn-minimize" class="ctrl-btn" title="最小化">
-                        <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M2 8h12v1H2z"/></svg>
+                        <svg viewBox="0 0 16 16" width="11" height="11"><path fill="currentColor" d="M2 8h12v1.2H2z"/></svg>
                     </button>
                     <button id="btn-close" class="ctrl-btn close-btn" title="关闭">
-                        <svg viewBox="0 0 16 16" width="12" height="12"><path fill="currentColor" d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>
+                        <svg viewBox="0 0 16 16" width="11" height="11"><path fill="currentColor" d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"/></svg>
                     </button>
                 </div>
             </div>
@@ -59,250 +56,240 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            <!-- View 1: Dashboard View -->
+            <!-- View 1: Dashboard View (卷一 · 汉化中枢) -->
             <div id="view-dashboard" class="page-view active">
-                <!-- Path & Detection Card -->
-                <section class="glass-card path-card">
-                    <div class="card-header">
-                        <div class="card-title">
-                            <svg viewBox="0 0 20 20" fill="currentColor" class="card-icon">
-                                <path d="M2 4.75C2 3.784 2.784 3 3.75 3h3.586a1.75 1.75 0 0 1 1.237.513l1.414 1.414a.25.25 0 0 0 .177.073h6.086C17.216 5.086 18 5.87 18 6.836v8.414c0 .966-.784 1.75-1.75 1.75H3.75A1.75 1.75 0 0 1 2 15.25V4.75Z"/>
-                            </svg>
-                            <span>Antigravity 目标路径 (app.asar)</span>
+                <!-- Section 1: Path & Detection Area -->
+                <section class="paper-card path-card">
+                    <div class="section-meta-header">
+                        <div class="section-title-wrap">
+                            <span class="section-num">SECTION 01</span>
+                            <h2 class="section-heading">目标路径与状态检索</h2>
                         </div>
-                        <button id="btn-refresh" class="icon-action-btn" title="重新检测状态">
-                            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                        <button id="btn-refresh" class="paper-action-btn" title="重新检测状态">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
                                 <path fill-rule="evenodd" d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.451a.75.75 0 0 0 0-1.5H4.5a.75.75 0 0 0-.75.75v3.75a.75.75 0 0 0 1.5 0v-2.096l.487.487a7 7 0 0 0 11.83-3.07.75.75 0 0 0-1.255-.476ZM4.688 8.576a5.5 5.5 0 0 1 9.201-2.466l.312.311H11.75a.75.75 0 0 0 0 1.5H15.5a.75.75 0 0 0 .75-.75V3.421a.75.75 0 0 0-1.5 0v2.096l-.487-.487a7 7 0 0 0-11.83 3.07.75.75 0 0 0 1.255.476Z" clip-rule="evenodd"/>
                             </svg>
-                            <span>刷新</span>
-                        </button>
-                    </div>
-                    <div class="path-input-group">
-                        <input type="text" id="input-path" class="text-input" placeholder="请选择或输入 app.asar 路径..." readonly>
-                        <button id="btn-browse" class="btn btn-secondary">
-                            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-                                <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z"/>
-                            </svg>
-                            <span>浏览...</span>
+                            <span>刷新检索</span>
                         </button>
                     </div>
 
-                    <!-- Status Pills -->
-                    <div class="status-bar">
+                    <div class="path-input-row">
+                        <div class="input-container">
+                            <span class="input-tag">PATH</span>
+                            <input type="text" id="input-path" class="text-input" placeholder="请选择或输入 app.asar 绝对路径..." readonly>
+                        </div>
+                        <button id="btn-browse" class="btn btn-secondary browse-btn">
+                            <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
+                                <path d="M2 4.75C2 3.784 2.784 3 3.75 3h3.586a1.75 1.75 0 0 1 1.237.513l1.414 1.414a.25.25 0 0 0 .177.073h6.086C17.216 5.086 18 5.87 18 6.836v8.414c0 .966-.784 1.75-1.75 1.75H3.75A1.75 1.75 0 0 1 2 15.25V4.75Z"/>
+                            </svg>
+                            <span>浏览路径</span>
+                        </button>
+                    </div>
+
+                    <!-- Status Badges / Three Status Pills -->
+                    <div class="status-grid">
                         <div class="status-pill" id="pill-install">
-                            <span class="status-dot"></span>
-                            <span class="status-label">安装状态:</span>
+                            <div class="status-dot-wrap"><span class="status-dot"></span></div>
+                            <span class="status-label">核心定位</span>
+                            <span class="status-divider">·</span>
                             <span class="status-value">检测中...</span>
                         </div>
                         <div class="status-pill" id="pill-backup">
-                            <span class="status-dot"></span>
-                            <span class="status-label">备份状态:</span>
+                            <div class="status-dot-wrap"><span class="status-dot"></span></div>
+                            <span class="status-label">原版备份</span>
+                            <span class="status-divider">·</span>
                             <span class="status-value">检测中...</span>
                         </div>
                         <div class="status-pill" id="pill-running">
-                            <span class="status-dot"></span>
-                            <span class="status-label">运行状态:</span>
+                            <div class="status-dot-wrap"><span class="status-dot"></span></div>
+                            <span class="status-label">进程状态</span>
+                            <span class="status-divider">·</span>
                             <span class="status-value">检测中...</span>
                         </div>
                     </div>
                 </section>
 
-                <!-- Actions Bar -->
+                <!-- Section 2: Unified Actions Bar -->
                 <section class="actions-container">
-                    <button id="btn-apply" class="btn btn-primary glow-btn">
-                        <div class="btn-glow"></div>
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                    <button id="btn-apply" class="btn btn-primary" title="一键将简体中文汉化语言包安全写入">
+                        <div class="btn-ink-shimmer"></div>
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
                             <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0 1 12 2v5h4a1 1 0 0 1 .82 1.573l-7 10A1 1 0 0 1 8 18v-5H4a1 1 0 0 1-.82-1.573l7-10a1 1 0 0 1 1.12-.38Z" clip-rule="evenodd"/>
                         </svg>
                         <span>一键安装汉化</span>
                     </button>
-                    <button id="btn-restore" class="btn btn-glass">
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                    <button id="btn-restore" class="btn btn-inkstone" title="从备份文件完整还原官方纯英文原版">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
                             <path fill-rule="evenodd" d="M7.793 2.232a.75.75 0 0 1-.025 1.06L3.622 7.25h10.003a5.375 5.375 0 0 1 0 10.75H10.75a.75.75 0 0 1 0-1.5h2.875a3.875 3.875 0 0 0 0-7.75H3.622l4.146 3.957a.75.75 0 0 1-1.036 1.085l-5.5-5.25a.75.75 0 0 1 0-1.085l5.5-5.25a.75.75 0 0 1 1.061.025Z" clip-rule="evenodd"/>
                         </svg>
                         <span>还原英文原版</span>
                     </button>
-                    <button id="btn-launch" class="btn btn-emerald">
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="18" height="18">
+                    <button id="btn-launch" class="btn btn-pine" title="启动已安装的 Google Antigravity 客户端">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
                             <path d="M6.3 2.84A1.5 1.5 0 0 0 4 4.11v11.78a1.5 1.5 0 0 0 2.3 1.27l9.344-5.891a1.5 1.5 0 0 0 0-2.538L6.3 2.841Z"/>
                         </svg>
                         <span>启动 Antigravity</span>
                     </button>
                 </section>
 
-                <!-- Terminal Console Card -->
-                <section class="glass-card terminal-card">
+                <!-- Section 3: Execution Log Terminal (古墨笺台) -->
+                <section class="paper-card terminal-card">
                     <div class="terminal-header">
-                        <div class="terminal-dots">
-                            <span class="dot dot-red"></span>
-                            <span class="dot dot-yellow"></span>
-                            <span class="dot dot-green"></span>
-                        </div>
-                        <div class="terminal-title">
-                            <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
-                                <path fill-rule="evenodd" d="M2 3.75C2 2.784 2.784 2 3.75 2h8.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5Zm3.22 2.97a.75.75 0 0 0 0 1.06l2.25 2.25a.75.75 0 0 0 1.06-1.06L7.06 7.5l1.47-1.47a.75.75 0 0 0-1.06-1.06L5.22 6.72Zm4.53 4.03a.75.75 0 0 0 0 1.5h2.5a.75.75 0 0 0 0-1.5h-2.5Z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>EXECUTION LOGS</span>
+                        <div class="terminal-meta">
+                            <span class="terminal-seal">录</span>
+                            <span class="terminal-title">执行记录与运行日志 · EXECUTION LOGS</span>
                         </div>
                         <div class="terminal-actions">
-                            <button id="btn-copy-log" class="term-btn" title="复制日志">
+                            <button id="btn-copy-log" class="term-btn" title="复制日志到剪贴板">
                                 <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
                                     <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25v-7.5Z"/>
                                     <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25v-7.5Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25h-7.5Z"/>
                                 </svg>
+                                <span>复制</span>
                             </button>
-                            <button id="btn-clear-log" class="term-btn" title="清空控制台">
+                            <button id="btn-clear-log" class="term-btn" title="清空控制台记录">
                                 <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
                                     <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.074l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.074l.275-5.5a.75.75 0 0 1 .786-.713Z" clip-rule="evenodd"/>
                                 </svg>
+                                <span>清空</span>
                             </button>
                         </div>
                     </div>
                     <div id="terminal-body" class="terminal-body">
-                        <div class="log-line log-system">Antigravity 简体中文深度汉化工具已就绪。</div>
+                        <div class="log-line log-system">Antigravity 简体中文深度汉化引擎已就绪。</div>
                     </div>
                 </section>
             </div>
 
-            <!-- View 2: Settings View -->
+            <!-- View 2: Settings View (卷二 · 偏好设置) -->
             <div id="view-settings" class="page-view">
                 <div class="settings-header">
-                    <button id="btn-back-dashboard" class="icon-action-btn" title="返回主界面">
-                        <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+                    <button id="btn-back-dashboard" class="paper-action-btn back-nav-btn" title="返回主界面">
+                        <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
                             <path fill-rule="evenodd" d="M17 10a.75.75 0 0 1-.75.75H5.612l4.158 3.96a.75.75 0 1 1-1.04 1.08l-5.5-5.25a.75.75 0 0 1 0-1.08l5.5-5.25a.75.75 0 1 1 1.04 1.08L5.612 9.25H16.25A.75.75 0 0 1 17 10Z" clip-rule="evenodd"/>
                         </svg>
                         <span>返回主页</span>
                     </button>
                     <div class="settings-title-wrap">
-                        <h2 class="settings-main-title">软件设置</h2>
-                        <span class="settings-sub-title">偏好设置与项目信息</span>
+                        <span class="section-num">SECTION 02</span>
+                        <h2 class="settings-main-title">偏好设定与项目信息</h2>
                     </div>
                 </div>
 
                 <div class="settings-scroll-container">
-                    <!-- Theme Settings Card -->
-                    <section class="glass-card settings-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <svg viewBox="0 0 20 20" fill="currentColor" class="card-icon">
-                                    <path fill-rule="evenodd" d="M4 2a2 2 0 0 0-2 2v11a3 3 0 1 0 6 0V4a2 2 0 0 0-2-2H4Zm1 14a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm5-1.75A.75.75 0 0 1 10.75 13.5h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75Zm0-4a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75Zm0-4a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd"/>
-                                </svg>
-                                <span>外观主题模式</span>
+                    <!-- Theme Mode Card -->
+                    <section class="paper-card settings-card">
+                        <div class="section-meta-header">
+                            <div class="section-title-wrap">
+                                <h3 class="card-title">外观主题模式</h3>
+                                <p class="card-subtitle">选择符合视觉意境的主题风格，支持即时渲染与持久化保存</p>
                             </div>
-                            <span class="settings-badge" id="current-theme-label">跟随系统</span>
+                            <div class="seal-badge" id="current-theme-label">跟随系统</div>
                         </div>
-                        <p class="settings-desc">选择符合您视觉偏好的界面主题风格，支持即时预览与持久化保存。</p>
-                        
+
                         <div class="theme-options-grid">
                             <!-- Option 1: System -->
                             <div class="theme-option-card active" data-theme-val="system" id="theme-opt-system">
-                                <div class="theme-card-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                                        <line x1="8" y1="21" x2="16" y2="21"></line>
-                                        <line x1="12" y1="17" x2="12" y2="21"></line>
-                                    </svg>
+                                <div class="theme-card-header">
+                                    <div class="theme-card-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                            <line x1="8" y1="21" x2="16" y2="21"></line>
+                                            <line x1="12" y1="17" x2="12" y2="21"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="theme-seal-check"><span class="seal-dot"></span></div>
                                 </div>
                                 <div class="theme-card-info">
                                     <span class="theme-name">跟随系统</span>
-                                    <span class="theme-detail">根据操作系统自动切换</span>
-                                </div>
-                                <div class="theme-radio-check">
-                                    <span class="check-dot"></span>
+                                    <span class="theme-detail">随操作系统色彩自动适配</span>
                                 </div>
                             </div>
 
-                            <!-- Option 2: Light -->
+                            <!-- Option 2: Light (素宣水墨) -->
                             <div class="theme-option-card" data-theme-val="light" id="theme-opt-light">
-                                <div class="theme-card-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="5"></circle>
-                                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                                    </svg>
+                                <div class="theme-card-header">
+                                    <div class="theme-card-icon light-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="5"></circle>
+                                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="theme-seal-check"><span class="seal-dot"></span></div>
                                 </div>
                                 <div class="theme-card-info">
-                                    <span class="theme-name">浅色模式</span>
-                                    <span class="theme-detail">纯净明亮，清晰通透</span>
-                                </div>
-                                <div class="theme-radio-check">
-                                    <span class="check-dot"></span>
+                                    <span class="theme-name">浅色 · 素宣</span>
+                                    <span class="theme-detail">温润生宣米白，水墨分明</span>
                                 </div>
                             </div>
 
-                            <!-- Option 3: Dark -->
+                            <!-- Option 3: Dark (玄青松烟) -->
                             <div class="theme-option-card" data-theme-val="dark" id="theme-opt-dark">
-                                <div class="theme-card-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                                    </svg>
+                                <div class="theme-card-header">
+                                    <div class="theme-card-icon dark-icon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="theme-seal-check"><span class="seal-dot"></span></div>
                                 </div>
                                 <div class="theme-card-info">
-                                    <span class="theme-name">深色模式</span>
-                                    <span class="theme-detail">沉浸深邃，科技护眼</span>
-                                </div>
-                                <div class="theme-radio-check">
-                                    <span class="check-dot"></span>
+                                    <span class="theme-name">深色 · 玄青</span>
+                                    <span class="theme-detail">松烟古砚沉邃，朱印点翠</span>
                                 </div>
                             </div>
                         </div>
                     </section>
 
                     <!-- GitHub & Project Info Card -->
-                    <section class="glass-card settings-card project-card">
-                        <div class="card-header">
-                            <div class="card-title">
-                                <svg viewBox="0 0 24 24" fill="currentColor" class="card-icon">
-                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/>
-                                </svg>
-                                <span>项目与开源仓库</span>
+                    <section class="paper-card settings-card project-card">
+                        <div class="section-meta-header">
+                            <div class="section-title-wrap">
+                                <h3 class="card-title">开源项目与社区</h3>
+                                <p class="card-subtitle">基于开源生态构建，致力于提供优雅、安全的本地汉化体验</p>
                             </div>
-                            <span class="version-badge">开源免费 · MIT</span>
+                            <div class="seal-badge">开源协议 · MIT</div>
                         </div>
-                        
-                        <div class="project-info-box">
-                            <div class="project-meta">
-                                <div class="project-main-meta">
-                                    <div class="project-name">haoze-evolluling / AntigravityCN</div>
-                                    <div class="project-desc">Google Antigravity 桌面客户端全方位简体中文深度汉化工具，提供现代化图形界面与安全注入引擎。</div>
-                                    <div class="project-repo-link">
-                                        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                                            <path d="M12.232 4.232a2.5 2.5 0 0 1 3.536 3.536l-1.225 1.224a.75.75 0 0 0 1.061 1.06l1.224-1.224a4 4 0 0 0-5.656-5.656l-3 3a4 4 0 0 0 .225 5.865.75.75 0 0 0 .977-1.138 2.5 2.5 0 0 1-.142-3.667l3-3Z"/>
-                                            <path d="M11.603 7.963a.75.75 0 0 0-.977 1.138 2.5 2.5 0 0 1 .142 3.667l-3 3a2.5 2.5 0 0 1-3.536-3.536l1.225-1.224a.75.75 0 0 0-1.061-1.06l-1.224 1.224a4 4 0 1 0 5.656 5.656l3-3a4 4 0 0 0-.225-5.865Z"/>
-                                        </svg>
-                                        <span>https://github.com/haoze-evolluling/AntigravityCN</span>
-                                    </div>
+
+                        <div class="project-info-layout">
+                            <div class="project-details">
+                                <div class="project-repo-title">haoze-evolluling / AntigravityCN</div>
+                                <p class="project-summary">Google Antigravity 客户端全方位简体中文深度汉化工具，提供现代化桌面交互、智能路径嗅探与无损备份还原引擎。</p>
+                                <div class="project-url-badge">
+                                    <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13">
+                                        <path d="M12.232 4.232a2.5 2.5 0 0 1 3.536 3.536l-1.225 1.224a.75.75 0 0 0 1.061 1.06l1.224-1.224a4 4 0 0 0-5.656-5.656l-3 3a4 4 0 0 0 .225 5.865.75.75 0 0 0 .977-1.138 2.5 2.5 0 0 1-.142-3.667l3-3Z"/>
+                                        <path d="M11.603 7.963a.75.75 0 0 0-.977 1.138 2.5 2.5 0 0 1 .142 3.667l-3 3a2.5 2.5 0 0 1-3.536-3.536l1.225-1.224a.75.75 0 0 0-1.061-1.06l-1.224 1.224a4 4 0 1 0 5.656 5.656l3-3a4 4 0 0 0-.225-5.865Z"/>
+                                    </svg>
+                                    <span>https://github.com/haoze-evolluling/AntigravityCN</span>
                                 </div>
-                                <div class="project-action-wrap">
-                                    <button id="btn-open-github" class="btn btn-primary github-link-btn">
-                                        <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/>
-                                        </svg>
-                                        <span>访问 GitHub 仓库</span>
-                                        <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
-                                            <path fill-rule="evenodd" d="M4.25 5.5a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 0 0 .75-.75v-4a.75.75 0 0 1 1.5 0v4A2.25 2.25 0 0 1 12.75 17h-8.5A2.25 2.25 0 0 1 2 14.75v-8.5A2.25 2.25 0 0 1 4.25 4h4a.75.75 0 0 1 0 1.5h-4Zm6.5 0a.75.75 0 0 1 .75-.75h4.25A.75.75 0 0 1 16.5 5.5v4.25a.75.75 0 0 1-1.5 0V6.56l-5.22 5.22a.75.75 0 0 1-1.06-1.06L13.94 5.5H11.5a.75.75 0 0 1-.75-.75Z" clip-rule="evenodd"/>
-                                        </svg>
-                                    </button>
-                                </div>
+                            </div>
+                            <div class="project-action-col">
+                                <button id="btn-open-github" class="btn btn-primary github-btn">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12Z"/>
+                                    </svg>
+                                    <span>访问开源仓库</span>
+                                </button>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Features & Protection Note -->
-                    <div class="settings-footer-info">
-                        <div class="info-item">
-                            <span class="info-dot"></span>
-                            <span>自动备份机制：首次汉化自动生成官方原版备份 <code>app.asar.backup</code></span>
+                    <!-- Features & Protection Info -->
+                    <div class="editorial-notes">
+                        <div class="note-item">
+                            <span class="note-seal">防</span>
+                            <span>自动备份机制：首次执行汉化时自动创建官方原版备份 <code>app.asar.backup</code></span>
                         </div>
-                        <div class="info-item">
-                            <span class="info-dot"></span>
-                            <span>无损安全还原：随时可一键还原为官方纯英文原版文件</span>
+                        <div class="note-item">
+                            <span class="note-seal">保</span>
+                            <span>无损安全还原：随时可无缝切换回官方纯英文原版，保障数据完备</span>
                         </div>
                     </div>
                 </div>
@@ -310,24 +297,22 @@
         </main>
     </div>
 
-    <!-- Process Conflict Modal -->
+    <!-- Process Conflict Modal (严格统一同级按钮尺寸) -->
     <div id="modal-conflict" class="modal-backdrop hidden">
         <div class="modal-card">
-            <div class="modal-icon-wrap warning-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                </svg>
+            <div class="modal-seal-badge">
+                <span class="modal-seal-char">警</span>
             </div>
             <h3 class="modal-title">检测到 Antigravity 正在运行</h3>
-            <p class="modal-desc">为避免 Windows 出现文件锁定占用冲突，建议先关闭 Antigravity 再进行汉化或还原操作。</p>
+            <p class="modal-desc">为避免 Windows 文件系统占用冲突，建议先安全关闭 Antigravity 再进行文件写入或还原操作。</p>
             <div class="modal-actions">
-                <button id="modal-btn-cancel" class="btn btn-glass">我先手动保存关闭</button>
-                <button id="modal-btn-autoclose" class="btn btn-primary">协助关闭并继续</button>
+                <button id="modal-btn-cancel" class="btn btn-secondary modal-action-btn">我先手动关闭</button>
+                <button id="modal-btn-autoclose" class="btn btn-primary modal-action-btn">协助关闭并继续</button>
             </div>
         </div>
     </div>
 
-    <!-- Alert / Toast -->
+    <!-- Toast Light Notification -->
     <div id="toast" class="toast hidden"></div>
 
     <script src="./src/main.js"></script>
