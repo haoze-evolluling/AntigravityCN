@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/composables/useantigravity.ts","./src/composables/useterminallog.ts","./src/composables/usetheme.ts","./src/composables/usetoast.ts","./src/types/index.ts","./wailsjs/go/models.ts","./wailsjs/go/main/app.d.ts","./wailsjs/runtime/runtime.d.ts"],"version":"5.9.3"}
