@@ -324,11 +324,9 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 	if _, err := os.Stat(preloadPath); err == nil {
 		marker := "// Antigravity 2.0 Chinese Localization Engine"
 		preloadStr := string(mergedPreloadData)
-		// Extract engine code starting from I18N_DICT definition
-		splitIdx := strings.Index(preloadStr, "const I18N_DICT =")
 		enginePayload := preloadStr
-		if splitIdx != -1 {
-			enginePayload = marker + " Enhanced\n" + preloadStr[splitIdx:]
+		if !strings.Contains(preloadStr, marker) {
+			enginePayload = marker + " Enhanced\n" + preloadStr
 		}
 		if err := injectOrUpdate(preloadPath, enginePayload, marker); err != nil {
 			return 0, fmt.Errorf("注入 preload.js 失败: %w", err)

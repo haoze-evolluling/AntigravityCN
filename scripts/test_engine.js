@@ -4,7 +4,7 @@ const vm = require('vm');
 const assert = require('assert');
 
 console.log('================================================================');
-console.log(' AntigravityCN 深度汉化引擎与安全沙盒自动化测试 (Node VM)');
+console.log(' AntigravityCN 深度汉化引擎与思考链隔离自动化测试 (Node VM)');
 console.log('================================================================\n');
 
 // 1. 读取并组装 preload.js 运行时
@@ -132,19 +132,21 @@ class MockTextNode extends MockNode {
   }
 }
 
-// 提取 injectedMainWorldScript 函数
-const funcStart = preloadSource.indexOf('function injectedMainWorldScript(DICT) {');
-const funcEnd = preloadSource.indexOf('// 4. 执行 Main World 注入');
-if (funcStart === -1 || funcEnd === -1) {
-  throw new Error('未能在 patches/preload.js 中匹配到 injectedMainWorldScript 函数定义');
-}
-const funcText = preloadSource.substring(funcStart, funcEnd).trim();
+// 装配词典并注入测试挂载钩子
+let code = preloadSource.replace('/*__I18N_DICT_PLACEHOLDER__*/{}', JSON.stringify(mergedDict));
+
+// 在 IIFE 内部暴露测试钩子，阻断真实 DOM 监听器
+code = code.replace(
+  /if\s*\(\s*document\.readyState === 'loading'\s*\)[\s\S]*?startObserver\(\);\s*\}/,
+  `globalThis.__testTranslate = translateString;
+  globalThis.__testSkip = shouldSkipNode;`
+);
 
 const sandbox = {
   window: { addEventListener: () => {} },
   document: { body: new MockElement('body'), readyState: 'complete', addEventListener: () => {} },
   globalThis: {},
-  Node: { TEXT_NODE: 3, ELEMENT_NODE: 1 },
+  Node: { TEXT_NODE: 3, ELEMENT_NODE: 1, DOCUMENT_FRAGMENT_NODE: 11 },
   Element: { prototype: {} },
   Document: { prototype: {} },
   HTMLDocument: { prototype: {} },
@@ -157,18 +159,10 @@ const sandbox = {
 };
 
 vm.createContext(sandbox);
+vm.runInContext(code, sandbox);
 
-const runnerCode = `
-${funcText.replace(
-  'startEngine();',
-  'globalThis.__testTranslate = translateText;\n    globalThis.__testSkip = shouldSkipNode;\n    startEngine();'
-)}
-injectedMainWorldScript(${JSON.stringify(mergedDict)});
-`;
-
-vm.runInContext(runnerCode, sandbox);
-testTranslateText = sandbox.globalThis.__testTranslate;
-testShouldSkipNode = sandbox.globalThis.__testSkip;
+const testTranslateText = sandbox.globalThis.__testTranslate;
+const testShouldSkipNode = sandbox.globalThis.__testSkip;
 
 if (!testTranslateText || !testShouldSkipNode) {
   throw new Error('未能从引擎中提取 translateText / shouldSkipNode 函数');
@@ -249,7 +243,7 @@ for (const file of workspaceFiles) {
 // ===================================================================
 // 测试组 3: 模型思考链 (Thinking Process) 绝对物理隔离
 // ===================================================================
-console.log('\n--- 测试组 3: 模型思考链物理隔离 ---');
+console.log('\n--- 测试组 3: 模型思考链物理隔离与药丸放行 ---');
 test('思考链正文容器 .thought-content 内部节点必须跳过', () => {
   const thoughtBox = new MockElement('div', { className: 'thought-content' });
   const innerSpan = new MockElement('span', { parentElement: thoughtBox });
@@ -287,7 +281,17 @@ test('思考折叠栏兄弟展开容器内流式正文必须绝对跳过', () =>
   assert.strictEqual(skipped, true, '兄弟正文容器内的所有流式文本必须跳过 (true)');
 });
 
-test('思考正文内的步骤词 (Thought/Ran/Plan) 不得被当作操作药丸误放行', () => {
+test('思考正文容器 .cursor-edit 内部节点必须绝对跳过', () => {
+  const editBox = new MockElement('div', { className: 'cursor-edit' });
+  const innerSpan = new MockElement('span', { parentElement: editBox });
+  editBox.appendChild(innerSpan);
+  const textNode = new MockTextNode('Editing file contents in real-time...', innerSpan);
+  innerSpan.appendChild(textNode);
+  const skipped = testShouldSkipNode(textNode);
+  assert.strictEqual(skipped, true, 'cursor-edit 正文必须跳过 (true)');
+});
+
+test('思考正文内的步骤词 (Thought/Ran/Plan/Code) 不得被当作操作药丸误放行', () => {
   const wrapper = new MockElement('div', { className: 'thought-box' });
   const innerSpan = new MockElement('span');
   wrapper.appendChild(innerSpan);
@@ -309,11 +313,172 @@ test('正常系统执行药丸 (如单独的 Ran/Viewed/Thought) 在非思考正
 });
 
 // ===================================================================
-// 测试组 4: 动态正则与核心长句汉化 (Dynamic Rules & Translations)
+// 测试组 4: Master 项目 Ticket-02 全套 DOM 隔离用例 (11 Cases)
 // ===================================================================
-console.log('\n--- 测试组 4: 动态正则与长句汉化 ---');
+console.log('\n--- 测试组 4: Master 项目 Ticket-02 全套 DOM 门禁测试 ---');
+const masterTicket02Cases = [
+  {
+    name: 'Case 1 (正常 UI 控件): <button class="btn-primary">Settings</button>',
+    node: () => {
+      const button = new MockElement('button', { className: 'btn-primary' });
+      const text = new MockTextNode('Settings', button);
+      button.appendChild(text);
+      return text;
+    },
+    expected: false
+  },
+  {
+    name: 'Case 2 (聊天容器): <div class="conversation-container"><span>File</span></div>',
+    node: () => {
+      const container = new MockElement('div', { className: 'conversation-container' });
+      const span = new MockElement('span', { parentElement: container });
+      container.appendChild(span);
+      const text = new MockTextNode('File', span);
+      span.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 3 (消息 ID 属性): <div data-message-id="msg-123"><p>Error</p></div>',
+    node: () => {
+      const msgDiv = new MockElement('div', { attributes: { 'data-message-id': 'msg-123' } });
+      const p = new MockElement('p', { parentElement: msgDiv });
+      msgDiv.appendChild(p);
+      const text = new MockTextNode('Error', p);
+      p.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 4 (Markdown Prose 渲染正文): <div class="prose"><div>File</div></div>',
+    node: () => {
+      const proseDiv = new MockElement('div', { className: 'prose' });
+      const innerDiv = new MockElement('div', { parentElement: proseDiv });
+      proseDiv.appendChild(innerDiv);
+      const text = new MockTextNode('File', innerDiv);
+      innerDiv.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 5 (文件路径特征): <span class="path-label">grill-with-docs-zh/SKILL.md</span>',
+    node: () => {
+      const pathSpan = new MockElement('span', { className: 'path-label' });
+      const text = new MockTextNode('grill-with-docs-zh/SKILL.md', pathSpan);
+      pathSpan.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 6 (动态思考与日志区域): <div class="thought-container"><span>Thought</span></div>',
+    node: () => {
+      const thoughtDiv = new MockElement('div', { className: 'thought-container' });
+      const span = new MockElement('span', { parentElement: thoughtDiv });
+      thoughtDiv.appendChild(span);
+      const text = new MockTextNode('Thought', span);
+      span.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 7 (面包屑导航): <span class="breadcrumb">Project</span>',
+    node: () => {
+      const span = new MockElement('span', { className: 'breadcrumb' });
+      const text = new MockTextNode('Project', span);
+      span.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 8 (工作区下拉列表项): <div class="workspace-dropdown-item">Project</div>',
+    node: () => {
+      const div = new MockElement('div', { className: 'workspace-dropdown-item' });
+      const text = new MockTextNode('Project', div);
+      div.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 9 (文件夹列表项): <div class="folder-item">Project</div>',
+    node: () => {
+      const div = new MockElement('div', { className: 'folder-item' });
+      const text = new MockTextNode('Project', div);
+      div.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 10 (聊天消息视图): <div class="chat-message-view"><span>Models</span></div>',
+    node: () => {
+      const container = new MockElement('div', { className: 'chat-message-view' });
+      const span = new MockElement('span', { parentElement: container });
+      container.appendChild(span);
+      const text = new MockTextNode('Models', span);
+      span.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 11 (Markdown 流式正文): <div class="stream-markdown-body"><span>Settings</span></div>',
+    node: () => {
+      const container = new MockElement('div', { className: 'stream-markdown-body' });
+      const span = new MockElement('span', { parentElement: container });
+      container.appendChild(span);
+      const text = new MockTextNode('Settings', span);
+      span.appendChild(text);
+      return text;
+    },
+    expected: true
+  }
+];
+
+for (const tc of masterTicket02Cases) {
+  test(`Master Ticket-02 门禁: ${tc.name}`, () => {
+    const node = tc.node();
+    const actual = testShouldSkipNode(node);
+    assert.strictEqual(actual, tc.expected);
+  });
+}
+
+// ===================================================================
+// 测试组 5: 思考链词汇分词保护 (消灭中英杂糅核心防线)
+// ===================================================================
+console.log('\n--- 测试组 5: 思考链高危动词与分词防污染测试 ---');
+const thoughtPollutionCases = [
+  'Thinking process starts now',
+  'I thought about this solution',
+  'We worked on this task',
+  'Check the code diff carefully',
+  'Next step is running unit tests',
+  'Analyzing the commit diff for patch',
+  'The agent explored the codebase'
+];
+
+for (const sentence of thoughtPollutionCases) {
+  test(`分词防污染断言: "${sentence}" 严禁被部分拆词替换为中文`, () => {
+    const res = testTranslateText(sentence);
+    assert.strictEqual(res, sentence, `句子 "${sentence}" 应当原样保留英文，实际返回: "${res}"`);
+  });
+}
+
+// ===================================================================
+// 测试组 6: 动态正则与核心长句汉化 (Dynamic Rules & Translations)
+// ===================================================================
+console.log('\n--- 测试组 6: 动态正则与长句汉化 ---');
 const translationCases = [
   { in: 'Thought for 4.2s', out: '思考了 4.2 秒' },
+  { in: 'Thinking for 1.5s', out: '思考了 1.5 秒' },
+  { in: 'Thinking...', out: '思考中...' },
+  { in: 'Working...', out: '处理中...' },
   { in: 'Setting up WSL: Ubuntu', out: '正在配置 WSL: Ubuntu' },
   { in: 'Connected to WSL: Debian', out: '已连接到 WSL: Debian' },
   { in: 'Installing into Ubuntu…', out: '正在安装到 Ubuntu…' },
@@ -343,9 +508,9 @@ for (const tc of translationCases) {
 }
 
 // ===================================================================
-// 测试组 5: 纯中文/数字 极速短路性能验证 (Fast Short-Circuit)
+// 测试组 7: 纯中文/数字 极速短路性能验证 (Fast Short-Circuit)
 // ===================================================================
-console.log('\n--- 测试组 5: 极速短路断言 ---');
+console.log('\n--- 测试组 7: 极速短路断言 ---');
 test('纯中文文本瞬间短路原样返回', () => {
   const cn = '这已经是纯简体中文界面内容，不需要任何查表';
   assert.strictEqual(testTranslateText(cn), cn);
