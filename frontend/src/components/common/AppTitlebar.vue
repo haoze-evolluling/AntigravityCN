@@ -1,14 +1,9 @@
 <script setup lang="ts">
 import type { NavTab } from '@/types'
 import { WindowMinimise, Quit } from '@/../wailsjs/runtime'
-import logoUrl from '@/assets/logo.svg'
 
 defineProps<{
   activeTab: NavTab
-}>()
-
-const emit = defineEmits<{
-  (e: 'update:activeTab', tab: NavTab): void
 }>()
 
 function minimizeWindow() {
@@ -30,48 +25,29 @@ function closeWindow() {
 
 <template>
   <header class="titlebar" style="--wails-draggable:drag">
-    <div class="brand">
-      <div class="logo-icon">
-        <img :src="logoUrl" alt="AntigravityCN" class="logo-img" width="22" height="22" />
+    <!-- Breadcrumb & Page Info -->
+    <div class="titlebar-left" style="--wails-draggable:no-drag">
+      <div class="page-breadcrumb">
+        <span>{{ activeTab === 'dashboard' ? '汉化控制台' : '偏好与关于' }}</span>
+        <span class="page-breadcrumb-sub">·</span>
+        <span class="page-breadcrumb-sub">
+          {{ activeTab === 'dashboard' ? '核心操作与状态监控' : '外观模式与开源信息' }}
+        </span>
       </div>
-      <div class="brand-text">
-        <span class="title">AntigravityCN</span>
-        <span class="editorial-sep">/</span>
-        <span class="title-sub">简体中文汉化</span>
-      </div>
-      <div class="seal-badge">便携版</div>
     </div>
 
-    <!-- Titlebar Tabs & Window Controls -->
+    <!-- Draggable Center Zone -->
+    <div class="titlebar-center"></div>
+
+    <!-- Window Controls -->
     <div class="titlebar-right" style="--wails-draggable:no-drag">
-      <nav class="titlebar-tabs">
-        <button
-          class="tab-item"
-          :class="{ active: activeTab === 'dashboard' }"
-          title="汉化主控制台"
-          @click="emit('update:activeTab', 'dashboard')"
-        >
-          <span class="tab-index">01</span>
-          <span>汉化中枢</span>
-        </button>
-        <button
-          class="tab-item"
-          :class="{ active: activeTab === 'settings' }"
-          title="软件设置与偏好"
-          @click="emit('update:activeTab', 'settings')"
-        >
-          <span class="tab-index">02</span>
-          <span>偏好设置</span>
-        </button>
-      </nav>
-      <div class="titlebar-divider"></div>
       <div class="window-controls">
-        <button class="ctrl-btn" title="最小化" @click="minimizeWindow">
+        <button class="ctrl-btn" title="最小化窗口" @click="minimizeWindow">
           <svg viewBox="0 0 16 16" width="11" height="11">
             <path fill="currentColor" d="M2 8h12v1.2H2z" />
           </svg>
         </button>
-        <button class="ctrl-btn close-btn" title="关闭" @click="closeWindow">
+        <button class="ctrl-btn close-btn" title="关闭窗口" @click="closeWindow">
           <svg viewBox="0 0 16 16" width="11" height="11">
             <path
               fill="currentColor"

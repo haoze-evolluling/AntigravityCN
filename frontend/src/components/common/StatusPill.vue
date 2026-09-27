@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-
-const props = withDefaults(
+withDefaults(
   defineProps<{
     label: string
     value: string
@@ -11,22 +9,12 @@ const props = withDefaults(
     status: 'default'
   }
 )
-
-const statusClass = computed(() => {
-  if (props.status === 'ok') return 'status-ok'
-  if (props.status === 'warn') return 'status-warn'
-  if (props.status === 'err') return 'status-err'
-  return ''
-})
 </script>
 
 <template>
-  <div class="status-pill" :class="statusClass">
-    <div class="status-dot-wrap">
-      <span class="status-dot"></span>
-    </div>
-    <span class="status-label">{{ label }}</span>
-    <span class="status-divider">·</span>
-    <span class="status-value">{{ value }}</span>
+  <div class="status-badge" :class="status">
+    <span class="status-dot"></span>
+    <span style="opacity: 0.7;">{{ label }} ·</span>
+    <span>{{ value }}</span>
   </div>
 </template>

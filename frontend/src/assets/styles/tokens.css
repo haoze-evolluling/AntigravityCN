@@ -1,184 +1,203 @@
 /* ==========================================================
-   AntigravityCN - Design Tokens & Theme Matrix
-   现代东方水墨 · 宣纸质感 · 杂志排版设计令牌
+   AntigravityCN - Design Tokens & Modern Visual System
+   现代科技 · 简约舒展 · 浅色白蓝 / 深色暗夜蓝设计令牌
    ========================================================== */
 
 :root,
 [data-theme="dark"] {
-    --theme-name: "dark";
+  --theme-name: "dark";
 
-    /* Backgrounds & Paper Surfaces (玄青古砚 · 墨玉层) */
-    --bg-base: #0f1115;
-    --app-bg: rgba(16, 18, 23, 0.94);
-    --titlebar-bg: rgba(14, 16, 21, 0.85);
+  /* App Shell & Backgrounds */
+  --bg-app: #0b0f19;
+  --bg-sidebar: #0f172a;
+  --bg-main: #0b0f19;
+  --bg-header: rgba(15, 23, 42, 0.75);
 
-    --card-bg: rgba(23, 26, 33, 0.82);
-    --card-bg-hover: rgba(28, 32, 41, 0.92);
-    --card-subtle: rgba(255, 255, 255, 0.035);
+  /* Card Surfaces & Layers */
+  --card-bg: rgba(21, 29, 47, 0.75);
+  --card-bg-hover: rgba(28, 38, 62, 0.85);
+  --card-bg-solid: #151d2f;
+  --card-bg-subtle: rgba(255, 255, 255, 0.03);
 
-    /* Ink Wash Borders & Dividers (砚线 · 裁边) */
-    --border-ink: rgba(235, 230, 220, 0.11);
-    --border-ink-strong: rgba(235, 230, 220, 0.22);
-    --border-subtle: rgba(255, 255, 255, 0.06);
+  /* Borders & Dividers */
+  --border-color: rgba(148, 163, 184, 0.14);
+  --border-color-hover: rgba(59, 130, 246, 0.4);
+  --border-color-strong: rgba(148, 163, 184, 0.25);
+  --divider: rgba(148, 163, 184, 0.1);
 
-    /* Ink Gradient & Typography (宣白 · 云灰 · 暮云) */
-    --text-primary: #edeae3;
-    --text-secondary: #aba498;
-    --text-dim: #6d675e;
-    --text-on-accent: #ffffff;
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-on-primary: #ffffff;
 
-    /* Oriental Accents (朱砂印泥 · 松烟翠竹 · 霜铁砚台) */
-    --cinnabar: #d94b38;
-    --cinnabar-hover: #ea5c49;
-    --cinnabar-active: #c43d2b;
-    --cinnabar-bg: rgba(217, 75, 56, 0.14);
-    --cinnabar-border: rgba(217, 75, 56, 0.35);
-    --cinnabar-shadow: rgba(217, 75, 56, 0.28);
+  /* Brand & Action Colors (Modern Tech Blue) */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-subtle: rgba(59, 130, 246, 0.12);
+  --primary-border: rgba(59, 130, 246, 0.35);
+  --primary-glow: rgba(59, 130, 246, 0.3);
 
-    --pine-jade: #2d8972;
-    --pine-jade-hover: #37a187;
-    --pine-jade-active: #237460;
-    --pine-jade-bg: rgba(45, 137, 114, 0.14);
-    --pine-jade-border: rgba(45, 137, 114, 0.35);
-    --pine-jade-shadow: rgba(45, 137, 114, 0.25);
+  /* Secondary & Neutral Actions */
+  --btn-secondary-bg: rgba(255, 255, 255, 0.06);
+  --btn-secondary-hover: rgba(255, 255, 255, 0.1);
+  --btn-secondary-border: rgba(148, 163, 184, 0.2);
+  --btn-secondary-text: #e2e8f0;
 
-    --inkstone-btn-bg: rgba(255, 255, 255, 0.07);
-    --inkstone-btn-hover: rgba(255, 255, 255, 0.12);
-    --inkstone-btn-border: rgba(255, 255, 255, 0.12);
-    --inkstone-btn-text: #e2ded5;
+  /* Accent / Launch Button */
+  --btn-accent-bg: #0284c7;
+  --btn-accent-hover: #0369a1;
+  --btn-accent-active: #075985;
+  --btn-accent-text: #ffffff;
+  --btn-accent-glow: rgba(2, 132, 199, 0.3);
 
-    --status-ok: #34d399;
-    --status-warn: #fbbf24;
-    --status-err: #f87171;
+  /* Status Colors */
+  --status-ok: #10b981;
+  --status-ok-bg: rgba(16, 185, 129, 0.12);
+  --status-ok-border: rgba(16, 185, 129, 0.28);
+  --status-warn: #f59e0b;
+  --status-warn-bg: rgba(245, 158, 11, 0.12);
+  --status-warn-border: rgba(245, 158, 11, 0.28);
+  --status-err: #ef4444;
+  --status-err-bg: rgba(239, 68, 68, 0.12);
+  --status-err-border: rgba(239, 68, 68, 0.28);
 
-    /* Seal & Editorial Badges */
-    --seal-bg: rgba(217, 75, 56, 0.12);
-    --seal-border: rgba(217, 75, 56, 0.32);
-    --seal-text: #e2614f;
+  /* Form Inputs */
+  --input-bg: rgba(15, 23, 42, 0.85);
+  --input-border: rgba(148, 163, 184, 0.18);
+  --input-border-focus: #3b82f6;
+  --input-text: #f8fafc;
+  --input-tag-bg: rgba(59, 130, 246, 0.15);
+  --input-tag-text: #60a5fa;
 
-    --input-bg: rgba(10, 12, 16, 0.7);
-    --input-border: rgba(255, 255, 255, 0.1);
-    --input-text: #e2ded5;
-    --input-focus-border: #d94b38;
+  /* Terminal Console */
+  --term-bg: #080c14;
+  --term-header-bg: #0f1523;
+  --term-border: rgba(148, 163, 184, 0.12);
+  --term-text: #e2e8f0;
 
-    /* Terminal Console */
-    --term-bg: #0b0d11;
-    --term-border: rgba(255, 255, 255, 0.08);
-    --term-header-bg: #14171e;
-    --term-header-border: rgba(255, 255, 255, 0.06);
+  /* Modals & Popups */
+  --modal-overlay: rgba(0, 0, 0, 0.65);
+  --modal-bg: #111827;
+  --modal-border: rgba(148, 163, 184, 0.2);
 
-    /* Modal & Toast */
-    --modal-bg: #161920;
-    --modal-border: rgba(255, 255, 255, 0.14);
-    --toast-bg: rgba(22, 25, 33, 0.96);
-    --toast-border: rgba(217, 75, 56, 0.35);
-    --toast-text: #edeae3;
+  /* Toasts */
+  --toast-bg: rgba(15, 23, 42, 0.95);
+  --toast-border: rgba(59, 130, 246, 0.35);
+  --toast-text: #f8fafc;
 
-    /* Shadows & Aura */
-    --paper-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
-    --paper-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --ink-blob-1: radial-gradient(circle at 10% 20%, rgba(217, 75, 56, 0.07) 0%, transparent 60%);
-    --ink-blob-2: radial-gradient(circle at 90% 80%, rgba(45, 137, 114, 0.06) 0%, transparent 60%);
-    --grain-opacity: 0.035;
-    --grain-blend: screen;
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.45);
 }
 
 [data-theme="light"] {
-    --theme-name: "light";
+  --theme-name: "light";
 
-    /* Backgrounds & Paper Surfaces (素宣白 · 绢帛米白) */
-    --bg-base: #f6f4ee;
-    --app-bg: rgba(248, 246, 240, 0.95);
-    --titlebar-bg: rgba(242, 239, 231, 0.88);
+  /* App Shell & Backgrounds */
+  --bg-app: #f8fafc;
+  --bg-sidebar: #ffffff;
+  --bg-main: #f8fafc;
+  --bg-header: rgba(255, 255, 255, 0.82);
 
-    --card-bg: rgba(255, 255, 255, 0.88);
-    --card-bg-hover: #ffffff;
-    --card-subtle: rgba(44, 40, 35, 0.035);
+  /* Card Surfaces & Layers */
+  --card-bg: #ffffff;
+  --card-bg-hover: #ffffff;
+  --card-bg-solid: #ffffff;
+  --card-bg-subtle: #f1f5f9;
 
-    /* Ink Wash Borders & Dividers (淡墨 · 细辑线) */
-    --border-ink: rgba(44, 40, 35, 0.12);
-    --border-ink-strong: rgba(44, 40, 35, 0.22);
-    --border-subtle: rgba(44, 40, 35, 0.06);
+  /* Borders & Dividers */
+  --border-color: #e2e8f0;
+  --border-color-hover: #93c5fd;
+  --border-color-strong: #cbd5e1;
+  --divider: #f1f5f9;
 
-    /* Ink Gradient & Typography (焦墨 · 浓墨 · 淡墨) */
-    --text-primary: #1c1a18;
-    --text-secondary: #4a463f;
-    --text-dim: #858076;
-    --text-on-accent: #ffffff;
+  /* Typography Colors */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-on-primary: #ffffff;
 
-    /* Oriental Accents (朱砂印泥 · 松烟黛绿 · 古墨砚台) */
-    --cinnabar: #b83b26;
-    --cinnabar-hover: #a1321f;
-    --cinnabar-active: #8b2817;
-    --cinnabar-bg: rgba(184, 59, 38, 0.08);
-    --cinnabar-border: rgba(184, 59, 38, 0.28);
-    --cinnabar-shadow: rgba(184, 59, 38, 0.2);
+  /* Brand & Action Colors (Clean Vibrant Blue) */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-active: #1e40af;
+  --primary-subtle: #eff6ff;
+  --primary-border: #bfdbfe;
+  --primary-glow: rgba(37, 99, 235, 0.2);
 
-    --pine-jade: #216153;
-    --pine-jade-hover: #194e42;
-    --pine-jade-active: #133f35;
-    --pine-jade-bg: rgba(33, 97, 83, 0.08);
-    --pine-jade-border: rgba(33, 97, 83, 0.25);
-    --pine-jade-shadow: rgba(33, 97, 83, 0.18);
+  /* Secondary & Neutral Actions */
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-hover: #f8fafc;
+  --btn-secondary-border: #e2e8f0;
+  --btn-secondary-text: #334155;
 
-    --inkstone-btn-bg: rgba(44, 40, 35, 0.06);
-    --inkstone-btn-hover: rgba(44, 40, 35, 0.1);
-    --inkstone-btn-border: rgba(44, 40, 35, 0.14);
-    --inkstone-btn-text: #1c1a18;
+  /* Accent / Launch Button */
+  --btn-accent-bg: #0284c7;
+  --btn-accent-hover: #0369a1;
+  --btn-accent-active: #075985;
+  --btn-accent-text: #ffffff;
+  --btn-accent-glow: rgba(2, 132, 199, 0.2);
 
-    --status-ok: #059669;
-    --status-warn: #d97706;
-    --status-err: #dc2626;
+  /* Status Colors */
+  --status-ok: #059669;
+  --status-ok-bg: #ecfdf5;
+  --status-ok-border: #a7f3d0;
+  --status-warn: #d97706;
+  --status-warn-bg: #fffbeb;
+  --status-warn-border: #fde68a;
+  --status-err: #dc2626;
+  --status-err-bg: #fef2f2;
+  --status-err-border: #fecaca;
 
-    /* Seal & Editorial Badges */
-    --seal-bg: rgba(184, 59, 38, 0.07);
-    --seal-border: rgba(184, 59, 38, 0.24);
-    --seal-text: #b83b26;
+  /* Form Inputs */
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-border-focus: #2563eb;
+  --input-text: #0f172a;
+  --input-tag-bg: #eff6ff;
+  --input-tag-text: #2563eb;
 
-    --input-bg: rgba(255, 255, 255, 0.95);
-    --input-border: rgba(44, 40, 35, 0.14);
-    --input-text: #1c1a18;
-    --input-focus-border: #b83b26;
+  /* Terminal Console */
+  --term-bg: #0f172a;
+  --term-header-bg: #1e293b;
+  --term-border: #334155;
+  --term-text: #f8fafc;
 
-    /* Terminal Console */
-    --term-bg: #1c1e22;
-    --term-border: rgba(44, 40, 35, 0.12);
-    --term-header-bg: #272a30;
-    --term-header-border: rgba(255, 255, 255, 0.06);
+  /* Modals & Popups */
+  --modal-overlay: rgba(15, 23, 42, 0.45);
+  --modal-bg: #ffffff;
+  --modal-border: #cbd5e1;
 
-    /* Modal & Toast */
-    --modal-bg: #ffffff;
-    --modal-border: rgba(44, 40, 35, 0.14);
-    --toast-bg: rgba(28, 26, 24, 0.94);
-    --toast-border: rgba(184, 59, 38, 0.4);
-    --toast-text: #f7f5ef;
+  /* Toasts */
+  --toast-bg: #0f172a;
+  --toast-border: #3b82f6;
+  --toast-text: #f8fafc;
 
-    /* Shadows & Aura */
-    --paper-shadow: 0 4px 20px rgba(44, 38, 30, 0.07), 0 1px 3px rgba(44, 38, 30, 0.04);
-    --paper-shadow-sm: 0 2px 8px rgba(44, 38, 30, 0.05);
-    --ink-blob-1: radial-gradient(circle at 10% 20%, rgba(184, 59, 38, 0.04) 0%, transparent 60%);
-    --ink-blob-2: radial-gradient(circle at 90% 80%, rgba(33, 97, 83, 0.04) 0%, transparent 60%);
-    --grain-opacity: 0.045;
-    --grain-blend: multiply;
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
 }
 
 :root {
-    /* Font Families */
-    --font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "SimSun", "STSong", "Hiragino Mincho ProN", serif;
-    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
-    --font-mono: "Cascadia Code", "JetBrains Mono", "SF Mono", Consolas, "Courier New", monospace;
+  /* Typography Systems */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", "SF Mono", Consolas, Menlo, monospace;
 
-    /* Global Border Radius Tokens (规范化圆角体系) */
-    --radius-xs: 4px;     /* 微型角标、代码块内部标记 */
-    --radius-sm: 6px;     /* 紧凑控件：标题栏Tab、窗口控制、控制台工具、卡片头操作 */
-    --radius-md: 8px;     /* 标准控件：路径输入框、浏览按钮、返回按钮、GitHub按钮、主题选项卡 */
-    --radius-lg: 10px;    /* 核心操作大按钮、对话框操作按钮 */
-    --radius-xl: 14px;    /* 卡片容器、对话框外框 */
-    --radius-pill: 9999px;/* 状态胶囊、圆形点缀 */
+  /* Unified Border Radius Hierarchy */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
 
-    /* Button Height & Dimension Tokens (标准尺寸梯度) */
-    --btn-h-lg: 44px;
-    --btn-h-md: 38px;
-    --btn-h-sm: 30px;
-    --btn-h-xs: 26px;
+  /* Unified Height Metric Standards */
+  --h-control: 38px;
+  --h-action-btn: 44px;
+  --h-sm-btn: 30px;
+  --h-badge: 24px;
 }

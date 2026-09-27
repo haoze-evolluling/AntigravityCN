@@ -7,8 +7,8 @@ const effectiveTheme = ref<'light' | 'dark'>('dark')
 
 const themeNames: Record<ThemeMode, string> = {
   system: '跟随系统',
-  light: '浅色 · 素宣',
-  dark: '深色 · 玄青'
+  light: '浅色模式',
+  dark: '深色模式'
 }
 
 export function useTheme() {

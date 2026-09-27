@@ -5,6 +5,7 @@ import { useTheme } from '@/composables/useTheme'
 import { useTerminalLog } from '@/composables/useTerminalLog'
 import { useAntigravity } from '@/composables/useAntigravity'
 
+import AppSidebar from '@/components/common/AppSidebar.vue'
 import AppTitlebar from '@/components/common/AppTitlebar.vue'
 import ToastNotification from '@/components/common/ToastNotification.vue'
 import ProcessConflictModal from '@/components/common/ProcessConflictModal.vue'
@@ -30,23 +31,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- Subtle Xuan Paper Grain & Ink Aura Background -->
-  <div class="ink-ambient-layer">
-    <div class="ink-blob blob-top"></div>
-    <div class="ink-blob blob-bottom"></div>
-    <div class="paper-grain-overlay"></div>
-  </div>
+  <div class="app-shell">
+    <!-- Left Navigation Sidebar -->
+    <AppSidebar v-model:active-tab="activeTab" />
 
-  <div class="app-container">
-    <AppTitlebar v-model:active-tab="activeTab" />
+    <!-- Right Workspace Area -->
+    <div class="main-wrapper">
+      <AppTitlebar :active-tab="activeTab" />
 
-    <!-- Main Content Area -->
-    <main class="main-content">
-      <Transition name="page-fade" mode="out-in">
-        <DashboardView v-if="activeTab === 'dashboard'" />
-        <SettingsView v-else @back="activeTab = 'dashboard'" />
-      </Transition>
-    </main>
+      <main class="main-content">
+        <Transition name="page-fade" mode="out-in">
+          <DashboardView v-if="activeTab === 'dashboard'" />
+          <SettingsView v-else />
+        </Transition>
+      </main>
+    </div>
   </div>
 
   <!-- Process Conflict Modal -->

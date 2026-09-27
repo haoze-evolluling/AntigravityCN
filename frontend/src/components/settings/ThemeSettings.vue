@@ -4,48 +4,57 @@ import type { ThemeMode } from '@/types'
 
 const { currentThemeMode, themeNames, setThemeMode } = useTheme()
 
-const themes: { id: ThemeMode; name: string; detail: string; icon: string }[] = [
+const themes: { id: ThemeMode; name: string; detail: string }[] = [
   {
     id: 'system',
     name: '跟随系统',
-    detail: '随操作系统色彩自动适配',
-    icon: 'system'
+    detail: '跟随 Windows 操作系统明暗色彩自动切换'
   },
   {
     id: 'light',
-    name: '浅色 · 素宣',
-    detail: '温润生宣米白，水墨分明',
-    icon: 'light'
+    name: '浅色模式',
+    detail: '纯白底色与深蓝强调，清晰透亮，开阔舒适'
   },
   {
     id: 'dark',
-    name: '深色 · 玄青',
-    detail: '松烟古砚沉邃，朱印点翠',
-    icon: 'dark'
+    name: '深色模式',
+    detail: '深邃灰蓝与科技蓝，沉浸聚焦，夜间舒适'
   }
 ]
 </script>
 
 <template>
-  <section class="paper-card settings-card">
-    <div class="section-meta-header">
-      <div class="section-title-wrap">
-        <h3 class="card-title">外观主题模式</h3>
-        <p class="card-subtitle">选择符合视觉意境的主题风格，支持即时渲染与持久化保存</p>
+  <section class="card">
+    <div class="card-header">
+      <div class="card-title-group">
+        <div class="card-icon">
+          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+            <path
+              d="M10 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 2ZM10 15a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 15ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"
+            />
+          </svg>
+        </div>
+        <div>
+          <h3 class="card-title">外观显示主题</h3>
+          <p class="card-subtitle">支持无缝热重载与本地持久化，确保界面全天候舒适视觉效果</p>
+        </div>
       </div>
-      <div class="seal-badge">{{ themeNames[currentThemeMode] }}</div>
+      <span class="badge-pill">
+        当前: {{ themeNames[currentThemeMode] }}
+      </span>
     </div>
 
-    <div class="theme-options-grid">
+    <!-- 3 Equal Columns Theme Selector -->
+    <div class="theme-grid">
       <div
         v-for="item in themes"
         :key="item.id"
-        class="theme-option-card"
+        class="theme-card"
         :class="{ active: currentThemeMode === item.id }"
         @click="setThemeMode(item.id, true)"
       >
-        <div class="theme-card-header">
-          <div class="theme-card-icon" :class="`${item.id}-icon`">
+        <div class="theme-card-top">
+          <div class="theme-icon-wrap">
             <!-- System Icon -->
             <svg
               v-if="item.id === 'system'"
@@ -55,6 +64,8 @@ const themes: { id: ThemeMode; name: string; detail: string; icon: string }[] = 
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
+              width="18"
+              height="18"
             >
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
               <line x1="8" y1="21" x2="16" y2="21" />
@@ -69,6 +80,8 @@ const themes: { id: ThemeMode; name: string; detail: string; icon: string }[] = 
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
+              width="18"
+              height="18"
             >
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />
@@ -89,17 +102,21 @@ const themes: { id: ThemeMode; name: string; detail: string; icon: string }[] = 
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
+              width="18"
+              height="18"
             >
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
           </div>
-          <div class="theme-seal-check">
-            <span class="seal-dot"></span>
+
+          <div class="theme-radio">
+            <span class="theme-radio-inner"></span>
           </div>
         </div>
-        <div class="theme-card-info">
-          <span class="theme-name">{{ item.name }}</span>
-          <span class="theme-detail">{{ item.detail }}</span>
+
+        <div>
+          <div class="theme-card-title">{{ item.name }}</div>
+          <div class="theme-card-desc">{{ item.detail }}</div>
         </div>
       </div>
     </div>
