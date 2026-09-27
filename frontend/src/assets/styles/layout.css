@@ -111,6 +111,7 @@
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 500;
+  text-align: left;
   position: relative;
   cursor: pointer;
   transform: scale(1);
@@ -169,6 +170,7 @@
 
 .nav-title {
   flex: 1;
+  text-align: left;
   white-space: nowrap;
 }
 
@@ -192,6 +194,7 @@
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 500;
+  text-align: left;
   position: relative;
   cursor: pointer;
   transform: scale(1);
