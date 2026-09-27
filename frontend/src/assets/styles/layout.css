@@ -78,7 +78,7 @@
 
 .brand-subtitle {
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-secondary);
 }
 
 .badge-pill {
@@ -154,8 +154,9 @@
   justify-content: space-between;
   padding: 8px 10px;
   border-radius: var(--radius-md);
-  color: var(--text-muted);
+  color: var(--text-secondary);
   font-size: 12px;
+  font-weight: 500;
   transition: all 0.18s ease;
 }
 
@@ -208,8 +209,8 @@
 
 .page-breadcrumb-sub {
   font-size: 12px;
-  font-weight: 400;
-  color: var(--text-muted);
+  font-weight: 500;
+  color: var(--text-secondary);
 }
 
 .titlebar-center {

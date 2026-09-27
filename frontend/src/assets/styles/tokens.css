@@ -97,27 +97,27 @@
   --theme-name: "light";
 
   /* App Shell & Backgrounds */
-  --bg-app: #f8fafc;
+  --bg-app: #f1f5f9;
   --bg-sidebar: #ffffff;
-  --bg-main: #f8fafc;
-  --bg-header: rgba(255, 255, 255, 0.82);
+  --bg-main: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.92);
 
   /* Card Surfaces & Layers */
   --card-bg: #ffffff;
   --card-bg-hover: #ffffff;
   --card-bg-solid: #ffffff;
-  --card-bg-subtle: #f1f5f9;
+  --card-bg-subtle: #f8fafc;
 
-  /* Borders & Dividers */
-  --border-color: #e2e8f0;
-  --border-color-hover: #93c5fd;
-  --border-color-strong: #cbd5e1;
-  --divider: #f1f5f9;
+  /* Borders & Dividers - High Contrast */
+  --border-color: #cbd5e1;
+  --border-color-hover: #2563eb;
+  --border-color-strong: #94a3b8;
+  --divider: #e2e8f0;
 
-  /* Typography Colors */
+  /* Typography Colors - High Contrast */
   --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
   --text-on-primary: #ffffff;
 
   /* Brand & Action Colors (Clean Vibrant Blue) */
@@ -125,14 +125,14 @@
   --primary-hover: #1d4ed8;
   --primary-active: #1e40af;
   --primary-subtle: #eff6ff;
-  --primary-border: #bfdbfe;
+  --primary-border: #93c5fd;
   --primary-glow: rgba(37, 99, 235, 0.2);
 
   /* Secondary & Neutral Actions */
   --btn-secondary-bg: #ffffff;
   --btn-secondary-hover: #f8fafc;
-  --btn-secondary-border: #e2e8f0;
-  --btn-secondary-text: #334155;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-text: #1e293b;
 
   /* Accent / Launch Button (Emerald Start) */
   --btn-accent-bg: #059669;
@@ -141,33 +141,33 @@
   --btn-accent-text: #ffffff;
   --btn-accent-glow: rgba(5, 150, 105, 0.2);
 
-  /* Status Colors */
-  --status-ok: #059669;
+  /* Status Colors - High Contrast */
+  --status-ok: #047857;
   --status-ok-bg: #ecfdf5;
-  --status-ok-border: #a7f3d0;
-  --status-warn: #d97706;
+  --status-ok-border: #86efac;
+  --status-warn: #b45309;
   --status-warn-bg: #fffbeb;
-  --status-warn-border: #fde68a;
-  --status-err: #dc2626;
+  --status-warn-border: #fde047;
+  --status-err: #b91c1c;
   --status-err-bg: #fef2f2;
-  --status-err-border: #fecaca;
+  --status-err-border: #fca5a5;
 
-  /* Form Inputs */
+  /* Form Inputs - High Contrast */
   --input-bg: #ffffff;
   --input-border: #cbd5e1;
   --input-border-focus: #2563eb;
   --input-text: #0f172a;
   --input-tag-bg: #eff6ff;
-  --input-tag-text: #2563eb;
+  --input-tag-text: #1d4ed8;
 
   /* Terminal Console (Clean Light Architecture) */
   --term-bg: #ffffff;
   --term-header-bg: #f8fafc;
-  --term-border: #e2e8f0;
-  --term-text: #1e293b;
+  --term-border: #cbd5e1;
+  --term-text: #0f172a;
 
   /* Modals & Popups */
-  --modal-overlay: rgba(15, 23, 42, 0.45);
+  --modal-overlay: rgba(15, 23, 42, 0.5);
   --modal-bg: #ffffff;
   --modal-border: #cbd5e1;
 
@@ -176,10 +176,10 @@
   --toast-border: #3b82f6;
   --toast-text: #f8fafc;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 30px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+  /* Shadows - More definition */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.12), 0 4px 8px rgba(15, 23, 42, 0.06);
 }
 
 :root {

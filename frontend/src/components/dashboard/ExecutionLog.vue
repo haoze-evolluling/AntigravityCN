@@ -61,7 +61,7 @@ watch(
         class="log-line"
         :class="`log-${item.type}`"
       >
-        <span style="opacity: 0.5;">[{{ item.time }}]</span> {{ item.text }}
+        <span style="color: var(--text-muted); font-weight: 500;">[{{ item.time }}]</span> {{ item.text }}
       </div>
     </div>
   </section>
