@@ -24,23 +24,23 @@ const emit = defineEmits<{
             </svg>
           </div>
           <div>
-            <h3 class="modal-title">检测到 Antigravity 正在运行</h3>
+            <h3 class="modal-title">Antigravity 正在运行</h3>
             <p class="modal-desc" style="margin-top: 2px;">
-              为避免 Windows 系统文件占用写入冲突，建议安全关闭客户端进程。
+              修改文件前需要先关闭 Antigravity，避免文件被占用。
             </p>
           </div>
         </div>
 
         <div class="modal-actions">
           <button class="btn-tool" style="height: 36px; padding: 0 16px;" @click="emit('cancel')">
-            我先手动关闭
+            取消
           </button>
           <button
             class="btn-tool btn-tool-primary"
             style="height: 36px; padding: 0 16px;"
             @click="emit('confirmAutoClose')"
           >
-            协助关闭并继续
+            关闭程序并继续
           </button>
         </div>
       </div>

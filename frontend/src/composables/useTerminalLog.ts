@@ -6,7 +6,7 @@ const logs = ref<LogItem[]>([
   {
     id: 1,
     time: new Date().toLocaleTimeString(),
-    text: 'Antigravity 简体中文深度汉化引擎已就绪。',
+    text: '汉化工具已就绪。',
     type: 'system'
   }
 ])
@@ -52,7 +52,7 @@ export function useTerminalLog() {
 
   function clearLogs() {
     logs.value = []
-    showToast('控制台已清空')
+    showToast('日志已清空')
   }
 
   async function copyLogs() {
@@ -62,9 +62,9 @@ export function useTerminalLog() {
 
     try {
       await navigator.clipboard.writeText(text)
-      showToast('日志已复制到剪贴板')
+      showToast('日志已复制')
     } catch {
-      showToast('复制失败，请手动选择复制')
+      showToast('复制失败')
     }
   }
 

@@ -15,7 +15,7 @@ const {
     <button
       class="btn-action btn-action-primary"
       :disabled="isLoading"
-      title="一键将简体中文汉化语言包安全写入 Antigravity"
+      title="安装简体中文汉化"
       @click="handleApply"
     >
       <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
@@ -25,14 +25,14 @@ const {
           clip-rule="evenodd"
         />
       </svg>
-      <span>一键安装汉化</span>
+      <span>安装汉化</span>
     </button>
 
     <!-- Secondary Action: Restore Backup -->
     <button
       class="btn-action btn-action-secondary"
       :disabled="isLoading"
-      title="从自动创建的备份文件中完整还原官方纯英文原版"
+      title="从备份还原为官方英文原版"
       @click="handleRestore"
     >
       <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
@@ -49,7 +49,7 @@ const {
     <button
       class="btn-action btn-action-accent"
       :disabled="isLoading"
-      title="启动已安装的 Google Antigravity 客户端"
+      title="启动 Antigravity"
       @click="handleLaunch"
     >
       <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">

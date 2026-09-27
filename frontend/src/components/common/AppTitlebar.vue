@@ -28,10 +28,10 @@ function closeWindow() {
     <!-- Breadcrumb & Page Info -->
     <div class="titlebar-left" style="--wails-draggable:no-drag">
       <div class="page-breadcrumb">
-        <span>{{ activeTab === 'dashboard' ? '汉化控制台' : '偏好与关于' }}</span>
+        <span>{{ activeTab === 'dashboard' ? '汉化' : '设置' }}</span>
         <span class="page-breadcrumb-sub">·</span>
         <span class="page-breadcrumb-sub">
-          {{ activeTab === 'dashboard' ? '核心操作与状态监控' : '外观模式与开源信息' }}
+          {{ activeTab === 'dashboard' ? '操作与日志' : '外观与关于' }}
         </span>
       </div>
     </div>
@@ -42,12 +42,12 @@ function closeWindow() {
     <!-- Window Controls -->
     <div class="titlebar-right" style="--wails-draggable:no-drag">
       <div class="window-controls">
-        <button class="ctrl-btn" title="最小化窗口" @click="minimizeWindow">
+        <button class="ctrl-btn" title="最小化" @click="minimizeWindow">
           <svg viewBox="0 0 16 16" width="11" height="11">
             <path fill="currentColor" d="M2 8h12v1.2H2z" />
           </svg>
         </button>
-        <button class="ctrl-btn close-btn" title="关闭窗口" @click="closeWindow">
+        <button class="ctrl-btn close-btn" title="关闭" @click="closeWindow">
           <svg viewBox="0 0 16 16" width="11" height="11">
             <path
               fill="currentColor"

@@ -80,7 +80,7 @@ func (a *App) emitLog(msg string) {
 // ApplyPatch applies Chinese localization patch
 func (a *App) ApplyPatch(asarPath string, autoClose bool) ActionResult {
 	a.emitLog("================================================")
-	a.emitLog("开始执行【一键安装简体中文汉化】...")
+	a.emitLog("开始安装汉化...")
 
 	err := patcher.ApplyPatch(asarPath, a.patchesFS, a.emitLog, &patcher.PatchOptions{AutoCloseProcess: autoClose})
 	if err != nil {
@@ -89,14 +89,14 @@ func (a *App) ApplyPatch(asarPath string, autoClose bool) ActionResult {
 	}
 
 	a.emitLog("================================================")
-	a.emitLog("🎉 汉化完成！您可以点击【启动 Antigravity】立即体验。")
-	return ActionResult{Success: true, Message: "汉化补丁应用成功！"}
+	a.emitLog("汉化完成，可启动 Antigravity 查看效果。")
+	return ActionResult{Success: true, Message: "汉化完成"}
 }
 
 // RestoreOriginal restores original app.asar from backup
 func (a *App) RestoreOriginal(asarPath string, autoClose bool) ActionResult {
 	a.emitLog("================================================")
-	a.emitLog("开始执行【还原官方英文原版】...")
+	a.emitLog("开始还原英文原版...")
 
 	err := patcher.RestoreOriginal(asarPath, a.emitLog, &patcher.PatchOptions{AutoCloseProcess: autoClose})
 	if err != nil {
@@ -105,24 +105,24 @@ func (a *App) RestoreOriginal(asarPath string, autoClose bool) ActionResult {
 	}
 
 	a.emitLog("================================================")
-	a.emitLog("✅ 还原成功！已恢复为官方英文原版。")
-	return ActionResult{Success: true, Message: "已成功还原官方英文原版！"}
+	a.emitLog("已恢复为英文原版。")
+	return ActionResult{Success: true, Message: "已还原为英文原版"}
 }
 
 // CleanAppCache clears temporary rendering and bytecode caches
 func (a *App) CleanAppCache() ActionResult {
 	a.emitLog("================================================")
-	a.emitLog("开始执行【安全清理应用缓存】...")
+	a.emitLog("开始清理应用缓存...")
 
 	count, err := patcher.CleanAppCache(a.emitLog)
 	if err != nil {
-		a.emitLog(fmt.Sprintf("[错误] 缓存清理异常: %v", err))
+		a.emitLog(fmt.Sprintf("[错误] 清理缓存失败: %v", err))
 		return ActionResult{Success: false, Message: err.Error()}
 	}
 
 	a.emitLog("================================================")
-	a.emitLog(fmt.Sprintf("✅ 缓存安全清理完成！共清理 %d 处临时目录（用户配置与账号不受影响）。", count))
-	return ActionResult{Success: true, Message: fmt.Sprintf("已成功清理 %d 处临时缓存目录！", count)}
+	a.emitLog(fmt.Sprintf("缓存清理完成，共清理 %d 处目录（不影响配置和账号）。", count))
+	return ActionResult{Success: true, Message: fmt.Sprintf("已清理 %d 处缓存目录", count)}
 }
 
 // LaunchAntigravity launches the main Antigravity executable
@@ -133,8 +133,8 @@ func (a *App) LaunchAntigravity(asarPath string) ActionResult {
 		return ActionResult{Success: false, Message: err.Error()}
 	}
 
-	a.emitLog("[OK] Antigravity 启动命令已发送。")
-	return ActionResult{Success: true, Message: "Antigravity 启动成功！"}
+	a.emitLog("[OK] Antigravity 已启动。")
+	return ActionResult{Success: true, Message: "启动成功"}
 }
 
 // OpenURL opens the specified URL in the user's default browser

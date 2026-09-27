@@ -21,12 +21,12 @@ var assets embed.FS
 var embeddedPatches embed.FS
 
 func main() {
-	applyFlag := flag.Bool("apply", false, "一键安装汉化补丁 (命令行模式)")
-	restoreFlag := flag.Bool("restore", false, "还原官方英文原版 (命令行模式)")
-	cleanCacheFlag := flag.Bool("clean-cache", false, "安全清理 Antigravity 临时渲染与编译缓存")
+	applyFlag := flag.Bool("apply", false, "安装汉化补丁")
+	restoreFlag := flag.Bool("restore", false, "还原英文原版")
+	cleanCacheFlag := flag.Bool("clean-cache", false, "清理应用缓存")
 	launchFlag := flag.Bool("launch", false, "启动 Antigravity")
-	asarPathFlag := flag.String("path", "", "自定义 app.asar 路径")
-	forceCloseFlag := flag.Bool("force-close", false, "若 Antigravity 正在运行，自动关闭进程")
+	asarPathFlag := flag.String("path", "", "指定 app.asar 路径")
+	forceCloseFlag := flag.Bool("force-close", false, "若程序正在运行，自动关闭进程")
 	helpFlag := flag.Bool("help", false, "显示帮助信息")
 
 	flag.Parse()
@@ -52,30 +52,30 @@ func main() {
 
 		if *cleanCacheFlag {
 			fmt.Println("================================================")
-			fmt.Println("   AntigravityCN — 正在安全清理应用临时缓存")
+			fmt.Println("   AntigravityCN — 正在清理应用缓存")
 			fmt.Println("================================================")
 			count, err := patcher.CleanAppCache(func(msg string) { fmt.Println(msg) })
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "[错误] 缓存清理异常: %v\n", err)
+				fmt.Fprintf(os.Stderr, "[错误] 清理缓存失败: %v\n", err)
 				os.Exit(1)
 			}
-			fmt.Printf("\n[完成] 缓存清理成功！共清理 %d 处目录。\n", count)
+			fmt.Printf("\n[完成] 缓存清理完成，共清理 %d 处目录。\n", count)
 		}
 
 		if *applyFlag {
-			fmt.Printf("================================================\n   AntigravityCN — 正在应用简体中文汉化补丁\n================================================\n目标路径: %s\n\n", targetAsar)
+			fmt.Printf("================================================\n   AntigravityCN — 正在安装汉化补丁\n================================================\n目标路径: %s\n\n", targetAsar)
 			if err := patcher.ApplyPatch(targetAsar, patchesSubFS, func(msg string) { fmt.Println(msg) }, opts); err != nil {
 				fmt.Fprintf(os.Stderr, "\n[错误] 汉化失败: %v\n", err)
 				os.Exit(1)
 			}
-			fmt.Println("\n[完成] 汉化成功！请重启或启动 Antigravity。")
+			fmt.Println("\n[完成] 汉化完成，请启动 Antigravity 查看效果。")
 		} else if *restoreFlag {
-			fmt.Printf("================================================\n   AntigravityCN — 正在还原官方英文原版\n================================================\n目标路径: %s\n\n", targetAsar)
+			fmt.Printf("================================================\n   AntigravityCN — 正在还原英文原版\n================================================\n目标路径: %s\n\n", targetAsar)
 			if err := patcher.RestoreOriginal(targetAsar, func(msg string) { fmt.Println(msg) }, opts); err != nil {
 				fmt.Fprintf(os.Stderr, "\n[错误] 还原失败: %v\n", err)
 				os.Exit(1)
 			}
-			fmt.Println("\n[完成] 还原成功！已恢复官方英文原版。")
+			fmt.Println("\n[完成] 还原完成，已恢复为英文原版。")
 		}
 
 		if *launchFlag {
@@ -97,7 +97,7 @@ func main() {
 	app := NewApp(patchesSubFS)
 
 	err := wails.Run(&options.App{
-		Title:             "Google Antigravity 简体中文汉化工具 (便携版)",
+		Title:             "Google Antigravity 简体中文汉化工具",
 		Width:             920,
 		Height:            630,
 		MinWidth:          840,
@@ -121,15 +121,15 @@ func main() {
 }
 
 func printHelp() {
-	fmt.Println("Google Antigravity 简体中文汉化工具 (便携版)")
+	fmt.Println("Google Antigravity 简体中文汉化工具")
 	fmt.Println("使用说明:")
-	fmt.Println("  双击运行: 自动启动 Wails 现代化图形界面")
+	fmt.Println("  双击运行: 启动图形界面")
 	fmt.Println("  命令行参数:")
-	fmt.Println("    -apply        一键安装简体中文汉化")
-	fmt.Println("    -restore      还原官方英文原版")
-	fmt.Println("    -clean-cache  安全清理渲染与字节码缓存")
+	fmt.Println("    -apply        安装汉化补丁")
+	fmt.Println("    -restore      还原英文原版")
+	fmt.Println("    -clean-cache  清理应用缓存")
 	fmt.Println("    -launch       启动 Antigravity")
-	fmt.Println("    -path <path>  指定自定义 app.asar 路径")
-	fmt.Println("    -force-close  若检测到运行中自动安全关闭进程")
-	fmt.Println("    -help         显示此帮助信息")
+	fmt.Println("    -path <path>  指定 app.asar 路径")
+	fmt.Println("    -force-close  若程序正在运行，自动关闭进程")
+	fmt.Println("    -help         显示帮助信息")
 }

@@ -47,7 +47,7 @@ export function useAntigravity() {
       const state = await GetInitialState()
       updateState(state)
     } catch (err) {
-      appendLog(`[错误] 初始化状态失败: ${err}`)
+      appendLog(`[错误] 获取初始状态失败: ${err}`)
     }
   }
 
@@ -59,7 +59,7 @@ export function useAntigravity() {
         showToast('状态已刷新')
       }
     } catch (err) {
-      appendLog(`[错误] 刷新状态异常: ${err}`)
+      appendLog(`[错误] 刷新状态失败: ${err}`)
     }
   }
 
@@ -69,10 +69,10 @@ export function useAntigravity() {
       if (selected) {
         currentPath.value = selected
         await refreshStatus()
-        appendLog(`[*] 已选择目标文件: ${selected}`)
+        appendLog(`[*] 已选择文件: ${selected}`)
       }
     } catch (err) {
-      appendLog(`[错误] 选择文件异常: ${err}`)
+      appendLog(`[错误] 选择文件失败: ${err}`)
     }
   }
 
@@ -90,7 +90,7 @@ export function useAntigravity() {
         showToast(`${failPrefix}: ${res ? res.message : '未知错误'}`)
       }
     } catch (err) {
-      appendLog(`[错误] 异常: ${err}`)
+      appendLog(`[错误] 操作失败: ${err}`)
     } finally {
       isLoading.value = false
       await refreshStatus()
@@ -100,7 +100,7 @@ export function useAntigravity() {
   async function executeApply(autoClose: boolean) {
     await executeAction(
       () => ApplyPatch(currentPath.value, autoClose),
-      '🎉 汉化成功完成！',
+      '汉化完成',
       '汉化失败'
     )
   }
@@ -108,14 +108,14 @@ export function useAntigravity() {
   async function executeRestore(autoClose: boolean) {
     await executeAction(
       () => RestoreOriginal(currentPath.value, autoClose),
-      '已成功还原英文官方原版！',
+      '已还原为英文原版',
       '还原失败'
     )
   }
 
   async function handleApply() {
     if (!currentStatus.value.asarExists) {
-      showToast('请先选择有效的 app.asar 文件！')
+      showToast('请先选择 app.asar 文件')
       return
     }
 
@@ -130,12 +130,12 @@ export function useAntigravity() {
 
   async function handleRestore() {
     if (!currentStatus.value.asarExists) {
-      showToast('请先选择有效的 app.asar 文件！')
+      showToast('请先选择 app.asar 文件')
       return
     }
 
     if (!currentStatus.value.backupExists) {
-      showToast('未检测到备份文件，无法还原！')
+      showToast('未找到备份文件，无法还原')
       return
     }
 
@@ -152,27 +152,27 @@ export function useAntigravity() {
     try {
       const res = await LaunchAntigravity(currentPath.value)
       if (res.success) {
-        showToast('已启动 Antigravity！')
+        showToast('已启动 Antigravity')
       } else {
         showToast(`启动失败: ${res.message}`)
       }
       setTimeout(() => refreshStatus(), 1500)
     } catch (err) {
-      appendLog(`[错误] 启动 Antigravity 异常: ${err}`)
+      appendLog(`[错误] 启动 Antigravity 失败: ${err}`)
     }
   }
 
   async function handleCleanCache() {
     await executeAction(
       () => CleanAppCache(),
-      '缓存安全清理完成！',
+      '缓存已清理',
       '清理缓存失败'
     )
   }
 
   function handleCancelConflict() {
     showConflictModal.value = false
-    appendLog('[!] 用户取消了操作（Antigravity 正在运行）。')
+    appendLog('[提示] 操作已取消（应用正在运行）')
     pendingAction.value = null
   }
 
@@ -197,7 +197,7 @@ export function useAntigravity() {
       } else {
         window.open(url, '_blank')
       }
-      showToast('已在默认浏览器中打开 GitHub 仓库')
+      showToast('已在浏览器中打开链接')
     } catch {
       window.open(url, '_blank')
     }

@@ -15,14 +15,14 @@ const installStatus = computed(() => {
   if (currentStatus.value.asarExists) {
     return {
       label: '核心文件',
-      desc: 'app.asar 文件就绪',
-      badge: '已定位',
+      desc: '已找到 app.asar',
+      badge: '正常',
       status: 'ok' as const
     }
   }
   return {
     label: '核心文件',
-    desc: '未找到目标文件',
+    desc: '未找到 app.asar',
     badge: '未找到',
     status: 'err' as const
   }
@@ -32,14 +32,14 @@ const backupStatus = computed(() => {
   if (currentStatus.value.backupExists) {
     return {
       label: '原版备份',
-      desc: 'app.asar.backup 就绪',
+      desc: '已生成备份文件',
       badge: '已备份',
       status: 'ok' as const
     }
   }
   return {
     label: '原版备份',
-    desc: '尚未创建安全备份',
+    desc: '未检测到备份',
     badge: '未备份',
     status: 'warn' as const
   }
@@ -48,16 +48,16 @@ const backupStatus = computed(() => {
 const runningStatus = computed(() => {
   if (currentStatus.value.isRunning) {
     return {
-      label: '客户端进程',
+      label: '运行状态',
       desc: 'Antigravity 正在运行',
       badge: '运行中',
       status: 'warn' as const
     }
   }
   return {
-    label: '客户端进程',
-    desc: '进程未运行 (可安全写入)',
-    badge: '就绪',
+    label: '运行状态',
+    desc: '未运行，可正常修改',
+    badge: '空闲',
     status: 'ok' as const
   }
 })
@@ -136,13 +136,13 @@ const runningStatus = computed(() => {
     <!-- Middle Row: Dedicated Path Config Card -->
     <section class="card" style="padding: 14px 16px;">
       <div class="path-toolbar">
-        <div class="path-input-group" title="当前检测或选择的目标 app.asar 路径">
+        <div class="path-input-group" title="app.asar 路径">
           <span class="path-tag">PATH</span>
           <input
             type="text"
             class="path-input"
             :value="currentPath"
-            placeholder="请选择或定位 Antigravity 的 app.asar 目标路径..."
+            placeholder="请选择 Antigravity 的 app.asar 路径..."
             readonly
           />
         </div>
@@ -150,7 +150,7 @@ const runningStatus = computed(() => {
         <button
           class="btn-tool btn-tool-browse"
           :disabled="isLoading"
-          title="在文件资源管理器中选择 app.asar 文件"
+          title="选择文件"
           @click="browsePath"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
@@ -158,13 +158,13 @@ const runningStatus = computed(() => {
               d="M2 4.75C2 3.784 2.784 3 3.75 3h3.586a1.75 1.75 0 0 1 1.237.513l1.414 1.414a.25.25 0 0 0 .177.073h6.086C17.216 5.086 18 5.87 18 6.836v8.414c0 .966-.784 1.75-1.75 1.75H3.75A1.75 1.75 0 0 1 2 15.25V4.75Z"
             />
           </svg>
-          <span>浏览文件</span>
+          <span>浏览</span>
         </button>
 
         <button
           class="btn-tool"
           :disabled="isLoading"
-          title="安全清理 Antigravity 临时渲染与编译缓存"
+          title="清理缓存"
           @click="handleCleanCache"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
@@ -180,7 +180,7 @@ const runningStatus = computed(() => {
         <button
           class="btn-tool"
           :disabled="isLoading"
-          title="重新检测核心文件与进程状态"
+          title="刷新状态"
           @click="refreshStatus(true)"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">

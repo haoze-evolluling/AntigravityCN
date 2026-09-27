@@ -8,17 +8,17 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
   {
     id: 'system',
     name: '跟随系统',
-    detail: '跟随 Windows 操作系统明暗色彩自动切换'
+    detail: '自动匹配系统深浅色设置'
   },
   {
     id: 'light',
     name: '浅色模式',
-    detail: '纯白底色与深蓝强调，清晰透亮，开阔舒适'
+    detail: '明亮清爽的浅色界面'
   },
   {
     id: 'dark',
     name: '深色模式',
-    detail: '深邃灰蓝与科技蓝，沉浸聚焦，夜间舒适'
+    detail: '适合暗光环境的深色界面'
   }
 ]
 </script>
@@ -35,12 +35,12 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
           </svg>
         </div>
         <div>
-          <h3 class="card-title">外观显示主题</h3>
-          <p class="card-subtitle">支持无缝热重载与本地持久化，确保界面全天候舒适视觉效果</p>
+          <h3 class="card-title">外观主题</h3>
+          <p class="card-subtitle">选择界面的深浅显示模式</p>
         </div>
       </div>
       <span class="badge-pill">
-        当前: {{ themeNames[currentThemeMode] }}
+        当前：{{ themeNames[currentThemeMode] }}
       </span>
     </div>
 

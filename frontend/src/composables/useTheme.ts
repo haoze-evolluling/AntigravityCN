@@ -55,7 +55,7 @@ export function useTheme() {
     }
 
     if (showFeedback) {
-      showToast(`已切换为【${themeNames[mode]}】`)
+      showToast(`已切换为${themeNames[mode]}`)
     }
   }
 
