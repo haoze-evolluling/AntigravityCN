@@ -64,25 +64,25 @@
 .status-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: var(--shadow-sm);
   transition: all 0.2s ease;
 }
 
 .status-card:hover {
   border-color: var(--border-color-hover);
   background: var(--card-bg-hover);
+  transform: translateY(-1px);
 }
 
-.status-card-left {
+.status-card-top {
   display: flex;
   align-items: center;
-  gap: 10px;
-  overflow: hidden;
+  justify-content: space-between;
 }
 
 .status-icon-box {
@@ -112,9 +112,10 @@
   color: var(--status-err);
 }
 
-.status-text-wrap {
+.status-card-bottom {
   display: flex;
   flex-direction: column;
+  gap: 2px;
 }
 
 .status-label {
@@ -124,10 +125,12 @@
 }
 
 .status-desc {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--text-primary);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status-badge {
@@ -244,14 +247,16 @@
   color: var(--text-primary);
 }
 
-.btn-tool.btn-tool-primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--text-on-primary);
+.btn-tool.btn-tool-browse {
+  background: var(--primary-subtle);
+  border-color: var(--primary-border);
+  color: var(--primary);
+  font-weight: 600;
 }
 
-.btn-tool.btn-tool-primary:hover:not(:disabled) {
-  background: var(--primary-hover);
+.btn-tool.btn-tool-browse:hover:not(:disabled) {
+  background: rgba(37, 99, 235, 0.15);
+  border-color: var(--primary);
 }
 
 /* ----------------------------------------------------------
@@ -357,7 +362,7 @@
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: #38bdf8;
+  background: var(--primary);
 }
 
 .terminal-title {
@@ -387,7 +392,7 @@
 }
 
 .term-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--card-bg-subtle);
   color: var(--text-primary);
 }
 
@@ -409,11 +414,11 @@
   word-break: break-all;
 }
 
-.log-info { color: #93c5fd; }
-.log-success { color: #34d399; font-weight: 600; }
-.log-warn { color: #fbbf24; }
-.log-error { color: #f87171; font-weight: 600; }
-.log-system { color: #94a3b8; }
+.log-info { color: var(--primary); }
+.log-success { color: var(--status-ok); font-weight: 600; }
+.log-warn { color: var(--status-warn); }
+.log-error { color: var(--status-err); font-weight: 600; }
+.log-system { color: var(--text-muted); }
 
 /* ----------------------------------------------------------
    Settings Components & Theme Cards

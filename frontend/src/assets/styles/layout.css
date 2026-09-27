@@ -14,8 +14,8 @@
    Sidebar (Left Navigation)
    ---------------------------------------------------------- */
 .sidebar {
-  width: 210px;
-  min-width: 210px;
+  width: 200px;
+  min-width: 200px;
   height: 100%;
   background-color: var(--bg-sidebar);
   border-right: 1px solid var(--border-color);
@@ -122,17 +122,7 @@
   background-color: var(--primary-subtle);
   color: var(--primary);
   font-weight: 600;
-}
-
-.nav-item.active::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 6px;
-  bottom: 6px;
-  width: 3px;
-  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
-  background-color: var(--primary);
+  border: 1px solid var(--primary-border);
 }
 
 .nav-icon {

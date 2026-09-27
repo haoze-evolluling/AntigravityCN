@@ -45,12 +45,12 @@
   --btn-secondary-border: rgba(148, 163, 184, 0.2);
   --btn-secondary-text: #e2e8f0;
 
-  /* Accent / Launch Button */
-  --btn-accent-bg: #0284c7;
-  --btn-accent-hover: #0369a1;
-  --btn-accent-active: #075985;
+  /* Accent / Launch Button (Emerald Start) */
+  --btn-accent-bg: #059669;
+  --btn-accent-hover: #10b981;
+  --btn-accent-active: #047857;
   --btn-accent-text: #ffffff;
-  --btn-accent-glow: rgba(2, 132, 199, 0.3);
+  --btn-accent-glow: rgba(16, 185, 129, 0.25);
 
   /* Status Colors */
   --status-ok: #10b981;
@@ -134,12 +134,12 @@
   --btn-secondary-border: #e2e8f0;
   --btn-secondary-text: #334155;
 
-  /* Accent / Launch Button */
-  --btn-accent-bg: #0284c7;
-  --btn-accent-hover: #0369a1;
-  --btn-accent-active: #075985;
+  /* Accent / Launch Button (Emerald Start) */
+  --btn-accent-bg: #059669;
+  --btn-accent-hover: #047857;
+  --btn-accent-active: #065f46;
   --btn-accent-text: #ffffff;
-  --btn-accent-glow: rgba(2, 132, 199, 0.2);
+  --btn-accent-glow: rgba(5, 150, 105, 0.2);
 
   /* Status Colors */
   --status-ok: #059669;
@@ -160,11 +160,11 @@
   --input-tag-bg: #eff6ff;
   --input-tag-text: #2563eb;
 
-  /* Terminal Console */
-  --term-bg: #0f172a;
-  --term-header-bg: #1e293b;
-  --term-border: #334155;
-  --term-text: #f8fafc;
+  /* Terminal Console (Clean Light Architecture) */
+  --term-bg: #ffffff;
+  --term-header-bg: #f8fafc;
+  --term-border: #e2e8f0;
+  --term-text: #1e293b;
 
   /* Modals & Popups */
   --modal-overlay: rgba(15, 23, 42, 0.45);

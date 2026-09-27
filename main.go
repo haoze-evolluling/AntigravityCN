@@ -98,10 +98,10 @@ func main() {
 
 	err := wails.Run(&options.App{
 		Title:             "Google Antigravity 简体中文汉化工具 (便携版)",
-		Width:             880,
-		Height:            620,
-		MinWidth:          800,
-		MinHeight:         560,
+		Width:             920,
+		Height:            630,
+		MinWidth:          840,
+		MinHeight:         580,
 		Frameless:         true,
 		BackgroundColour:  &options.RGBA{R: 11, G: 15, B: 25, A: 255},
 		AssetServer:       &assetserver.Options{Assets: frontendFS},
