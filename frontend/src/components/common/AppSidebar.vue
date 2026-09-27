@@ -46,8 +46,10 @@ function toggleQuickTheme() {
       <!-- Navigation Links -->
       <nav class="sidebar-nav" style="--wails-draggable:no-drag">
         <button
+          type="button"
           class="nav-item"
           :class="{ active: activeTab === 'dashboard' }"
+          :aria-current="activeTab === 'dashboard' ? 'page' : undefined"
           title="汉化管理"
           @click="emit('update:activeTab', 'dashboard')"
         >
@@ -65,8 +67,10 @@ function toggleQuickTheme() {
         </button>
 
         <button
+          type="button"
           class="nav-item"
           :class="{ active: activeTab === 'settings' }"
+          :aria-current="activeTab === 'settings' ? 'page' : undefined"
           title="设置"
           @click="emit('update:activeTab', 'settings')"
         >
@@ -86,7 +90,7 @@ function toggleQuickTheme() {
 
     <!-- Sidebar Footer -->
     <div class="sidebar-footer" style="--wails-draggable:no-drag">
-      <button class="footer-btn" title="切换主题" @click="toggleQuickTheme">
+      <button type="button" class="footer-btn" title="切换主题" @click="toggleQuickTheme">
         <span style="display: flex; align-items: center; gap: 6px;">
           <svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
             <path
@@ -100,7 +104,7 @@ function toggleQuickTheme() {
         </span>
       </button>
 
-      <button class="footer-btn" title="打开 GitHub 仓库" @click="openExternalUrl()">
+      <button type="button" class="footer-btn" title="打开 GitHub 仓库" @click="openExternalUrl()">
         <span style="display: flex; align-items: center; gap: 6px;">
           <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
             <path
