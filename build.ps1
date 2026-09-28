@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     AntigravityCN Wails v2 现代化便携版编译构建脚本
 .DESCRIPTION
@@ -106,6 +106,21 @@ try {
         }
     } else {
         Write-Host "[OK] 应用图标已是最新，跳过重新生成 (使用 .\build.ps1 -ForceIcon 可强制重新生成)。" -ForegroundColor Green
+    }
+
+    # 4.5 检查并构建模块化 preload.js 注入脚本
+    $preloadBuildScript = "scripts\build_preload.js"
+    if (Test-Path $preloadBuildScript) {
+        $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
+        if ($nodeCmd) {
+            Write-Host "[*] 正在从 patches/src/preload/ 组装最新 preload.js 补丁..." -ForegroundColor Yellow
+            try {
+                & node scripts/build_preload.js
+                Write-Host "[OK] preload.js 组装完成。" -ForegroundColor Green
+            } catch {
+                Write-Host "[!] preload.js 组装异常，将使用现有文件继续构建。" -ForegroundColor DarkYellow
+            }
+        }
     }
 
     # 5. 执行编译构建

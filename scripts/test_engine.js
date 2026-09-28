@@ -7,7 +7,9 @@ console.log('================================================================');
 console.log(' AntigravityCN 深度汉化引擎与思考链隔离自动化测试 (Node VM)');
 console.log('================================================================\n');
 
-// 1. 读取并组装 preload.js 运行时
+// 1. 自动编译模块化源码并组装 preload.js 运行时
+const { buildPreload } = require('./build_preload.js');
+buildPreload({ silent: true });
 const preloadSource = fs.readFileSync(path.resolve(__dirname, '../patches/preload.js'), 'utf8');
 
 // 读取所有模块化词典并合并
