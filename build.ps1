@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
     AntigravityCN Wails v2 现代化便携版编译构建脚本
 .DESCRIPTION
