@@ -1,0 +1,203 @@
+/* ==========================================================
+   AntigravityCN - Design Tokens & Modern Visual System
+   现代科技 · 简约舒展 · 浅色白蓝 / 深色暗夜蓝设计令牌
+   ========================================================== */
+
+:root,
+[data-theme="dark"] {
+  --theme-name: "dark";
+
+  /* App Shell & Backgrounds */
+  --bg-app: #0b0f19;
+  --bg-sidebar: #0f172a;
+  --bg-main: #0b0f19;
+  --bg-header: rgba(15, 23, 42, 0.75);
+
+  /* Card Surfaces & Layers */
+  --card-bg: rgba(21, 29, 47, 0.75);
+  --card-bg-hover: rgba(28, 38, 62, 0.85);
+  --card-bg-solid: #151d2f;
+  --card-bg-subtle: rgba(255, 255, 255, 0.03);
+
+  /* Borders & Dividers */
+  --border-color: rgba(148, 163, 184, 0.14);
+  --border-color-hover: rgba(59, 130, 246, 0.4);
+  --border-color-strong: rgba(148, 163, 184, 0.25);
+  --divider: rgba(148, 163, 184, 0.1);
+
+  /* Typography Colors */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-on-primary: #ffffff;
+
+  /* Brand & Action Colors (Modern Tech Blue) */
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-active: #1d4ed8;
+  --primary-subtle: rgba(59, 130, 246, 0.12);
+  --primary-border: rgba(59, 130, 246, 0.35);
+  --primary-glow: rgba(59, 130, 246, 0.3);
+
+  /* Secondary & Neutral Actions */
+  --btn-secondary-bg: rgba(255, 255, 255, 0.06);
+  --btn-secondary-hover: rgba(255, 255, 255, 0.1);
+  --btn-secondary-border: rgba(148, 163, 184, 0.2);
+  --btn-secondary-text: #e2e8f0;
+
+  /* Accent / Launch Button (Emerald Start) */
+  --btn-accent-bg: #059669;
+  --btn-accent-hover: #10b981;
+  --btn-accent-active: #047857;
+  --btn-accent-text: #ffffff;
+  --btn-accent-glow: rgba(16, 185, 129, 0.25);
+
+  /* Status Colors */
+  --status-ok: #10b981;
+  --status-ok-bg: rgba(16, 185, 129, 0.12);
+  --status-ok-border: rgba(16, 185, 129, 0.28);
+  --status-warn: #f59e0b;
+  --status-warn-bg: rgba(245, 158, 11, 0.12);
+  --status-warn-border: rgba(245, 158, 11, 0.28);
+  --status-err: #ef4444;
+  --status-err-bg: rgba(239, 68, 68, 0.12);
+  --status-err-border: rgba(239, 68, 68, 0.28);
+
+  /* Form Inputs */
+  --input-bg: rgba(15, 23, 42, 0.85);
+  --input-border: rgba(148, 163, 184, 0.18);
+  --input-border-focus: #3b82f6;
+  --input-text: #f8fafc;
+  --input-tag-bg: rgba(59, 130, 246, 0.15);
+  --input-tag-text: #60a5fa;
+
+  /* Terminal Console */
+  --term-bg: #080c14;
+  --term-header-bg: #0f1523;
+  --term-border: rgba(148, 163, 184, 0.12);
+  --term-text: #e2e8f0;
+
+  /* Modals & Popups */
+  --modal-overlay: rgba(0, 0, 0, 0.65);
+  --modal-bg: #111827;
+  --modal-border: rgba(148, 163, 184, 0.2);
+
+  /* Toasts */
+  --toast-bg: rgba(15, 23, 42, 0.95);
+  --toast-border: rgba(59, 130, 246, 0.35);
+  --toast-text: #f8fafc;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+[data-theme="light"] {
+  --theme-name: "light";
+
+  /* App Shell & Backgrounds */
+  --bg-app: #f1f5f9;
+  --bg-sidebar: #ffffff;
+  --bg-main: #f1f5f9;
+  --bg-header: rgba(255, 255, 255, 0.92);
+
+  /* Card Surfaces & Layers */
+  --card-bg: #ffffff;
+  --card-bg-hover: #ffffff;
+  --card-bg-solid: #ffffff;
+  --card-bg-subtle: #f8fafc;
+
+  /* Borders & Dividers - High Contrast */
+  --border-color: #cbd5e1;
+  --border-color-hover: #2563eb;
+  --border-color-strong: #94a3b8;
+  --divider: #e2e8f0;
+
+  /* Typography Colors - High Contrast */
+  --text-primary: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+  --text-on-primary: #ffffff;
+
+  /* Brand & Action Colors (Clean Vibrant Blue) */
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-active: #1e40af;
+  --primary-subtle: #eff6ff;
+  --primary-border: #93c5fd;
+  --primary-glow: rgba(37, 99, 235, 0.2);
+
+  /* Secondary & Neutral Actions */
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-hover: #f8fafc;
+  --btn-secondary-border: #cbd5e1;
+  --btn-secondary-text: #1e293b;
+
+  /* Accent / Launch Button (Emerald Start) */
+  --btn-accent-bg: #059669;
+  --btn-accent-hover: #047857;
+  --btn-accent-active: #065f46;
+  --btn-accent-text: #ffffff;
+  --btn-accent-glow: rgba(5, 150, 105, 0.2);
+
+  /* Status Colors - High Contrast */
+  --status-ok: #047857;
+  --status-ok-bg: #ecfdf5;
+  --status-ok-border: #86efac;
+  --status-warn: #b45309;
+  --status-warn-bg: #fffbeb;
+  --status-warn-border: #fde047;
+  --status-err: #b91c1c;
+  --status-err-bg: #fef2f2;
+  --status-err-border: #fca5a5;
+
+  /* Form Inputs - High Contrast */
+  --input-bg: #ffffff;
+  --input-border: #cbd5e1;
+  --input-border-focus: #2563eb;
+  --input-text: #0f172a;
+  --input-tag-bg: #eff6ff;
+  --input-tag-text: #1d4ed8;
+
+  /* Terminal Console (Clean Light Architecture) */
+  --term-bg: #ffffff;
+  --term-header-bg: #f8fafc;
+  --term-border: #cbd5e1;
+  --term-text: #0f172a;
+
+  /* Modals & Popups */
+  --modal-overlay: rgba(15, 23, 42, 0.5);
+  --modal-bg: #ffffff;
+  --modal-border: #cbd5e1;
+
+  /* Toasts */
+  --toast-bg: #0f172a;
+  --toast-border: #3b82f6;
+  --toast-text: #f8fafc;
+
+  /* Shadows - More definition */
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.12), 0 4px 8px rgba(15, 23, 42, 0.06);
+}
+
+:root {
+  /* Typography Systems */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-mono: "Cascadia Code", "JetBrains Mono", "SF Mono", Consolas, Menlo, monospace;
+
+  /* Unified Border Radius Hierarchy */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 9999px;
+
+  /* Unified Height Metric Standards */
+  --h-control: 38px;
+  --h-action-btn: 44px;
+  --h-sm-btn: 30px;
+  --h-badge: 24px;
+}
