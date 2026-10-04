@@ -11,6 +11,8 @@ Google Antigravity 桌面客户端的简体中文汉化工具。生成 Windows �
   <img src="https://img.shields.io/badge/License-MIT-green" alt="License" />
 </p>
 
+![AntigravityCN 软件界面预览](docs/app-preview.png)
+
 ## 功能特点
 
 - **开箱即用**：提供单文件绿色版程序，内置汉化补丁与静态资源，无需安装 Node.js、Python 等外部依赖。
