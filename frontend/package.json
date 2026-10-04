@@ -6,10 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:icons": "node scripts/build-icon-font.mjs"
   },
   "dependencies": {
-    "material-symbols": "^0.47.6",
     "vue": "^3.5.13"
   },
   "devDependencies": {
