@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useTheme } from '@/composables/useTheme'
 import type { ThemeMode } from '@/types'
+import MdCard from '@/components/md3/MdCard.vue'
+import MdBadge from '@/components/md3/MdBadge.vue'
 
 const { currentThemeMode, themeNames, setThemeMode } = useTheme()
 
@@ -8,48 +10,49 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
   {
     id: 'system',
     name: '跟随系统',
-    detail: '自动匹配系统深浅色设置'
+    detail: '自动同步并匹配操作系统深浅色设置'
   },
   {
     id: 'light',
     name: '浅色模式',
-    detail: '明亮清爽的浅色界面'
+    detail: '明亮通透的 Material 3 浅色工作界面'
   },
   {
     id: 'dark',
     name: '深色模式',
-    detail: '适合暗光环境的深色界面'
+    detail: '沉浸舒适的夜间模式，与系统云母材质深度融合'
   }
 ]
 </script>
 
 <template>
-  <section class="card">
+  <MdCard variant="outlined">
     <div class="card-header">
       <div class="card-title-group">
         <div class="card-icon">
-          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <path
-              d="M10 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 2ZM10 15a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 15ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z"
+              d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8A9.006 9.006 0 0 0 12 3Z"
             />
           </svg>
         </div>
         <div>
           <h3 class="card-title">外观主题</h3>
-          <p class="card-subtitle">选择界面的深浅显示模式</p>
+          <p class="card-subtitle">选择 Material Design 3 的色彩与深浅模式</p>
         </div>
       </div>
-      <span class="badge-pill">
+      <MdBadge>
         当前：{{ themeNames[currentThemeMode] }}
-      </span>
+      </MdBadge>
     </div>
 
-    <!-- 3 Equal Columns Theme Selector -->
+    <!-- 3 Columns Theme Selector Grid -->
     <div class="theme-grid">
       <div
         v-for="item in themes"
         :key="item.id"
-        class="theme-card"
+        v-ripple
+        class="theme-card md-state-layer"
         :class="{ active: currentThemeMode === item.id }"
         @click="setThemeMode(item.id, true)"
       >
@@ -64,8 +67,8 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
-              width="18"
-              height="18"
+              width="20"
+              height="20"
             >
               <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
               <line x1="8" y1="21" x2="16" y2="21" />
@@ -80,8 +83,8 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
-              width="18"
-              height="18"
+              width="20"
+              height="20"
             >
               <circle cx="12" cy="12" r="5" />
               <line x1="12" y1="1" x2="12" y2="3" />
@@ -102,8 +105,8 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
               stroke-width="1.8"
               stroke-linecap="round"
               stroke-linejoin="round"
-              width="18"
-              height="18"
+              width="20"
+              height="20"
             >
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
             </svg>
@@ -120,5 +123,5 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
         </div>
       </div>
     </div>
-  </section>
+  </MdCard>
 </template>

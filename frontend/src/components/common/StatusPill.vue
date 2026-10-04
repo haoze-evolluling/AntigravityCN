@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import MdBadge from '@/components/md3/MdBadge.vue'
+
 withDefaults(
   defineProps<{
     label: string
@@ -12,9 +14,8 @@ withDefaults(
 </script>
 
 <template>
-  <div class="status-badge" :class="status">
-    <span class="status-dot"></span>
-    <span style="opacity: 0.7;">{{ label }} ·</span>
+  <MdBadge :status="status" :show-dot="true">
+    <span style="opacity: 0.8;">{{ label }} ·</span>
     <span>{{ value }}</span>
-  </div>
+  </MdBadge>
 </template>

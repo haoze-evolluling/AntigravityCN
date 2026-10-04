@@ -1,57 +1,59 @@
 /* ==========================================================
-   AntigravityCN - Layout Architecture (Left Sidebar + Main Canvas)
+   AntigravityCN - Material Design 3 Layout Architecture
+   M3 Navigation Drawer + Top App Bar + Main Canvas Grid
    ========================================================== */
 
 .app-shell {
   display: flex;
   width: 100vw;
   height: 100vh;
-  background-color: var(--bg-app);
+  background-color: var(--md-sys-color-surface);
   overflow: hidden;
 }
 
 /* ----------------------------------------------------------
-   Sidebar (Left Navigation)
+   M3 Navigation Drawer (Sidebar)
    ---------------------------------------------------------- */
-.sidebar {
-  width: 200px;
-  min-width: 200px;
+.md-navigation-drawer {
+  width: var(--md-comp-navigation-drawer-width);
+  min-width: var(--md-comp-navigation-drawer-width);
   height: 100%;
-  background-color: var(--bg-sidebar);
-  border-right: 1px solid var(--border-color);
+  background-color: var(--md-sys-color-surface-container-low);
+  border-right: 1px solid var(--md-sys-color-outline-variant);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 16px 12px;
   z-index: 10;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+  transition: background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
 }
 
-/* Sidebar Brand Header */
-.sidebar-header {
+/* Brand Header */
+.drawer-header {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 8px 16px 8px;
-  border-bottom: 1px solid var(--divider);
+  gap: 12px;
+  padding: 8px 10px 16px 10px;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
 .brand-logo-wrap {
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-md);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--md-sys-shape-corner-medium);
   overflow: hidden;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary-subtle);
-  border: 1px solid var(--primary-border);
+  background: var(--md-sys-color-primary-container);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .brand-logo-wrap img {
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
 }
 
@@ -62,10 +64,9 @@
 }
 
 .brand-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: -0.3px;
+  font: var(--md-sys-typescale-title-medium);
+  color: var(--md-sys-color-on-surface);
+  letter-spacing: -0.2px;
   line-height: 1.2;
 }
 
@@ -73,26 +74,16 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
 .brand-subtitle {
-  font-size: 11px;
-  color: var(--text-secondary);
+  font: var(--md-sys-typescale-label-small);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.badge-pill {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 1px 6px;
-  border-radius: var(--radius-pill);
-  background: var(--primary-subtle);
-  color: var(--primary);
-  border: 1px solid var(--primary-border);
-}
-
-/* Sidebar Nav Menu */
-.sidebar-nav {
+/* Navigation Menu */
+.drawer-nav {
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -100,72 +91,70 @@
   flex: 1;
 }
 
-.nav-item {
+.drawer-nav-item {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  background-color: transparent;
-  color: var(--text-secondary);
-  font-size: 13px;
-  font-weight: 500;
-  text-align: left;
-  position: relative;
+  height: 52px;
+  padding: 0 16px;
+  border-radius: var(--md-sys-shape-corner-full);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-large);
   cursor: pointer;
-  transform: scale(1);
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+  transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
-.nav-item:hover {
-  background-color: var(--card-bg-subtle);
-  border-color: var(--primary-border);
-  color: var(--text-primary);
+/* M3 State layer for drawer nav items */
+.drawer-nav-item::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-color: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) ease;
+  pointer-events: none;
 }
 
-.nav-item:active {
-  transform: scale(0.97);
+.drawer-nav-item:hover::before {
+  opacity: var(--md-sys-state-hover-opacity);
 }
 
-.nav-item.active {
-  background-color: var(--primary-subtle);
-  border-color: var(--primary-border);
-  color: var(--primary);
+.drawer-nav-item:focus-visible::before {
+  opacity: var(--md-sys-state-focus-opacity);
+}
+
+.drawer-nav-item:active::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* Active State with M3 Indicator Pill */
+.drawer-nav-item.active {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
   font-weight: 600;
 }
 
-.nav-item.active:hover {
-  background-color: var(--primary-subtle);
-  border-color: var(--primary);
-  color: var(--primary);
-}
-
-.nav-item.active:active {
-  transform: scale(0.97);
-}
-
-.nav-item:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 1px;
+.drawer-nav-item.active .nav-icon {
+  color: var(--md-sys-color-on-secondary-container);
 }
 
 .nav-icon {
-  width: 18px;
-  height: 18px;
+  width: 22px;
+  height: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 12px;
   flex-shrink: 0;
-  transition: color 0.18s ease;
+  color: inherit;
+  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
 }
 
-.nav-item:hover .nav-icon {
-  color: var(--primary);
+.drawer-nav-item:hover .nav-icon {
+  transform: scale(1.08);
 }
 
 .nav-title {
@@ -174,80 +163,69 @@
   white-space: nowrap;
 }
 
-/* Sidebar Footer */
-.sidebar-footer {
+/* Drawer Footer */
+.drawer-footer {
   display: flex;
   flex-direction: column;
   gap: 8px;
   padding-top: 12px;
-  border-top: 1px solid var(--divider);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
 }
 
-.footer-btn {
+.drawer-footer-btn {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 10px;
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  background-color: transparent;
-  color: var(--text-secondary);
-  font-size: 12px;
-  font-weight: 500;
-  text-align: left;
-  position: relative;
+  height: 38px;
+  padding: 0 12px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  color: var(--md-sys-color-on-surface-variant);
+  font: var(--md-sys-typescale-label-medium);
   cursor: pointer;
-  transform: scale(1);
-  transition:
-    background-color 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease,
-    transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1);
+  overflow: hidden;
+  background-color: transparent;
+  transition: background-color var(--md-sys-motion-duration-short3) ease,
+              color var(--md-sys-motion-duration-short3) ease;
 }
 
-.footer-btn:hover {
-  background-color: var(--card-bg-subtle);
-  border-color: var(--primary-border);
-  color: var(--text-primary);
+.drawer-footer-btn:hover {
+  background-color: var(--md-sys-color-surface-container-high);
+  color: var(--md-sys-color-on-surface);
 }
 
-.footer-btn:active {
-  transform: scale(0.97);
-}
-
-.footer-btn:focus-visible {
-  outline: 2px solid var(--primary);
+.drawer-footer-btn:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
   outline-offset: 1px;
 }
 
 /* ----------------------------------------------------------
-   Main Content Area & Titlebar
+   M3 Top App Bar & Window Titlebar
    ---------------------------------------------------------- */
 .main-wrapper {
   flex: 1;
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-main);
+  background-color: var(--md-sys-color-surface);
   overflow: hidden;
 }
 
-.titlebar {
-  height: 44px;
-  min-height: 44px;
+.top-app-bar {
+  height: var(--md-comp-top-app-bar-height);
+  min-height: var(--md-comp-top-app-bar-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
-  background: var(--bg-header);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-color);
+  background: var(--md-sys-color-surface-container-low);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
   z-index: 5;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+  transition: background-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-standard);
 }
 
-.titlebar-left {
+.top-app-bar-left {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -257,56 +235,52 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
+  font: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-on-surface);
 }
 
 .page-breadcrumb-sub {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-secondary);
+  font: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-on-surface-variant);
 }
 
-.titlebar-center {
+.top-app-bar-center {
   flex: 1;
   height: 100%;
 }
 
-.titlebar-right {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.window-controls {
+.top-app-bar-right {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.ctrl-btn {
-  width: 28px;
+/* Window Control Buttons */
+.window-ctrl-btn {
+  width: 32px;
   height: 28px;
-  border-radius: var(--radius-sm);
+  border-radius: var(--md-sys-shape-corner-extra-small);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-secondary);
-  transition: all 0.15s ease;
+  color: var(--md-sys-color-on-surface-variant);
+  transition: background-color var(--md-sys-motion-duration-short2) ease,
+              color var(--md-sys-motion-duration-short2) ease;
 }
 
-.ctrl-btn:hover {
-  background-color: var(--card-bg-subtle);
-  color: var(--text-primary);
+.window-ctrl-btn:hover {
+  background-color: var(--md-sys-color-surface-container-highest);
+  color: var(--md-sys-color-on-surface);
 }
 
-.ctrl-btn.close-btn:hover {
-  background-color: var(--status-err);
-  color: #ffffff;
+.window-ctrl-btn.close-btn:hover {
+  background-color: var(--md-sys-color-error);
+  color: var(--md-sys-color-on-error);
 }
 
-/* Page Views Container */
+/* ----------------------------------------------------------
+   Main Workspace Canvas
+   ---------------------------------------------------------- */
 .main-content {
   flex: 1;
   padding: 16px 20px 20px 20px;

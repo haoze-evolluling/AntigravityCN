@@ -1,9 +1,11 @@
 /* ==========================================================
    AntigravityCN - Master Stylesheet
-   Modularized modern visual design system
+   Modularized Material Design 3 Visual Design System
    ========================================================== */
 
 @import './tokens.css';
 @import './base.css';
 @import './layout.css';
 @import './components.css';
+@import './terminal.css';
+@import './dialog.css';

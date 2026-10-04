@@ -1,0 +1,75 @@
+/* ==========================================================
+   AntigravityCN - Material Design 3 Terminal Console
+   ========================================================== */
+
+.terminal-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 160px;
+  background-color: var(--md-sys-color-terminal-bg);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-large);
+  overflow: hidden;
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.terminal-header {
+  height: 38px;
+  min-height: 38px;
+  background-color: var(--md-sys-color-terminal-header);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 14px;
+}
+
+.terminal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.term-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--md-sys-color-primary);
+}
+
+.terminal-title {
+  font: var(--md-sys-typescale-title-small);
+  font-family: var(--md-ref-typeface-mono);
+  color: var(--md-sys-color-on-surface);
+}
+
+.terminal-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.terminal-body {
+  flex: 1;
+  padding: 12px 14px;
+  overflow-y: auto;
+  font-family: var(--md-ref-typeface-mono);
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--md-sys-color-on-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.log-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.log-info { color: var(--md-sys-color-primary); }
+.log-success { color: var(--md-sys-color-tertiary); font-weight: 600; }
+.log-warn { color: var(--md-sys-color-warning); }
+.log-error { color: var(--md-sys-color-error); font-weight: 600; }
+.log-system { color: var(--md-sys-color-on-surface-variant); }
