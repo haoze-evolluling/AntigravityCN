@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { NavTab } from '@/types'
 import { WindowMinimise, Quit } from '@/../wailsjs/runtime'
+import MdIcon from '@/components/md3/MdIcon.vue'
 
 defineProps<{
   activeTab: NavTab
@@ -42,17 +43,10 @@ function closeWindow() {
     <!-- Window Controls -->
     <div class="top-app-bar-right" style="--wails-draggable:no-drag">
       <button class="window-ctrl-btn" title="最小化" @click="minimizeWindow">
-        <svg viewBox="0 0 16 16" width="12" height="12">
-          <path fill="currentColor" d="M2 8h12v1.5H2z" />
-        </svg>
+        <MdIcon name="minimize" :size="14" :weight="500" />
       </button>
       <button class="window-ctrl-btn close-btn" title="关闭" @click="closeWindow">
-        <svg viewBox="0 0 16 16" width="12" height="12">
-          <path
-            fill="currentColor"
-            d="M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.75.75 0 1 1 1.06 1.06L9.06 8l3.22 3.22a.75.75 0 1 1-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 0 1-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z"
-          />
-        </svg>
+        <MdIcon name="close" :size="16" :weight="500" />
       </button>
     </div>
   </header>

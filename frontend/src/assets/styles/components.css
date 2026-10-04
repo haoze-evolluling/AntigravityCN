@@ -4,6 +4,19 @@
    ========================================================== */
 
 /* ----------------------------------------------------------
+   M3 Icon (Material Symbols Rounded, self-hosted variable font)
+   ---------------------------------------------------------- */
+.md-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 1;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ----------------------------------------------------------
    M3 Ripple & State Layers
    ---------------------------------------------------------- */
 .md-state-layer {

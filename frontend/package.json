@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "material-symbols": "^0.47.6",
     "vue": "^3.5.13"
   },
   "devDependencies": {

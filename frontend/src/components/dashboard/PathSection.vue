@@ -5,6 +5,7 @@ import MdCard from '@/components/md3/MdCard.vue'
 import MdButton from '@/components/md3/MdButton.vue'
 import MdIconButton from '@/components/md3/MdIconButton.vue'
 import MdBadge from '@/components/md3/MdBadge.vue'
+import MdIcon from '@/components/md3/MdIcon.vue'
 
 const {
   currentPath,
@@ -75,11 +76,7 @@ const runningStatus = computed(() => {
       <div class="status-card">
         <div class="status-card-top">
           <div class="status-icon-box" :class="installStatus.status">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path
-                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Zm4 18H6V4h7v5h5v11Z"
-              />
-            </svg>
+            <MdIcon name="description" :size="20" filled />
           </div>
           <MdBadge :status="installStatus.status" :show-dot="true">
             {{ installStatus.badge }}
@@ -95,11 +92,7 @@ const runningStatus = computed(() => {
       <div class="status-card">
         <div class="status-card-top">
           <div class="status-icon-box" :class="backupStatus.status">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path
-                d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2Zm-7 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3Zm6 12H6v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1Z"
-              />
-            </svg>
+            <MdIcon name="settings_backup_restore" :size="20" filled />
           </div>
           <MdBadge :status="backupStatus.status" :show-dot="true">
             {{ backupStatus.badge }}
@@ -115,11 +108,7 @@ const runningStatus = computed(() => {
       <div class="status-card">
         <div class="status-card-top">
           <div class="status-icon-box" :class="runningStatus.status">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path
-                d="M4 4h16v16H4V4Zm2 4v8h12V8H6Z"
-              />
-            </svg>
+            <MdIcon name="web_asset" :size="20" filled />
           </div>
           <MdBadge :status="runningStatus.status" :show-dot="true">
             {{ runningStatus.badge }}
@@ -153,11 +142,7 @@ const runningStatus = computed(() => {
           @click="browsePath"
         >
           <template #icon>
-            <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-              <path
-                d="M2 4.75C2 3.784 2.784 3 3.75 3h3.586a1.75 1.75 0 0 1 1.237.513l1.414 1.414a.25.25 0 0 0 .177.073h6.086C17.216 5.086 18 5.87 18 6.836v8.414c0 .966-.784 1.75-1.75 1.75H3.75A1.75 1.75 0 0 1 2 15.25V4.75Z"
-              />
-            </svg>
+            <MdIcon name="folder_open" :size="18" />
           </template>
           浏览
         </MdButton>
@@ -169,13 +154,7 @@ const runningStatus = computed(() => {
           @click="handleCleanCache"
         >
           <template #icon>
-            <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15">
-              <path
-                fill-rule="evenodd"
-                d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
-                clip-rule="evenodd"
-              />
-            </svg>
+            <MdIcon name="delete_sweep" :size="18" />
           </template>
           清理缓存
         </MdButton>
@@ -186,13 +165,7 @@ const runningStatus = computed(() => {
           title="刷新核心状态"
           @click="refreshStatus(true)"
         >
-          <svg viewBox="0 0 20 20" fill="currentColor" width="16" height="16">
-            <path
-              fill-rule="evenodd"
-              d="M15.312 11.424a5.5 5.5 0 0 1-9.201 2.466l-.312-.311h2.451a.75.75 0 0 0 0-1.5H4.5a.75.75 0 0 0-.75.75v3.75a.75.75 0 0 0 1.5 0v-2.096l.487.487a7 7 0 0 0 11.83-3.07.75.75 0 0 0-1.255-.476ZM4.688 8.576a5.5 5.5 0 0 1 9.201-2.466l.312.311H11.75a.75.75 0 0 0 0 1.5H15.5a.75.75 0 0 0 .75-.75V3.421a.75.75 0 0 0-1.5 0v2.096l-.487-.487a7 7 0 0 0-11.83 3.07.75.75 0 0 0 1.255.476Z"
-              clip-rule="evenodd"
-            />
-          </svg>
+          <MdIcon name="refresh" :size="18" />
         </MdIconButton>
       </div>
     </MdCard>

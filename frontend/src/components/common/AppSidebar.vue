@@ -3,6 +3,7 @@ import type { NavTab } from '@/types'
 import { useAntigravity } from '@/composables/useAntigravity'
 import { useTheme } from '@/composables/useTheme'
 import MdBadge from '@/components/md3/MdBadge.vue'
+import MdIcon from '@/components/md3/MdIcon.vue'
 import logoUrl from '@/assets/logo.svg'
 
 defineProps<{
@@ -56,11 +57,7 @@ function toggleQuickTheme() {
           @click="emit('update:activeTab', 'dashboard')"
         >
           <div class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path
-                d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Zm2 0v12h12V6H6Zm2 2h8v2H8V8Zm0 4h8v2H8v-2Zm0 4h5v2H8v-2Z"
-              />
-            </svg>
+            <MdIcon name="translate" :size="20" />
           </div>
           <span class="nav-title">汉化</span>
         </button>
@@ -75,18 +72,7 @@ function toggleQuickTheme() {
           @click="emit('update:activeTab', 'settings')"
         >
           <div class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-              <path
-                fill-rule="evenodd"
-                d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 4a2 2 0 1 1 4 0 2 2 0 0 1-4 0Z"
-                clip-rule="evenodd"
-              />
-              <path
-                fill-rule="evenodd"
-                d="M9.82 2.1a1.5 1.5 0 0 1 1.48-1.1h1.4a1.5 1.5 0 0 1 1.48 1.1l.36 1.44a7.96 7.96 0 0 1 1.76.73l1.32-.76a1.5 1.5 0 0 1 1.84.28l.99.99a1.5 1.5 0 0 1 .28 1.84l-.76 1.32c.3.56.54 1.15.73 1.76l1.44.36a1.5 1.5 0 0 1 1.1 1.48v1.4a1.5 1.5 0 0 1-1.1 1.48l-1.44.36a7.96 7.96 0 0 1-.73 1.76l.76 1.32a1.5 1.5 0 0 1-.28 1.84l-.99.99a1.5 1.5 0 0 1-1.84.28l-1.32-.76c-.56.3-1.15.54-1.76.73l-.36 1.44a1.5 1.5 0 0 1-1.48 1.1h-1.4a1.5 1.5 0 0 1-1.48-1.1l-.36-1.44a7.96 7.96 0 0 1-1.76-.73l-1.32.76a1.5 1.5 0 0 1-1.84-.28l-.99-.99a1.5 1.5 0 0 1-.28-1.84l.76-1.32a7.96 7.96 0 0 1-.73-1.76l-1.44-.36A1.5 1.5 0 0 1 1 13.42v-1.4a1.5 1.5 0 0 1 1.1-1.48l1.44-.36c.19-.61.43-1.2.73-1.76l-.76-1.32a1.5 1.5 0 0 1 .28-1.84l.99-.99a1.5 1.5 0 0 1 1.84-.28l1.32.76c.56-.3 1.15-.54 1.76-.73l.36-1.44ZM12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Z"
-                clip-rule="evenodd"
-              />
-            </svg>
+            <MdIcon name="settings" :size="20" />
           </div>
           <span class="nav-title">设置</span>
         </button>
@@ -103,11 +89,7 @@ function toggleQuickTheme() {
         @click="toggleQuickTheme"
       >
         <span style="display: flex; align-items: center; gap: 8px;">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-            <path
-              d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8A9.006 9.006 0 0 0 12 3Z"
-            />
-          </svg>
+          <MdIcon name="dark_mode" :size="16" filled />
           <span>主题</span>
         </span>
         <MdBadge style="font-size: 9.5px; padding: 1px 7px;">
@@ -130,13 +112,7 @@ function toggleQuickTheme() {
           </svg>
           <span>GitHub</span>
         </span>
-        <svg viewBox="0 0 20 20" fill="currentColor" width="13" height="13" style="opacity: 0.6;">
-          <path
-            fill-rule="evenodd"
-            d="M5.22 14.78a.75.75 0 0 0 1.06 0l7.22-7.22v5.69a.75.75 0 0 0 1.5 0v-7.5a.75.75 0 0 0-.75-.75h-7.5a.75.75 0 0 0 0 1.5h5.69l-7.22 7.22a.75.75 0 0 0 0 1.06Z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <MdIcon name="arrow_outward" :size="14" style="opacity: 0.6;" />
       </button>
     </div>
   </aside>

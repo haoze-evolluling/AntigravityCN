@@ -38,22 +38,20 @@
   border-bottom: 1px solid var(--md-sys-color-outline-variant);
 }
 
+/* Brand app icon: the SVG carries its own squircle badge, so the wrap
+   stays transparent to avoid a halo ring around the baked-in margins */
 .brand-logo-wrap {
   width: 36px;
   height: 36px;
-  border-radius: var(--md-sys-shape-corner-medium);
-  overflow: hidden;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--md-sys-color-primary-container);
-  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .brand-logo-wrap img {
-  width: 26px;
-  height: 26px;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 
