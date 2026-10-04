@@ -70,9 +70,10 @@ button {
   outline: none;
 }
 
+/* Disabled visuals are defined per-component with M3 disabled tokens
+   (on-surface 12% container / 38% content); base only adjusts cursor */
 button:disabled {
   cursor: not-allowed;
-  opacity: 0.38;
 }
 
 input {
@@ -85,6 +86,36 @@ input {
 
 code {
   font-family: var(--md-ref-typeface-mono);
+}
+
+/* ----------------------------------------------------------
+   M3 Focus Ring (md.comp.focus-ring)
+   3px secondary ring, 2px outward offset; Chromium/WebView2
+   outlines follow border-radius automatically
+   ---------------------------------------------------------- */
+:focus-visible {
+  outline: var(--md-comp-focus-ring-width) solid var(--md-comp-focus-ring-color);
+  outline-offset: var(--md-comp-focus-ring-offset);
+}
+
+/* Outlined text fields signal focus with the 2px primary border
+   (md.comp.outlined-field.focus), so the inner input hides its ring */
+.path-input:focus-visible {
+  outline: none;
+}
+
+/* ----------------------------------------------------------
+   Accessibility: reduced motion preference
+   ---------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ----------------------------------------------------------
@@ -124,7 +155,7 @@ code {
 .modal-fade-enter-from,
 .modal-fade-leave-to {
   opacity: 0;
-  transform: scale(0.92);
+  transform: scale(0.9);
 }
 
 /* M3 Snackbar Transitions */

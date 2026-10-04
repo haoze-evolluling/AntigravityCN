@@ -65,8 +65,8 @@
 
 .brand-title {
   font: var(--md-sys-typescale-title-medium);
+  letter-spacing: var(--md-sys-typescale-title-medium-tracking);
   color: var(--md-sys-color-on-surface);
-  letter-spacing: -0.2px;
   line-height: 1.2;
 }
 
@@ -79,6 +79,7 @@
 
 .brand-subtitle {
   font: var(--md-sys-typescale-label-small);
+  letter-spacing: var(--md-sys-typescale-label-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
@@ -91,15 +92,18 @@
   flex: 1;
 }
 
+/* M3 Navigation Destination (md.comp.navigation-drawer:
+   56px item, full-shape indicator, label-large) */
 .drawer-nav-item {
   position: relative;
   display: flex;
   align-items: center;
-  height: 52px;
+  height: var(--md-comp-navigation-item-height);
   padding: 0 16px;
   border-radius: var(--md-sys-shape-corner-full);
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   cursor: pointer;
   overflow: hidden;
   transition: color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
@@ -130,11 +134,12 @@
   opacity: var(--md-sys-state-pressed-opacity);
 }
 
-/* Active State with M3 Indicator Pill */
+/* Active State with M3 Indicator Pill (active label = weight-bold per
+   md.comp.navigation-drawer.active-label-text-weight) */
 .drawer-nav-item.active {
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .drawer-nav-item.active .nav-icon {
@@ -150,11 +155,6 @@
   margin-right: 12px;
   flex-shrink: 0;
   color: inherit;
-  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
-}
-
-.drawer-nav-item:hover .nav-icon {
-  transform: scale(1.08);
 }
 
 .nav-title {
@@ -182,21 +182,17 @@
   border-radius: var(--md-sys-shape-corner-medium);
   color: var(--md-sys-color-on-surface-variant);
   font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   cursor: pointer;
   overflow: hidden;
   background-color: transparent;
-  transition: background-color var(--md-sys-motion-duration-short3) ease,
-              color var(--md-sys-motion-duration-short3) ease;
+  transition: background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+              color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
 }
 
 .drawer-footer-btn:hover {
   background-color: var(--md-sys-color-surface-container-high);
   color: var(--md-sys-color-on-surface);
-}
-
-.drawer-footer-btn:focus-visible {
-  outline: 2px solid var(--md-sys-color-primary);
-  outline-offset: 1px;
 }
 
 /* ----------------------------------------------------------

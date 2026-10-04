@@ -47,13 +47,16 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
     </div>
 
     <!-- 3 Columns Theme Selector Grid -->
-    <div class="theme-grid">
-      <div
+    <div class="theme-grid" role="radiogroup" aria-label="外观主题">
+      <button
         v-for="item in themes"
         :key="item.id"
         v-ripple
+        type="button"
         class="theme-card md-state-layer"
         :class="{ active: currentThemeMode === item.id }"
+        role="radio"
+        :aria-checked="currentThemeMode === item.id"
         @click="setThemeMode(item.id, true)"
       >
         <div class="theme-card-top">
@@ -121,7 +124,7 @@ const themes: { id: ThemeMode; name: string; detail: string }[] = [
           <div class="theme-card-title">{{ item.name }}</div>
           <div class="theme-card-desc">{{ item.detail }}</div>
         </div>
-      </div>
+      </button>
     </div>
   </MdCard>
 </template>

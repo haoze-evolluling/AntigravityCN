@@ -54,23 +54,26 @@
 .md-dialog-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 8px;
   margin-top: 8px;
 }
 
 /* ----------------------------------------------------------
    M3 Snackbar (Toast Notification)
+   (inverse-surface container, extra-small shape, level 3 shadow)
    ---------------------------------------------------------- */
 .md-snackbar {
   position: fixed;
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
+  min-height: 44px;
   background-color: var(--md-sys-color-inverse-surface);
   color: var(--md-sys-color-inverse-on-surface);
   padding: 10px 20px;
   border-radius: var(--md-sys-shape-corner-extra-small);
   font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   font-weight: 500;
   box-shadow: var(--md-sys-elevation-level3);
   z-index: 200;

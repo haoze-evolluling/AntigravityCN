@@ -52,15 +52,16 @@
 }
 
 /* ----------------------------------------------------------
-   M3 Cards
+   M3 Cards (md.comp.card: elevated / filled / outlined;
+   non-interactive cards carry no hover state)
    ---------------------------------------------------------- */
 .md-card {
   border-radius: var(--md-sys-shape-corner-large);
   padding: 16px 18px;
   position: relative;
   transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
-              transform var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
-              background-color var(--md-sys-motion-duration-short4) ease;
+              background-color var(--md-sys-motion-duration-short4) ease,
+              border-color var(--md-sys-motion-duration-short4) ease;
 }
 
 .md-card--elevated {
@@ -68,22 +69,13 @@
   box-shadow: var(--md-sys-elevation-level1);
 }
 
-.md-card--elevated:hover {
-  box-shadow: var(--md-sys-elevation-level2);
-  transform: translateY(-1px);
-}
-
 .md-card--filled {
-  background-color: var(--md-sys-color-surface-container-high);
+  background-color: var(--md-sys-color-surface-container-highest);
 }
 
 .md-card--outlined {
   background-color: var(--md-sys-color-surface);
   border: 1px solid var(--md-sys-color-outline-variant);
-}
-
-.md-card--outlined:hover {
-  border-color: var(--md-sys-color-outline);
 }
 
 .card-header {
@@ -110,11 +102,13 @@
 
 .card-title {
   font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
   color: var(--md-sys-color-on-surface);
 }
 
 .card-subtitle {
   font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
   margin-top: 2px;
 }
@@ -137,13 +131,9 @@
   flex-direction: column;
   gap: 12px;
   box-shadow: var(--md-sys-elevation-level1);
-  transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
-}
-
-.status-card:hover {
-  border-color: var(--md-sys-color-outline);
-  box-shadow: var(--md-sys-elevation-level2);
-  transform: translateY(-1px);
+  transition: box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+              background-color var(--md-sys-motion-duration-short4) ease,
+              border-color var(--md-sys-motion-duration-short4) ease;
 }
 
 .status-card-top {
@@ -187,11 +177,13 @@
 
 .status-label {
   font: var(--md-sys-typescale-label-medium);
+  letter-spacing: var(--md-sys-typescale-label-medium-tracking);
   color: var(--md-sys-color-on-surface-variant);
 }
 
 .status-desc {
   font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
   color: var(--md-sys-color-on-surface);
   white-space: nowrap;
   overflow: hidden;
@@ -208,7 +200,8 @@
   padding: 3px 10px;
   border-radius: var(--md-sys-shape-corner-full);
   font: var(--md-sys-typescale-label-small);
-  font-weight: 600;
+  letter-spacing: var(--md-sys-typescale-label-small-tracking);
+  font-weight: 500;
   flex-shrink: 0;
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
@@ -237,7 +230,9 @@
 }
 
 /* ----------------------------------------------------------
-   M3 Outlined Path Input & Toolbar
+   M3 Outlined Text Field & Toolbar
+   (md.comp.outlined-field: extra-small shape, hover border
+   on-surface, focus border primary 2px)
    ---------------------------------------------------------- */
 .path-toolbar {
   display: flex;
@@ -253,11 +248,15 @@
   align-items: center;
   background-color: var(--md-sys-color-surface-container-lowest);
   border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: var(--md-sys-shape-corner-medium);
+  border-radius: var(--md-comp-textfield-shape);
   padding: 0 12px;
-  transition: border-color var(--md-sys-motion-duration-short3) ease,
+  transition: border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
               box-shadow var(--md-sys-motion-duration-short3) ease;
   overflow: hidden;
+}
+
+.md-textfield-outlined:hover:not(:focus-within) {
+  border-color: var(--md-sys-color-on-surface);
 }
 
 .md-textfield-outlined:focus-within {
@@ -282,6 +281,7 @@
   flex: 1;
   color: var(--md-sys-color-on-surface);
   font: var(--md-sys-typescale-body-medium);
+  letter-spacing: var(--md-sys-typescale-body-medium-tracking);
   font-family: var(--md-ref-typeface-mono);
   white-space: nowrap;
   overflow: hidden;
@@ -294,43 +294,44 @@
 
 /* ----------------------------------------------------------
    M3 Buttons Architecture
+   (md.comp.filled-button / filled-tonal-button / outlined-button /
+   text-button: full shape, label-large 500, rest elevation 0,
+   hover elevation 1 for filled/tonal only, state layers via
+   .md-state-layer, no hover translation)
    ---------------------------------------------------------- */
 .md-btn {
   height: var(--md-comp-button-height);
-  padding: 0 18px;
+  padding: 0 var(--md-comp-button-space);
   border-radius: var(--md-sys-shape-corner-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   font: var(--md-sys-typescale-label-large);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   position: relative;
   overflow: hidden;
   white-space: nowrap;
   flex-shrink: 0;
-  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
-              box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+  transition: box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
               background-color var(--md-sys-motion-duration-short3) ease,
-              color var(--md-sys-motion-duration-short3) ease;
-}
-
-.md-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-}
-
-.md-btn:active:not(:disabled) {
-  transform: translateY(0);
+              color var(--md-sys-motion-duration-short3) ease,
+              border-color var(--md-sys-motion-duration-short3) ease;
 }
 
 /* M3 Filled Button (High Emphasis) */
 .md-btn--filled {
   background-color: var(--md-sys-color-primary);
   color: var(--md-sys-color-on-primary);
-  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .md-btn--filled:hover:not(:disabled) {
-  box-shadow: var(--md-sys-elevation-level2);
+  box-shadow: var(--md-sys-elevation-level1);
+}
+
+.md-btn--filled:disabled {
+  background-color: var(--md-comp-button-disabled-container);
+  color: var(--md-comp-button-disabled-content);
 }
 
 /* M3 Filled Tonal Button (Medium Emphasis) */
@@ -343,38 +344,47 @@
   box-shadow: var(--md-sys-elevation-level1);
 }
 
+.md-btn--tonal:disabled {
+  background-color: var(--md-comp-button-disabled-container);
+  color: var(--md-comp-button-disabled-content);
+}
+
 /* M3 Tertiary Tonal Button (Accent Emphasis for Launch) */
 .md-btn--tertiary {
   background-color: var(--md-sys-color-tertiary-container);
   color: var(--md-sys-color-on-tertiary-container);
-  box-shadow: var(--md-sys-elevation-level1);
 }
 
 .md-btn--tertiary:hover:not(:disabled) {
-  box-shadow: var(--md-sys-elevation-level2);
+  box-shadow: var(--md-sys-elevation-level1);
 }
 
-/* M3 Outlined Button */
+.md-btn--tertiary:disabled {
+  background-color: var(--md-comp-button-disabled-container);
+  color: var(--md-comp-button-disabled-content);
+}
+
+/* M3 Outlined Button (border = outline, hover = state layer only) */
 .md-btn--outlined {
   background-color: transparent;
   color: var(--md-sys-color-primary);
-  border: 1px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--md-sys-color-outline);
 }
 
-.md-btn--outlined:hover:not(:disabled) {
-  border-color: var(--md-sys-color-outline);
-  background-color: var(--md-sys-color-surface-container-high);
+.md-btn--outlined:disabled {
+  border-color: var(--md-comp-button-disabled-container);
+  color: var(--md-comp-button-disabled-content);
 }
 
 /* M3 Text Button (Low Emphasis) */
 .md-btn--text {
   background-color: transparent;
   color: var(--md-sys-color-primary);
-  padding: 0 12px;
+  padding: 0 var(--md-comp-button-text-space);
 }
 
-.md-btn--text:hover:not(:disabled) {
-  background-color: var(--md-sys-color-surface-container-high);
+.md-btn--text:disabled {
+  color: var(--md-comp-button-disabled-content);
 }
 
 /* ----------------------------------------------------------
@@ -387,13 +397,13 @@
 }
 
 .btn-action {
-  height: 46px;
-  font-weight: 600;
-  font-size: 13.5px;
+  height: var(--md-comp-button-height-large);
 }
 
 /* ----------------------------------------------------------
    M3 Icon Button
+   (md.comp.icon-button variants: standard / filled / tonal /
+   outlined; 40px target size, state layer = currentColor)
    ---------------------------------------------------------- */
 .md-icon-btn {
   width: var(--md-comp-icon-button-size);
@@ -406,16 +416,51 @@
   position: relative;
   overflow: hidden;
   transition: background-color var(--md-sys-motion-duration-short2) ease,
-              color var(--md-sys-motion-duration-short2) ease;
+              color var(--md-sys-motion-duration-short2) ease,
+              border-color var(--md-sys-motion-duration-short2) ease;
 }
 
-.md-icon-btn:hover:not(:disabled) {
-  background-color: var(--md-sys-color-surface-container-highest);
+.md-icon-btn--standard:hover:not(:disabled) {
   color: var(--md-sys-color-on-surface);
+}
+
+.md-icon-btn--filled {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.md-icon-btn--tonal {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.md-icon-btn--outlined {
+  border: 1px solid var(--md-sys-color-outline);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.md-icon-btn--outlined:hover:not(:disabled) {
+  color: var(--md-sys-color-on-surface);
+}
+
+.md-icon-btn:disabled {
+  color: var(--md-comp-button-disabled-content);
+}
+
+.md-icon-btn--filled:disabled,
+.md-icon-btn--tonal:disabled {
+  background-color: var(--md-comp-button-disabled-container);
+  color: var(--md-comp-button-disabled-content);
+}
+
+.md-icon-btn--outlined:disabled {
+  border-color: var(--md-comp-button-disabled-container);
 }
 
 /* ----------------------------------------------------------
    Settings Components & Theme Cards
+   (M3 selection semantics: 1px outline-variant border, hover
+   outline, selected = 2px primary border via inset ring)
    ---------------------------------------------------------- */
 .theme-grid {
   display: grid;
@@ -425,27 +470,30 @@
 
 .theme-card {
   background-color: var(--md-sys-color-surface-container-low);
-  border: 2px solid var(--md-sys-color-outline-variant);
+  border: 1px solid var(--md-sys-color-outline-variant);
   border-radius: var(--md-sys-shape-corner-medium);
   padding: 14px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  text-align: left;
   position: relative;
   overflow: hidden;
-  transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  font: inherit;
+  color: inherit;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
 }
 
 .theme-card:hover {
   border-color: var(--md-sys-color-outline);
-  background-color: var(--md-sys-color-surface-container);
 }
 
 .theme-card.active {
   border-color: var(--md-sys-color-primary);
-  background-color: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
 }
 
 .theme-card-top {
@@ -470,50 +518,46 @@
   color: var(--md-sys-color-on-primary);
 }
 
+/* M3 Radio (md.comp.radio: 20px circle, 2px outline ring,
+   10px primary dot, animated dot scale-in) */
 .theme-radio {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: 2px solid var(--md-sys-color-outline);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all var(--md-sys-motion-duration-short2) ease;
+  flex-shrink: 0;
+  transition: border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
 }
 
 .theme-card.active .theme-radio {
   border-color: var(--md-sys-color-primary);
-  background-color: var(--md-sys-color-primary);
 }
 
 .theme-radio-inner {
-  width: 6px;
-  height: 6px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background-color: var(--md-sys-color-on-primary);
-  display: none;
+  background-color: var(--md-sys-color-primary);
+  transform: scale(0);
+  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized-decelerate);
 }
 
 .theme-card.active .theme-radio-inner {
-  display: block;
+  transform: scale(1);
 }
 
 .theme-card-title {
   font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
   color: var(--md-sys-color-on-surface);
-}
-
-.theme-card.active .theme-card-title {
-  color: var(--md-sys-color-on-primary-container);
 }
 
 .theme-card-desc {
   font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
   color: var(--md-sys-color-on-surface-variant);
   line-height: 1.4;
-}
-
-.theme-card.active .theme-card-desc {
-  color: var(--md-sys-color-on-primary-container);
-  opacity: 0.85;
 }

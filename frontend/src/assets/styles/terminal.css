@@ -66,6 +66,18 @@
 .log-line {
   white-space: pre-wrap;
   word-break: break-all;
+  animation: log-entry var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+@keyframes log-entry {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .log-info { color: var(--md-sys-color-primary); }
