@@ -138,8 +138,8 @@ for (const file of workspaceFiles) {
 // 测试组 3: 模型思考链 (Thinking Process) 绝对物理隔离
 // ===================================================================
 console.log('\n--- 测试组 3: 模型思考链物理隔离与药丸放行 ---');
-test('思考链正文容器 .thought-content 内部节点必须跳过', () => {
-  const thoughtBox = new MockElement('div', { className: 'thought-content' });
+test('思考链正文容器 [data-testid="thinking-collapsible"] 内部节点必须跳过', () => {
+  const thoughtBox = new MockElement('div', { attributes: { 'data-testid': 'thinking-collapsible' } });
   const innerSpan = new MockElement('span', { parentElement: thoughtBox });
   thoughtBox.appendChild(innerSpan);
   const textNode = new MockTextNode('Analyzing codebase dependencies and determining next action...', innerSpan);
@@ -162,7 +162,7 @@ test('思考折叠栏兄弟展开容器内流式正文必须绝对跳过', () =>
   const triggerBtn = new MockElement('button', { attributes: { 'data-testid': 'thinking-collapsible-trigger' } });
   wrapper.appendChild(triggerBtn);
 
-  const streamBody = new MockElement('div', { className: 'stream-markdown' });
+  const streamBody = new MockElement('div', { className: 'cursor-edit' });
   wrapper.appendChild(streamBody);
 
   const innerSpan = new MockElement('span');
@@ -186,7 +186,7 @@ test('思考正文容器 .cursor-edit 内部节点必须绝对跳过', () => {
 });
 
 test('思考正文内的步骤词 (Thought/Ran/Plan/Code) 不得被当作操作药丸误放行', () => {
-  const wrapper = new MockElement('div', { className: 'thought-box' });
+  const wrapper = new MockElement('div', { attributes: { 'data-testid': 'thinking-collapsible' } });
   const innerSpan = new MockElement('span');
   wrapper.appendChild(innerSpan);
 
@@ -207,10 +207,10 @@ test('正常系统执行药丸 (如单独的 Ran/Viewed/Thought) 在非思考正
 });
 
 // ===================================================================
-// 测试组 4: Master 项目 Ticket-02 全套 DOM 隔离用例 (11 Cases)
+// 测试组 4: Antigravity 2.0 现代架构全套 DOM 门禁测试
 // ===================================================================
-console.log('\n--- 测试组 4: Master 项目 Ticket-02 全套 DOM 门禁测试 ---');
-const masterTicket02Cases = [
+console.log('\n--- 测试组 4: Antigravity 2.0 现代架构 DOM 门禁测试 ---');
+const antigravity20DomCases = [
   {
     name: 'Case 1 (正常 UI 控件): <button class="btn-primary">Settings</button>',
     node: () => {
@@ -222,112 +222,130 @@ const masterTicket02Cases = [
     expected: false
   },
   {
-    name: 'Case 2 (聊天容器): <div class="conversation-container"><span>File</span></div>',
+    name: 'Case 2 (模型推理中间回复): <div data-testid="planner-response-text"><p>I will pause tool calls...</p></div>',
     node: () => {
-      const container = new MockElement('div', { className: 'conversation-container' });
-      const span = new MockElement('span', { parentElement: container });
-      container.appendChild(span);
-      const text = new MockTextNode('File', span);
-      span.appendChild(text);
-      return text;
-    },
-    expected: true
-  },
-  {
-    name: 'Case 3 (消息 ID 属性): <div data-message-id="msg-123"><p>Error</p></div>',
-    node: () => {
-      const msgDiv = new MockElement('div', { attributes: { 'data-message-id': 'msg-123' } });
-      const p = new MockElement('p', { parentElement: msgDiv });
-      msgDiv.appendChild(p);
-      const text = new MockTextNode('Error', p);
+      const planner = new MockElement('div', { attributes: { 'data-testid': 'planner-response-text' } });
+      const p = new MockElement('p', { parentElement: planner });
+      planner.appendChild(p);
+      const text = new MockTextNode('I will pause tool calls and wait for the Gradle task to complete.', p);
       p.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 4 (Markdown Prose 渲染正文): <div class="prose"><div>File</div></div>',
+    name: 'Case 3 (模型最终回复全部变更): <div data-testid="planner-response-text"><p>I have launched... verify all changes</p></div>',
     node: () => {
-      const proseDiv = new MockElement('div', { className: 'prose' });
-      const innerDiv = new MockElement('div', { parentElement: proseDiv });
-      proseDiv.appendChild(innerDiv);
-      const text = new MockTextNode('File', innerDiv);
-      innerDiv.appendChild(text);
+      const planner = new MockElement('div', { attributes: { 'data-testid': 'planner-response-text' } });
+      const p = new MockElement('p', { parentElement: planner });
+      planner.appendChild(p);
+      const text = new MockTextNode('I have launched the test suite to verify all changes and will wait for completion.', p);
+      p.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 5 (文件路径特征): <span class="path-label">grill-with-docs-zh/SKILL.md</span>',
+    name: 'Case 4 (模型回复内 Markdown 行内代码): <div data-testid="planner-response-text"><code>all changes</code></div>',
     node: () => {
-      const pathSpan = new MockElement('span', { className: 'path-label' });
-      const text = new MockTextNode('grill-with-docs-zh/SKILL.md', pathSpan);
-      pathSpan.appendChild(text);
+      const planner = new MockElement('div', { attributes: { 'data-testid': 'planner-response-text' } });
+      const code = new MockElement('code', { parentElement: planner });
+      planner.appendChild(code);
+      const text = new MockTextNode('all changes', code);
+      code.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 6 (动态思考与日志区域): <div class="thought-container"><span>Thought</span></div>',
+    name: 'Case 5 (思考过程展开正文容器): <div data-testid="thinking-collapsible"><div class="cursor-edit"><span>Thought stream</span></div></div>',
     node: () => {
-      const thoughtDiv = new MockElement('div', { className: 'thought-container' });
-      const span = new MockElement('span', { parentElement: thoughtDiv });
-      thoughtDiv.appendChild(span);
-      const text = new MockTextNode('Thought', span);
+      const collapsible = new MockElement('div', { attributes: { 'data-testid': 'thinking-collapsible' } });
+      const editBox = new MockElement('div', { className: 'cursor-edit', parentElement: collapsible });
+      collapsible.appendChild(editBox);
+      const span = new MockElement('span', { parentElement: editBox });
+      editBox.appendChild(span);
+      const text = new MockTextNode('Analyzing codebase dependencies...', span);
       span.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 7 (面包屑导航): <span class="breadcrumb">Project</span>',
+    name: 'Case 6 (用户输入步骤容器): <div data-testid="user-input-step"><div>Prompt text</div></div>',
     node: () => {
-      const span = new MockElement('span', { className: 'breadcrumb' });
-      const text = new MockTextNode('Project', span);
+      const step = new MockElement('div', { attributes: { 'data-testid': 'user-input-step' } });
+      const inner = new MockElement('div', { parentElement: step });
+      step.appendChild(inner);
+      const text = new MockTextNode('Please optimize build speed', inner);
+      inner.appendChild(text);
+      return text;
+    },
+    expected: true
+  },
+  {
+    name: 'Case 7 (Tailwind 提问步骤气泡): <div class="group/user-input-step"><span>User text</span></div>',
+    node: () => {
+      const step = new MockElement('div', { className: 'group/user-input-step' });
+      const span = new MockElement('span', { parentElement: step });
+      step.appendChild(span);
+      const text = new MockTextNode('User prompt message', span);
       span.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 8 (工作区下拉列表项): <div class="workspace-dropdown-item">Project</div>',
+    name: 'Case 8 (底部输入框容器): <div data-testid="agent-input-box"><textarea></textarea></div>',
     node: () => {
-      const div = new MockElement('div', { className: 'workspace-dropdown-item' });
-      const text = new MockTextNode('Project', div);
-      div.appendChild(text);
+      const box = new MockElement('div', { attributes: { 'data-testid': 'agent-input-box' } });
+      const ta = new MockElement('textarea', { parentElement: box });
+      box.appendChild(ta);
+      const text = new MockTextNode('Draft input', ta);
+      ta.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 9 (文件夹列表项): <div class="folder-item">Project</div>',
+    name: 'Case 9 (富文本与输入区): <div contenteditable="true"><span>Typing</span></div>',
     node: () => {
-      const div = new MockElement('div', { className: 'folder-item' });
-      const text = new MockTextNode('Project', div);
-      div.appendChild(text);
-      return text;
-    },
-    expected: true
-  },
-  {
-    name: 'Case 10 (聊天消息视图): <div class="chat-message-view"><span>Models</span></div>',
-    node: () => {
-      const container = new MockElement('div', { className: 'chat-message-view' });
-      const span = new MockElement('span', { parentElement: container });
-      container.appendChild(span);
-      const text = new MockTextNode('Models', span);
+      const edit = new MockElement('div', { attributes: { contenteditable: 'true' } });
+      const span = new MockElement('span', { parentElement: edit });
+      edit.appendChild(span);
+      const text = new MockTextNode('Typing query', span);
       span.appendChild(text);
       return text;
     },
     expected: true
   },
   {
-    name: 'Case 11 (Markdown 流式正文): <div class="stream-markdown-body"><span>Settings</span></div>',
+    name: 'Case 10 (智能体历史操作总耗时触发按钮): <button data-testid="worked-for-collapsible">Worked for 4m</button>',
     node: () => {
-      const container = new MockElement('div', { className: 'stream-markdown-body' });
-      const span = new MockElement('span', { parentElement: container });
-      container.appendChild(span);
-      const text = new MockTextNode('Settings', span);
+      const btn = new MockElement('button', { attributes: { 'data-testid': 'worked-for-collapsible' } });
+      const text = new MockTextNode('Worked for 4m', btn);
+      btn.appendChild(text);
+      return text;
+    },
+    expected: false
+  },
+  {
+    name: 'Case 11 (智能体文件操作统计条触发按钮): <button data-testid="tool-group-collapsible">Exploring 19 files</button>',
+    node: () => {
+      const btn = new MockElement('button', { attributes: { 'data-testid': 'tool-group-collapsible' } });
+      const text = new MockTextNode('Exploring 19 files, running 50 commands', btn);
+      btn.appendChild(text);
+      return text;
+    },
+    expected: false
+  },
+  {
+    name: 'Case 12 (Notebook Markdown 单元格与工件): <div class="notebook-markdown-cell"><span>Summary</span></div>',
+    node: () => {
+      const cell = new MockElement('div', { className: 'notebook-markdown-cell' });
+      const span = new MockElement('span', { parentElement: cell });
+      cell.appendChild(span);
+      const text = new MockTextNode('Artifact markdown details', span);
       span.appendChild(text);
       return text;
     },
@@ -335,8 +353,8 @@ const masterTicket02Cases = [
   }
 ];
 
-for (const tc of masterTicket02Cases) {
-  test(`Master Ticket-02 门禁: ${tc.name}`, () => {
+for (const tc of antigravity20DomCases) {
+  test(`Antigravity 2.0 门禁: ${tc.name}`, () => {
     const node = tc.node();
     const actual = testShouldSkipNode(node);
     assert.strictEqual(actual, tc.expected);
@@ -354,7 +372,9 @@ const thoughtPollutionCases = [
   'Check the code diff carefully',
   'Next step is running unit tests',
   'Analyzing the commit diff for patch',
-  'The agent explored the codebase'
+  'The agent explored the codebase',
+  'I will pause tool calls and wait for the Gradle task to complete.',
+  'I have launched the test suite to verify all changes and will wait for completion.'
 ];
 
 for (const sentence of thoughtPollutionCases) {
@@ -450,7 +470,7 @@ test('ARIA role="dialog" 内部后代判定为 TRUSTED', () => {
 });
 
 test('AI 消息容器内部的按钮仍被 SKIP 压制（跳过优先于信任）', () => {
-  const message = new MockElement('div', { attributes: { 'data-message-id': 'msg-1' } });
+  const message = new MockElement('div', { attributes: { 'data-testid': 'planner-response-text' } });
   const btn = new MockElement('button', { parentElement: message });
   message.appendChild(btn);
   const textNode = new MockTextNode('Copy', btn);

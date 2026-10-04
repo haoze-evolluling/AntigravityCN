@@ -52,16 +52,7 @@
 
     const escapeRegExp = (s) => s.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
 
-    // 启动时一次性预编译高频短词联合词边界流式正则
-    const sortedCoreKeys = Object.keys(coreWords)
-        .sort((a, b) => b.length - a.length)
-        .filter(w => w.length > 2 || /^[a-zA-Z0-9]+$/.test(w));
-    const escapedCoreUnion = sortedCoreKeys.map(w => escapeRegExp(w)).join('|');
-    const CORE_WORDS_UNION_REGEX = new RegExp('\\b(' + escapedCoreUnion + ')\\b', 'gi');
-
-    // 代码编辑器类名模式与提及白名单
-    const codeClassPattern = /(?:^|[\s_-])(monaco-editor|editor-instance|hljs|shiki|prism|codemirror|line-content|gutter|codeblock|code-block|code-line|view-line)(?:$|[\s_-])/i;
-
+    // @ 提及白名单分类（特权放行汉化）
     const MENTION_CATEGORIES = new Set([
         'Rules', '规则',
         'Conversation', '对话',

@@ -119,31 +119,20 @@ electron_1.contextBridge.exposeInMainWorld('wsl', {});
 `
 	_ = os.WriteFile(preloadPath, []byte(origPreloadContent), 0644)
 
-	// Mock dist/loadingOverlay.js
-	loadingPath := filepath.Join(distDir, "loadingOverlay.js")
-	origLoadingContent := `<div class="text">Loading Antigravity</div>`
-	_ = os.WriteFile(loadingPath, []byte(origLoadingContent), 0644)
-
 	mergedMock := []byte("const I18N_DICT = {'File':'文件'};\nconsole.log('inject');")
 	count, err := applySurgicalPatches(tempExtract, mergedMock, func(string) {})
 	if err != nil {
 		t.Fatalf("applySurgicalPatches failed: %v", err)
 	}
 
-	if count < 3 {
-		t.Errorf("Expected at least 3 files patched, got %d", count)
+	if count < 2 {
+		t.Errorf("Expected at least 2 files patched, got %d", count)
 	}
 
 	// Verify menu.js
 	menuPatched, _ := os.ReadFile(menuPath)
 	if !strings.Contains(string(menuPatched), "translateMenu") {
 		t.Errorf("menu.js missing translateMenu")
-	}
-
-	// Verify loadingOverlay.js
-	loadingPatched, _ := os.ReadFile(loadingPath)
-	if !strings.Contains(string(loadingPatched), "正在加载 Antigravity...") {
-		t.Errorf("loadingOverlay.js missing translated text")
 	}
 
 	// Verify preload.js

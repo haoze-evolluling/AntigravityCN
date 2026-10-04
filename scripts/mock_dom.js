@@ -61,7 +61,7 @@ class MockElement extends MockNode {
 
   matches(selector) {
     let sel = selector.replace(/^:scope\s*>\s*/, '').trim();
-    const tagAttrMatch = sel.match(/^([a-zA-Z0-9_-]+)?\[([a-zA-Z0-9_-]+)(?:="([^"]*)")?\]$/);
+    const tagAttrMatch = sel.match(/^([a-zA-Z0-9_-]+)?\[([a-zA-Z0-9_-]+)(?:=["']?([^"']*)["']?)?\]$/);
     if (tagAttrMatch) {
       const tag = tagAttrMatch[1];
       const attr = tagAttrMatch[2];
@@ -71,7 +71,10 @@ class MockElement extends MockNode {
       if (val !== undefined) return actualVal === val;
       return actualVal !== null;
     }
-    if (sel.startsWith('.')) return this.classList.contains(sel.slice(1));
+    if (sel.startsWith('.')) {
+      const cls = sel.slice(1).replace(/\\/g, '');
+      return this.classList.contains(cls);
+    }
     if (sel.startsWith('#')) return this.getAttribute('id') === sel.slice(1);
     return this.tagName.toLowerCase() === sel.toLowerCase();
   }

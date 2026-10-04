@@ -406,10 +406,8 @@
             return text.replace(trimmed, lowerNormMatch);
         }
 
-        // 4-5. 剥离末尾标点模糊匹配与短词分词降级：仅在受信任 UI 上下文执行。
-        // STRICT（未知区域）模式严禁分词与模糊替换，这是防止 AI 输出英文被误翻译成中英夹杂的最后防线。
+        // 4. 剥离末尾标点模糊匹配：仅在受信任 UI 上下文执行
         if (!strict) {
-            // 4. 剥离并智能映射末尾标点符号
             let core = trimmed;
             let matchPunc = '';
             let trailPunc = '';
@@ -436,62 +434,8 @@
                 if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, res);
                 return text.replace(trimmed, res);
             }
-
-            // 5. 短词流式联合分词降级 (仅限 <= 3 词的超短词组)
-            // 关键防御：如果短语中已包含中文，严禁进入英文分词，杜绝二次翻译污染
-            if (/[\u4e00-\u9fa5]/.test(core)) {
-                return text;
-            }
-            // 关键防御：超过 3 词的长句绝对不进行分词替换，保持英文原汁原味
-            const wordsCount = core.split(/\s+/).filter(Boolean).length;
-            if (wordsCount > 3) {
-                return text;
-            }
-
-            let replaced = false;
-            let temp = core.replace(CORE_WORDS_UNION_REGEX, (matched) => {
-                const lower = matched.toLowerCase();
-                if (coreWords[lower]) {
-                    replaced = true;
-                    return coreWords[lower];
-                }
-                return matched;
-            });
-
-            let finalTranslated = replaced ? temp : core;
-            // 消除中文字符之间可能由分词替换残留的空格
-            finalTranslated = finalTranslated.replace(/([\u4e00-\u9fa5])\s+([\u4e00-\u9fa5])/g, '$1$2');
-
-            // 特殊去重与边界清洗
-            finalTranslated = finalTranslated.replace(/使用使用 Google 插件构建/g, '使用 Google 插件构建');
-            finalTranslated = finalTranslated.replace(/Advanced\s*设置/gi, '高级设置');
-            finalTranslated = finalTranslated.replace(/Collapse\s*All/gi, '全部折叠');
-            finalTranslated = finalTranslated.replace(/Expand\s*All/gi, '全部展开');
-            finalTranslated = finalTranslated.replace(/了解更多关于\s*继承\s*Global/gi, '了解更多关于 继承全局');
-            finalTranslated = finalTranslated.replace(/继承\s*Global/gi, '继承全局');
-            finalTranslated = finalTranslated.replace(/Also\s+includes\s*(?:Global\s*Permissions|全局权限)\s*when\s+working\s+in\s+this\s+project\.?[。.]?/gi, '在当前项目中工作时，亦继承全局权限配置。');
-            finalTranslated = finalTranslated.replace(/Configure 智能体 执行[,\s]+queued 消息 delivery[,\s]+and 权限[。.]?/g, '配置智能体执行策略、消息队列发送机制以及安全权限。');
-            finalTranslated = finalTranslated.replace(/Automatic 检查更新/g, '自动检查更新');
-            finalTranslated = finalTranslated.replace(/每周限额\s*Remaining/gi, '每周限额剩余');
-            finalTranslated = finalTranslated.replace(/五小时限额\s*Remaining/gi, '5 小时限额剩余');
-            finalTranslated = finalTranslated.replace(/Claude and GPT 模型/g, 'Claude 与 GPT 模型');
-            finalTranslated = finalTranslated.replace(/命令\s*palette/gi, '命令面板');
-            finalTranslated = finalTranslated.replace(/(?:工作了\s*持续|总耗时\s*持续|Worked for)\s*(.+)/gi, '总耗时 $1');
-            finalTranslated = finalTranslated.replace(/(?:Thought\s*持续|思考了\s*持续)\s*(.+)/gi, '思考了 $1');
-            finalTranslated = finalTranslated.replace(/查看\s*could not be opened/gi, '查看文件无法打开');
-            finalTranslated = finalTranslated.replace(/could not be opened/gi, '无法打开');
-            finalTranslated = finalTranslated.replace(/(\d+)\s+searches?/gi, '$1 次搜索');
-
-            if (matchPunc) {
-                finalTranslated += trailPunc;
-            }
-
-            if (stringCache.size < MAX_STRING_CACHE) {
-                stringCache.set(cacheKey, finalTranslated);
-            }
-            return text.replace(trimmed, finalTranslated);
         }
 
-        // STRICT 模式终点：词典与强锚定系统规则均未命中，保持英文原样
+        // 终点：未命中词典或动态系统规则，保持原样（杜绝拆词污染与中英夹杂）
         return text;
     }

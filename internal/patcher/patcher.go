@@ -431,17 +431,7 @@ func loadLocalesDict(patchesFS fs.FS, logFn func(string)) ([]byte, int, int, err
 		}
 	}
 
-	for _, file := range []string{"locales/zh-CN.json", "patches/locales/zh-CN.json"} {
-		if data, err := fs.ReadFile(patchesFS, file); err == nil {
-			var singleMap map[string]string
-			if unmarshalErr := json.Unmarshal(data, &singleMap); unmarshalErr != nil {
-				return nil, 0, 0, fmt.Errorf("%s JSON 格式有误: %w", file, unmarshalErr)
-			}
-			return data, len(singleMap), 1, nil
-		}
-	}
-
-	return nil, 0, 0, fmt.Errorf("未找到 locales/zh-CN/ 目录或 locales/zh-CN.json 词典文件")
+	return nil, 0, 0, fmt.Errorf("未找到 patches/locales/zh-CN/ 模块化词典目录")
 }
 
 // getMergedPreloadData bundles the locales dictionary into preload.js at patch time

@@ -226,19 +226,7 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 		patchedCount++
 	}
 
-	// 4. Localize dist/loadingOverlay.js (Starting loading screen)
-	loadingOverlayPath := filepath.Join(extractDir, "dist", "loadingOverlay.js")
-	if _, err := os.Stat(loadingOverlayPath); err == nil {
-		_, _ = replaceInFile(
-			loadingOverlayPath,
-			`<div class="text">Loading Antigravity</div>`,
-			`<div class="text">正在加载 Antigravity...</div>`,
-		)
-		logFn("    [+] 已修补 dist/loadingOverlay.js (启动加载遮罩界面)")
-		patchedCount++
-	}
-
-	// 5. Localize dist/provisionSplash.js (WSL Provision Splash Screen)
+	// 4. Localize dist/provisionSplash.js (WSL Provision Splash Screen)
 	splashPath := filepath.Join(extractDir, "dist", "provisionSplash.js")
 	if _, err := os.Stat(splashPath); err == nil {
 		_, _ = replaceInFile(
