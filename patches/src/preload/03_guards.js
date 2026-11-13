@@ -19,12 +19,66 @@
         'dialog', 'alertdialog', 'tooltip', 'switch', 'checkbox', 'radio', 'option', 'combobox', 'listbox',
         'treeitem', 'columnheader', 'gridcell'
     ]);
+    // 可编辑输入区内部仍属于界面的交互控件（工具栏按钮等）
+    const CONTROL_TAGS = new Set(['BUTTON']);
+    const CONTROL_ROLES = new Set(['button', 'menuitem', 'menuitemcheckbox', 'menuitemradio', 'tab', 'switch', 'checkbox', 'radio']);
+
+    function isEditableSurface(el) {
+        return !!(el && el.getAttribute && (
+            el.getAttribute('contenteditable') === 'true' ||
+            el.getAttribute('role') === 'textbox'
+        ));
+    }
+
+    function isPlaceholderElement(el) {
+        if (!el || !el.getAttribute) return false;
+        if (el.hasAttribute('data-placeholder') || el.hasAttribute('aria-placeholder')) return true;
+        if (el.tagName === 'P' && el.classList &&
+            el.classList.contains('pointer-events-none') &&
+            el.classList.contains('select-none') &&
+            el.classList.contains('absolute')) {
+            return true;
+        }
+        if (el.classList) {
+            for (const cls of el.classList) {
+                if (/placeholder/i.test(cls)) return true;
+            }
+        }
+        const testId = el.getAttribute('data-testid') || '';
+        return /placeholder/i.test(testId);
+    }
+
+    // 输入区容器本身跳过文本翻译，但需要继续向下遍历以识别工具栏控件与占位符
+    function isComposerContainer(el) {
+        if (!el || !el.getAttribute) return false;
+        const testId = el.getAttribute('data-testid') || '';
+        return testId === 'agent-input-box' || testId === 'user-input-step' ||
+            (el.classList && el.classList.contains('surface-composer-card'));
+    }
+
+    function isInsideComposer(el) {
+        if (!el || !el.closest) return false;
+        return !!el.closest('[data-testid="agent-input-box"], [data-testid="user-input-step"], .surface-composer-card');
+    }
 
     function getNodeVerdict(node) {
         if (!node) return VERDICT_SKIP;
 
         const element = node.nodeType === 3 ? node.parentElement : node; // 3 === Node.TEXT_NODE
         if (!element) return VERDICT_TRUSTED;
+
+        // 模型选择器：按钮自身的 aria-label 可翻译，但内部文本必须保留模型英文名
+        const modelTrigger = element.closest && element.closest('[data-testid="model-selector-trigger"]');
+        if (modelTrigger) {
+            return node.nodeType === 3 || element !== modelTrigger ? VERDICT_SKIP : VERDICT_TRUSTED;
+        }
+
+        // 用户消息操作条（复制、时间戳等）属于系统 UI，不包含用户正文
+        const isMessageActions = element.closest && element.closest('[id="user-message-actions"], [data-testid="user-message-actions"]');
+        if (isMessageActions) {
+            skipCache.set(element, VERDICT_TRUSTED);
+            return VERDICT_TRUSTED;
+        }
 
         // 1. 记忆化缓存查询：O(1) 瞬间返回，消除万次重复树遍历
         if (skipCache.has(element)) {
@@ -67,6 +121,15 @@
         // 3. 特殊特权放行：针对执行步骤的药丸标签（如 Ran, Explored, Edited, Viewed, Thought, Thinking, Working, Analyzed 等）
         const textContent = (element.innerText || element.textContent || '').trim();
         const isActionPill = textContent.length <= 25 && /^(Explored|Ran|Viewed|Edited|Thought|Thinking|Working|Analyzed)$/i.test(textContent);
+        const elementRole = element.getAttribute && element.getAttribute('role');
+        const controlAncestor = element.closest && element.closest('button, [role="button"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"], [role="tab"], [role="switch"], [role="checkbox"], [role="radio"]');
+        const isInteractiveControl = CONTROL_TAGS.has(element.tagName) || (elementRole && CONTROL_ROLES.has(elementRole)) || !!controlAncestor;
+
+        // 富文本编辑器内部的 placeholder 节点属于系统 UI，放行汉化
+        if (isPlaceholderElement(element)) {
+            skipCache.set(element, VERDICT_TRUSTED);
+            return VERDICT_TRUSTED;
+        }
 
         // 4. 输入框/文本域/富文本编辑器绝对跳过
         if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
@@ -109,8 +172,16 @@
         while (cur && cur !== document.body) {
             if (skipCache.has(cur)) {
                 const cached = skipCache.get(cur);
-                if (cached === VERDICT_SKIP) skipSeen = true;
-                else if (cached === VERDICT_TRUSTED) trustSeen = true;
+                if (cached === VERDICT_TRUSTED) {
+                    trustSeen = true;
+                } else if (cached === VERDICT_SKIP) {
+                    if (isInteractiveControl || isPlaceholderElement(element)) {
+                        // 输入区容器整体可能是 SKIP，但其内部的工具栏控件与占位符仍需汉化
+                        trustSeen = true;
+                    } else {
+                        skipSeen = true;
+                    }
+                }
                 break;
             }
 
@@ -134,13 +205,6 @@
                 skipSeen = true;
                 break;
             }
-            if (cur.parentElement && cur.parentElement.querySelector) {
-                const trigger = cur.parentElement.querySelector('button[data-testid="thinking-collapsible-trigger"]');
-                if (trigger && cur !== trigger && !trigger.contains(cur)) {
-                    skipSeen = true;
-                    break;
-                }
-            }
 
             // 6.3 用户提问输入区与消息气泡
             if (cur.getAttribute && (
@@ -149,7 +213,11 @@
                 cur.getAttribute('contenteditable') === 'true' ||
                 cur.getAttribute('role') === 'textbox'
             )) {
-                skipSeen = true;
+                if (isInteractiveControl) {
+                    trustSeen = true;
+                } else {
+                    skipSeen = true;
+                }
                 break;
             }
             if (cur.classList && (

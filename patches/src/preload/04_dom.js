@@ -5,10 +5,12 @@
 
     function translateNode(node) {
         if (!node) return;
-        if (shouldSkipNode(node)) return;
+        const editableSurface = node.nodeType === 1 && isEditableSurface(node);
+        const formControl = node.nodeType === 1 && (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA');
+        const composerSubtree = node.nodeType === 1 && isInsideComposer(node);
+        if (!editableSurface && !formControl && !composerSubtree && !isPlaceholderElement(node) && shouldSkipNode(node)) return;
 
         if (node.nodeType === 3) { // Node.TEXT_NODE
-            if (translatedNodes.has(node)) return;
             const original = node.nodeValue;
             if (!original || !original.trim()) return;
             const translated = translateString(original, getNodeVerdict(node) === VERDICT_STRICT);
@@ -36,6 +38,18 @@
                     }
                 }
             });
+            // React 常把一句话拆成多个文本节点：纯文本容器先按整句匹配词典
+            if (node.childNodes.length > 1 && !node.firstElementChild &&
+                !isEditableSurface(node) && !isInsideComposer(node) && !isPlaceholderElement(node)) {
+                const fullText = (node.textContent || '').trim();
+                if (fullText && /[a-zA-Z]/.test(fullText)) {
+                    const translatedFull = translateString(fullText, nodeStrict);
+                    if (translatedFull !== fullText) {
+                        node.textContent = translatedFull;
+                        return;
+                    }
+                }
+            }
             if (node.shadowRoot) {
                 observeRoot(node.shadowRoot);
                 translateNode(node.shadowRoot);
@@ -90,7 +104,7 @@
             // 1. 批量处理属性变更
             if (pendingAttrNodes.size > 0) {
                 for (const [target, attrs] of pendingAttrNodes) {
-                    if (!shouldSkipNode(target)) {
+                    if (!shouldSkipNode(target) || isEditableSurface(target) || target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || isInsideComposer(target) || isPlaceholderElement(target)) {
                         const attrStrict = getNodeVerdict(target) === VERDICT_STRICT;
                         for (const attrName of attrs) {
                             if (attrName === 'value' && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
@@ -152,7 +166,7 @@
                     if (node.shadowRoot) {
                         observeRoot(node.shadowRoot);
                     }
-                    if (!shouldSkipNode(node)) {
+                    if (!shouldSkipNode(node) || isEditableSurface(node) || node.tagName === 'INPUT' || node.tagName === 'TEXTAREA' || (node.nodeType === 1 && isInsideComposer(node)) || isPlaceholderElement(node)) {
                         translateNode(node);
                     }
                 }

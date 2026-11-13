@@ -58,6 +58,7 @@ const menuTranslationMap = {
   'View': '视图',
   'Window': '窗口',
   'Help': '帮助',
+  'Workspace': '工作区',
   'New Window': '新建窗口',
   'Docs': '使用文档',
   'Docs & API Reference': '文档与 API 参考',
@@ -74,6 +75,7 @@ const menuTranslationMap = {
   'Paste and Match Style': '粘贴并匹配格式',
   'Select All': '全选',
   'Minimize': '最小化',
+  'Maximize': '最大化',
   'Close': '关闭',
   'Close Window': '关闭窗口',
   'Quit': '退出',
@@ -88,9 +90,21 @@ const menuTranslationMap = {
   'Actual Size': '实际大小',
   'Zoom In': '放大',
   'Zoom Out': '缩小',
+  'Reset Zoom': '重置缩放',
   'Toggle Full Screen': '切换全屏',
   'Toggle Fullscreen': '切换全屏',
-  'Reset Zoom': '重置缩放',
+  'Open in Antigravity IDE': '在 Antigravity IDE 中打开',
+  'Open in External Browser': '在外部浏览器中打开',
+  'Copy Link': '复制链接',
+  'Copy Image': '复制图片',
+  'Save Image As...': '图片另存为...',
+  'Open Link in New Tab': '在新标签页中打开链接',
+  'Open Link in New Window': '在新窗口中打开链接',
+  'Inspect': '检查元素',
+  'Back': '后退',
+  'Forward': '前进',
+  'Add to Dictionary': '添加到词典',
+  'Search with Google': '使用 Google 搜索',
   'New Conversation': '新建对话',
   'Create Project': '创建项目',
   'New Project': '新建项目',
@@ -123,6 +137,21 @@ function translateMenu(menuItem) {
     }
   }
 }
+function untranslateMenuLabel(label) {
+  for (const [en, zh] of Object.entries(menuTranslationMap)) {
+    if (zh === label) return en;
+  }
+  return label;
+}
+const __origSetApplicationMenu = electron_1.Menu.setApplicationMenu;
+electron_1.Menu.setApplicationMenu = function (menu) {
+  try {
+    if (menu && Array.isArray(menu.items)) {
+      menu.items.forEach(translateMenu);
+    }
+  } catch (_) {}
+  return __origSetApplicationMenu.call(electron_1.Menu, menu);
+};
 `
 
 // contextMenuInjectCode translates the native right-click context menu (Antigravity 2.19.1+ ipcHandlers.js)
@@ -148,11 +177,62 @@ const contextMenuTranslationMap = {
   'Copy Relative Path': '复制相对路径',
   'Reveal in File Explorer': '在文件资源管理器中显示',
   'Reveal in Finder': '在访达中显示',
-  'Open in Terminal': '在终端中打开'
+  'Open in Terminal': '在终端中打开',
+  'Open Link': '打开链接',
+  'Open Link in New Tab': '在新标签页中打开链接',
+  'Open Link in New Window': '在新窗口中打开链接',
+  'Copy Link': '复制链接',
+  'Copy Link Address': '复制链接地址',
+  'Copy Image': '复制图片',
+  'Copy Image Address': '复制图片地址',
+  'Save Image As...': '图片另存为...',
+  'Save Link As...': '链接另存为...',
+  'Open in New Tab': '在新标签页中打开',
+  'Open in New Window': '在新窗口中打开',
+  'Open in Side Panel': '在侧边面板中打开',
+  'Search with Google': '使用 Google 搜索',
+  'Add to Dictionary': '添加到词典',
+  'Look Up': '查询',
+  'Inspect': '检查元素',
+  'Back': '后退',
+  'Forward': '前进',
+  'Reload': '重新加载',
+  'View Page Source': '查看网页源代码'
 };
 function translateContextLabel(lbl) {
   if (!lbl) return '';
   return contextMenuTranslationMap[lbl] || lbl;
+}
+`
+
+// trayInjectCode translates the native system tray menu on Antigravity 2.31+
+const trayInjectCode = `
+// Antigravity 2.0 Chinese Localization Engine Enhanced - Native Tray Map
+const trayTranslationMap = {
+  'No agents running': '没有智能体在运行',
+  'New Window': '新建窗口',
+  'Docs': '使用文档',
+  'Check for Updates': '检查更新',
+  'Connect to WSL': '连接到 WSL',
+  'Reopen Locally': '本地重新打开',
+  'Quit': '退出'
+};
+function translateTrayItem(item) {
+  if (!item || typeof item !== 'object') return item;
+  if (typeof item.label === 'string') {
+    if (trayTranslationMap[item.label]) {
+      item.label = trayTranslationMap[item.label];
+    } else if (item.label.startsWith('Open ')) {
+      item.label = '打开 ' + item.label.slice(5);
+    }
+  }
+  if (Array.isArray(item.submenu)) {
+    item.submenu = item.submenu.map(translateTrayItem);
+  }
+  return item;
+}
+function translateTrayItems(actions) {
+  return Array.isArray(actions) ? actions.map(translateTrayItem) : actions;
 }
 `
 
@@ -196,8 +276,13 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 		)
 		_, _ = replaceInFile(
 			menuPath,
-			"electron_1.Menu.setApplicationMenu(menu);",
-			`if (typeof translateMenu === 'function') { menu.items.forEach(translateMenu); } electron_1.Menu.setApplicationMenu(menu);`,
+			"const viewMenuItem = appMenu.items?.find((item) => item.label === 'View');",
+			`const viewMenuItem = appMenu.items?.find((item) => item.label === 'View' || (typeof menuTranslationMap !== "undefined" && item.label === menuTranslationMap['View']));`,
+		)
+		_, _ = replaceInFile(
+			menuPath,
+			"const action = updater_1.updateActions[menuItem.label];",
+			`const action = updater_1.updateActions[menuItem.label] || (typeof untranslateMenuLabel === 'function' ? updater_1.updateActions[untranslateMenuLabel(menuItem.label)] : undefined);`,
 		)
 		logFn("    [+] 已修补 dist/menu.js (原生菜单栏汉化与级联中英匹配回退)")
 		patchedCount++
@@ -206,6 +291,7 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 	// 3. Localize dist/tray.js (Native System Tray)
 	trayPath := filepath.Join(extractDir, "dist", "tray.js")
 	if _, err := os.Stat(trayPath); err == nil {
+		_ = injectOrUpdate(trayPath, trayInjectCode, "const trayTranslationMap =")
 		_, _ = replaceInFile(
 			trayPath,
 			"countItem.label =\n                (count > 0 ? `${count}` : 'No') +\n                    ' agent' +\n                    (count === 1 ? '' : 's') +\n                    ' running';",
@@ -214,13 +300,12 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 		_, _ = replaceInFile(
 			trayPath,
 			"contextMenu = electron_1.Menu.buildFromTemplate(actions);",
-			`const translatedActions = actions.map(action => {
-        if (action.label === 'No agents running') action.label = '没有智能体在运行';
-        if (action.label && action.label.startsWith('Open ')) action.label = '打开 Antigravity';
-        if (action.label === 'Quit') action.label = '退出';
-        return action;
-    });
-    contextMenu = electron_1.Menu.buildFromTemplate(translatedActions);`,
+			"contextMenu = electron_1.Menu.buildFromTemplate(translateTrayItems(actions));",
+		)
+		_, _ = replaceInFile(
+			trayPath,
+			"contextMenu.insert(Math.min(position, contextMenu.items.length), new electron_1.MenuItem(options));",
+			"contextMenu.insert(Math.min(position, contextMenu.items.length), new electron_1.MenuItem(translateTrayItem(options)));",
 		)
 		logFn("    [+] 已修补 dist/tray.js (系统托盘菜单与智能体运行计数)")
 		patchedCount++
@@ -248,6 +333,7 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 	if _, err := os.Stat(ipcPath); err == nil {
 		_, _ = replaceInFile(ipcPath, "title: 'Open workspace',", "title: '打开工作区',")
 		_, _ = replaceInFile(ipcPath, "title: 'Open workspaces',", "title: '打开工作区',")
+		_, _ = replaceInFile(ipcPath, "title: 'Select Download Folder',", "title: '选择下载文件夹',")
 		_, _ = replaceInFile(ipcPath, "electron_1.dialog.showErrorBox('Cannot open folder', t.error);", "electron_1.dialog.showErrorBox('无法打开文件夹', t.error);")
 		_, _ = replaceInFile(ipcPath, "message: 'Folder is on the Windows filesystem',", "message: '文件夹位于 Windows 文件系统中',")
 		// 2.19.1+ 原生右键上下文菜单动态翻译（buildContextMenuTemplate 拦截 label）
@@ -331,6 +417,11 @@ func applySurgicalPatches(extractDir string, mergedPreloadData []byte, logFn fun
 	// 9. Localize dist/updater.js (Update Notifications & Dialogs)
 	updaterPath := filepath.Join(extractDir, "dist", "updater.js")
 	if _, err := os.Stat(updaterPath); err == nil {
+		_, _ = replaceInFile(
+			updaterPath,
+			"item.label = step;",
+			"item.label = ({ 'Check for Updates': '检查更新', 'Checking for Updates...': '正在检查更新...', 'Downloading Update...': '正在下载更新...', 'Restart to Update': '重启以应用更新' })[step] || step;",
+		)
 		_, _ = replaceInFile(updaterPath, "title: 'Check for Updates',", "title: '检查更新',")
 		_, _ = replaceInFile(updaterPath, "message: 'No updates available',", "message: '当前已是最新版本，暂无可用更新。',")
 		_, _ = replaceInFile(updaterPath, "buttons: ['OK'],", "buttons: ['确定'],")

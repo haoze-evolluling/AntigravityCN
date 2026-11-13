@@ -8,6 +8,11 @@
         const trimmed = text.trim();
         if (!trimmed) return text;
 
+        // 被空白或 <code> 标签拆分的界面碎片：React 会将空格拆为独立文本节点
+        if (/^Type$/.test(text)) return '输入';
+        if (/^and select$/.test(text)) return '并选择';
+        if (/^Modified in$/.test(text)) return '修改于';
+
         // 性能短路：纯中文、数字、标点瞬间 0 开销原样返回
         if (!/[a-zA-Z]/.test(trimmed)) {
             return text;
@@ -76,6 +81,127 @@
 
         if (/^See all\s*\(([^)]+)\)$/i.test(trimmed)) {
             const fixed = trimmed.replace(/^See all\s*\(([^)]+)\)$/i, '查看全部 ($1)');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^See\s+(\d+)\s+more$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^See\s+(\d+)\s+more$/i, '查看更多（$1）');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Card\s+(\d+)\s+of\s+(\d+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Card\s+(\d+)\s+of\s+(\d+)$/i, '第 $1 张，共 $2 张');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        // 首页问候语（Antigravity 2.31+ 动态插入用户名）
+        if (/^Welcome back,\s*(.+?)\.\s*Where should we pick up\?$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Welcome back,\s*(.+?)\.\s*Where should we pick up\?$/i, '欢迎回来，$1。我们从哪里继续？');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Welcome back\.\s*Where should we pick up\?$/i.test(trimmed)) {
+            const fixed = '欢迎回来。我们从哪里继续？';
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Hey\s+(.+?),\s*what should we build today\?$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Hey\s+(.+?),\s*what should we build today\?$/i, '你好，$1。今天想构建什么？');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Hey there,\s*what should we build today\?$/i.test(trimmed)) {
+            const fixed = '你好，今天想构建什么？';
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Good to see you,\s*(.+?)\.\s*What's next\?$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Good to see you,\s*(.+?)\.\s*What's next\?$/i, '很高兴见到你，$1。接下来做什么？');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Good to see you\.\s*What's next\?$/i.test(trimmed)) {
+            const fixed = '很高兴见到你。接下来做什么？';
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        // 输入区无障碍标签（动态携带当前值）
+        if (/^Select project, current:\s*(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Select project, current:\s*(.+)$/i, '选择项目，当前：$1');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Branch, current:\s*(.+?)\s+Description:\s*(.*)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Branch, current:\s*(.+?)\s+Description:\s*(.*)$/i, '分支，当前：$1 描述：$2');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Branch, current:\s*(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Branch, current:\s*(.+)$/i, '分支，当前：$1');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Select model, current:\s*(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Select model, current:\s*(.+)$/i, '选择模型，当前：$1');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Send feedback as\s+(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Send feedback as\s+(.+)$/i, '以 $1 身份发送反馈');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Agent permissions preset selector, current:\s*(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Agent permissions preset selector, current:\s*(.+)$/i, (_m, preset) => {
+                const localized = dictionary[preset] || lowerDictionary.get(preset.toLowerCase()) || preset;
+                return '智能体权限预设选择器，当前：' + localized;
+            });
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Permanently delete\s+(.+?)\s+including\s+(\d+)\s+active conversations?\.?$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Permanently delete\s+(.+?)\s+including\s+(\d+)\s+active conversations?\.?$/i, '永久删除 $1 及其 $2 个活跃对话。');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Whether the agent asks you to review its documents\.\s*Modified in\s+(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Whether the agent asks you to review its documents\.\s*Modified in\s+(.+)$/i, '智能体是否会要求你审阅其文档。已在 $1 中修改');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^Modified in\s+(.+)$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Modified in\s+(.+)$/i, '已在 $1 中修改');
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^(\d+)(s|m|h|d|w|mo|y)\s+ago$/i.test(trimmed)) {
+            const unitMap = { s: '秒', m: '分钟', h: '小时', d: '天', w: '周', mo: '个月', y: '年' };
+            const match = trimmed.match(/^(\d+)(s|m|h|d|w|mo|y)\s+ago$/i);
+            const fixed = match[1] + ' ' + unitMap[match[2].toLowerCase()] + '前';
+            if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
+            return text.replace(trimmed, fixed);
+        }
+
+        if (/^just now$/i.test(trimmed)) {
+            const fixed = '刚刚';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
         }
@@ -261,6 +387,18 @@
             isDynamic = true;
         }
 
+        // 带模型名的限额标签（如 "Gemini 4 Argon Weekly Limit"），保留模型英文名
+        if (/^(.+?)\s+(Weekly|Five[- ]Hour|5[- ]Hour|Hourly|Daily|Monthly)\s+Limit$/i.test(trimmed)) {
+            const m = trimmed.match(/^(.+?)\s+(Weekly|Five[- ]Hour|5[- ]Hour|Hourly|Daily|Monthly)\s+Limit$/i);
+            const unit = m[2].toLowerCase();
+            const label = unit === 'weekly' ? '每周限额'
+                : (unit === 'five-hour' || unit === 'five hour' || unit === '5-hour' || unit === '5 hour') ? '5 小时限额'
+                : unit === 'hourly' ? '每小时限额'
+                : unit === 'daily' ? '每日限额' : '每月限额';
+            dynamicMatch = m[1] + ' ' + label;
+            isDynamic = true;
+        }
+
         // 配额刷新提示句
         if (/(?:You have used some of your|您已使用了部分).*(?:limit|限额)/i.test(trimmed)) {
             dynamicMatch = dynamicMatch
@@ -351,6 +489,11 @@
         // Version / Updated 词头过于通用（AI 输出常以二者开头），仅在受信任 UI 上下文翻译
         if (!strict && /^Version\s+(\d+.*)$/i.test(trimmed)) {
             dynamicMatch = dynamicMatch.replace(/^Version\s+(\d+.*)$/i, '版本 $1');
+            isDynamic = true;
+        }
+        // 侧边栏时间戳（如 "Updated 8:10"）：仅为时间格式，严格模式下也可安全翻译
+        if (/^Updated\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)$/i.test(trimmed)) {
+            dynamicMatch = trimmed.replace(/^Updated\s+(\d{1,2}:\d{2}(?:\s*[AP]M)?)$/i, '更新于 $1');
             isDynamic = true;
         }
         if (!strict && /^Updated\s+(.+)$/i.test(trimmed)) {

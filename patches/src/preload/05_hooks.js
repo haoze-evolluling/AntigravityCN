@@ -24,7 +24,7 @@
         safeScan();
 
         // 1. 渐进式多阶挂载兜底 (Progressive Mounting Backstop)
-        [50, 150, 400, 1000, 2500].forEach(delay => {
+        [50, 150, 400, 1000, 2500, 5000, 8000].forEach(delay => {
             setTimeout(safeScan, delay);
         });
 
@@ -59,4 +59,5 @@
     } else {
         startObserver();
     }
+
 })();
