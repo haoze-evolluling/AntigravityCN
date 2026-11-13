@@ -69,11 +69,14 @@
 
 .terminal-empty {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
+  align-self: center;
   margin: auto 0;
   max-width: 420px;
   color: var(--md-sys-color-on-surface-variant);
+  text-align: center;
 }
 
 .terminal-empty-icon {
@@ -86,6 +89,12 @@
   flex-shrink: 0;
   background-color: var(--md-sys-color-surface-container);
   color: var(--md-sys-color-primary);
+}
+
+.terminal-empty > div:last-child {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .terminal-empty strong {

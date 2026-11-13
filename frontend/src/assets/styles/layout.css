@@ -235,6 +235,17 @@
               color var(--md-sys-motion-duration-short2) ease;
 }
 
+.window-ctrl-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
 .window-ctrl-btn:hover {
   background-color: var(--md-sys-color-surface-container-highest);
   color: var(--md-sys-color-on-surface);

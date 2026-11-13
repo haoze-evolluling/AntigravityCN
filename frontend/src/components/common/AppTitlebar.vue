@@ -7,7 +7,6 @@ import {
   WindowToggleMaximise,
   Quit
 } from '@/../wailsjs/runtime'
-import MdIcon from '@/components/md3/MdIcon.vue'
 
 defineProps<{
   activeTab: NavTab
@@ -79,18 +78,27 @@ onUnmounted(() => {
     <!-- Window Controls -->
     <div class="top-app-bar-right" style="--wails-draggable:no-drag">
       <button class="window-ctrl-btn" title="最小化" @click="minimizeWindow">
-        <MdIcon name="minimize" :size="14" :weight="500" />
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 8.5h10" />
+        </svg>
       </button>
       <button
         class="window-ctrl-btn"
         :title="isMaximised ? '还原窗口' : '最大化'"
         @click="toggleMaximiseWindow"
       >
-        <MdIcon v-if="isMaximised" name="restore" :size="14" :weight="500" />
-        <MdIcon v-else name="maximize" :size="14" :weight="500" />
+        <svg v-if="isMaximised" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M5.5 3.5h7v7h-2" />
+          <rect x="3.5" y="5.5" width="7" height="7" rx="0.6" />
+        </svg>
+        <svg v-else viewBox="0 0 16 16" aria-hidden="true">
+          <rect x="3.5" y="3.5" width="9" height="9" rx="0.6" />
+        </svg>
       </button>
       <button class="window-ctrl-btn close-btn" title="关闭" @click="closeWindow">
-        <MdIcon name="close" :size="16" :weight="500" />
+        <svg viewBox="0 0 16 16" aria-hidden="true">
+          <path d="m4 4 8 8M12 4l-8 8" />
+        </svg>
       </button>
     </div>
   </header>
