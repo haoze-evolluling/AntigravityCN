@@ -86,8 +86,8 @@ Google Antigravity 桌面客户端的简体中文汉化工具。生成 Windows �
 
 `scripts/` 目录下提供了辅助维护脚本：
 - `audit_locales.js`：检查词典冲突与格式变体。
-- `batch_clean_locales.js`：词典清洗与去重。
-- `sort_locales.py`：按英文字母序重新排序词典。
+- `prune_locales.js`：对照当前版本 UI 前端包审计并删除未使用词条（`--write` 写回）。
+- `locale_allowlist.json`：登记服务端下发或运行时拼接、无法在前端包中直接检索到的词条。
 
 ## 源码构建
 

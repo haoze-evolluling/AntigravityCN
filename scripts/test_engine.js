@@ -403,7 +403,6 @@ const translationCases = [
   { in: 'plan to have the agent generate a plan.', out: 'plan 来让智能体生成计划。' },
   { in: 'Step 1 of 6', out: '步骤 1 / 6' },
   { in: '3 files changed', out: '3 个文件已更改' },
-  { in: '15 searches', out: '15 次搜索' },
   { in: 'Weekly Limit Remaining', out: '每周限额剩余' },
   { in: 'Five-Hour Limit Remaining', out: '5 小时限额剩余' },
   { in: 'Connect to WSL', out: '连接到 WSL' },

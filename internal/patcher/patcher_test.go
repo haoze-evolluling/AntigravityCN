@@ -45,13 +45,13 @@ func TestLoadLocalesDictWithChineseFilenames(t *testing.T) {
 	}
 
 	sampleKeys := map[string]string{
-		"Save":               "保存",
-		"Skills & Workflows": "技能与工作流",
-		"MCP Servers":        "MCP 服务器",
-		"Appearance":         "外观",
-		"Connect to WSL":     "连接到 WSL",
-		"Reopen Locally":     "本地重新打开",
-		"Plan Review":        "计划审核",
+		"Save":           "保存",
+		"Workspace":      "工作区",
+		"MCP Servers":    "MCP 服务器",
+		"Appearance":     "外观",
+		"Connect to WSL": "连接到 WSL",
+		"Reopen Locally": "本地重新打开",
+		"Plan Review":    "计划审核",
 	}
 
 	for k, expectedVal := range sampleKeys {

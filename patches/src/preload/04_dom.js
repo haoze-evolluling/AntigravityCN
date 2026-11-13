@@ -1,8 +1,6 @@
     // ---------------------------------------------------------------------------
     // 4. DOM 调度层 (微任务聚合、WeakSet 记忆化与祖先剪枝)
     // ---------------------------------------------------------------------------
-    const translatedNodes = new WeakSet();
-
     function translateNode(node) {
         if (!node) return;
         const editableSurface = node.nodeType === 1 && isEditableSurface(node);
@@ -16,9 +14,6 @@
             const translated = translateString(original, getNodeVerdict(node) === VERDICT_STRICT);
             if (original !== translated) {
                 node.nodeValue = translated;
-                translatedNodes.add(node);
-            } else if (!/[a-zA-Z]/.test(original)) {
-                translatedNodes.add(node);
             }
         } else if (node.nodeType === 1) { // Node.ELEMENT_NODE
             const nodeVerdict = getNodeVerdict(node);
@@ -132,9 +127,6 @@
                             const translated = translateString(original, getNodeVerdict(node) === VERDICT_STRICT);
                             if (original !== translated) {
                                 node.nodeValue = translated;
-                                translatedNodes.add(node);
-                            } else if (!/[a-zA-Z]/.test(original)) {
-                                translatedNodes.add(node);
                             }
                         }
                     }
@@ -197,7 +189,6 @@
                         needsSchedule = true;
                     }
                 } else if (mutation.type === 'characterData') {
-                    translatedNodes.delete(mutation.target);
                     pendingTextNodes.add(mutation.target);
                     needsSchedule = true;
                 } else if (mutation.type === 'attributes') {

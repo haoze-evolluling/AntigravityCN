@@ -40,12 +40,12 @@
                 if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
                 return text.replace(trimmed, fixed);
             }
-            if (/Scan the code to.*(?:copy link|复制链接)/i.test(trimmed)) {
+            if (/Scan the code to.*copy link/i.test(trimmed)) {
                 const fixed = '扫描二维码以在远程控制中打开此设备，或复制链接。';
                 if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
                 return text.replace(trimmed, fixed);
             }
-            if (/Scan the code to.*(?:Remote Control|远程\s*控制)/i.test(trimmed)) {
+            if (/Scan the code to.*Remote Control/i.test(trimmed)) {
                 const fixed = '扫描二维码以在远程控制中打开此设备';
                 if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
                 return text.replace(trimmed, fixed);
@@ -206,8 +206,8 @@
             return text.replace(trimmed, fixed);
         }
 
-        if (/^Ran\s+(\d+)\s*(?:commands|命令)$/i.test(trimmed)) {
-            const fixed = trimmed.replace(/^Ran\s+(\d+)\s*(?:commands|命令)$/i, '已运行 $1 条命令');
+        if (/^Ran\s+(\d+)\s+commands$/i.test(trimmed)) {
+            const fixed = trimmed.replace(/^Ran\s+(\d+)\s+commands$/i, '已运行 $1 条命令');
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
         }
@@ -224,25 +224,25 @@
             return text.replace(trimmed, fixed);
         }
 
-        if (/^(?:Advanced\s*Settings|Advanced\s*设置|advanced\s*settings)$/i.test(trimmed)) {
+        if (/^Advanced\s*Settings$/i.test(trimmed)) {
             const fixed = '高级设置';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
         }
 
-        if (/^(?:Collapse\s*All|Collapse\s*all|collapse\s*all)$/i.test(trimmed)) {
+        if (/^Collapse\s+All$/i.test(trimmed)) {
             const fixed = '全部折叠';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
         }
 
-        if (/^(?:Expand\s*All|Expand\s*all|expand\s*all)$/i.test(trimmed)) {
+        if (/^Expand\s+All$/i.test(trimmed)) {
             const fixed = '全部展开';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
         }
 
-        if (/^(?:Inherit\s*Global|Inherits\s*Global|继承\s*Global)$/i.test(trimmed)) {
+        if (/^(?:Inherit|Inherits)\s+Global$/i.test(trimmed)) {
             const fixed = '继承全局';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
@@ -254,7 +254,7 @@
             return text.replace(trimmed, fixed);
         }
 
-        if (/^Also\s+includes.*(?:Global\s+Permissions|全局权限).*when\s+working\s+in\s+this\s+project/i.test(trimmed)) {
+        if (/^Also\s+includes.*Global\s+Permissions.*when\s+working\s+in\s+this\s+project/i.test(trimmed)) {
             const fixed = '在当前项目中工作时，亦继承全局权限配置。';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
@@ -266,7 +266,7 @@
             return text.replace(trimmed, fixed);
         }
 
-        if (/^(?:Tool[\s ]+Permissions|工具[\s ]*Permissions)$/i.test(trimmed)) {
+        if (/^Tool[\s ]+Permissions$/i.test(trimmed)) {
             const fixed = '工具权限';
             if (stringCache.size < MAX_STRING_CACHE) stringCache.set(cacheKey, fixed);
             return text.replace(trimmed, fixed);
@@ -335,13 +335,13 @@
         let isDynamic = false;
 
         // 思考外部折叠药丸时间与总耗时汉化
-        if (/^Thought (?:for|持续) (.+)$/i.test(trimmed)) {
-            const m = trimmed.match(/^Thought (?:for|持续) (.+)$/i);
+        if (/^Thought for (.+)$/i.test(trimmed)) {
+            const m = trimmed.match(/^Thought for (.+)$/i);
             const timeSec = m[1].replace(/seconds?/i, '秒').replace(/s\b/i, ' 秒');
             dynamicMatch = '思考了 ' + timeSec;
             isDynamic = true;
-        } else if (/^Thinking (?:for|持续) (.+)$/i.test(trimmed)) {
-            const m = trimmed.match(/^Thinking (?:for|持续) (.+)$/i);
+        } else if (/^Thinking for (.+)$/i.test(trimmed)) {
+            const m = trimmed.match(/^Thinking for (.+)$/i);
             const timeSec = m[1].replace(/seconds?/i, '秒').replace(/s\b/i, ' 秒');
             dynamicMatch = '思考了 ' + timeSec;
             isDynamic = true;
@@ -350,16 +350,12 @@
             isDynamic = true;
         }
 
-        if (/^Worked (?:for|持续) (.+)$/i.test(trimmed)) {
-            dynamicMatch = dynamicMatch.replace(/^Worked (?:for|持续) (.+)$/i, '总耗时 $1');
+        if (/^Worked for (.+)$/i.test(trimmed)) {
+            dynamicMatch = dynamicMatch.replace(/^Worked for (.+)$/i, '总耗时 $1');
             isDynamic = true;
         }
         if (/^\d+ files? changed(.*)$/i.test(trimmed)) {
             dynamicMatch = dynamicMatch.replace(/^(\d+) files? changed(.*)/i, '$1 个文件已更改$2');
-            isDynamic = true;
-        }
-        if (/^(\d+)\s+searches?$/i.test(trimmed)) {
-            dynamicMatch = dynamicMatch.replace(/^(\d+)\s+searches?/i, '$1 次搜索');
             isDynamic = true;
         }
         if (/^Edited (.*) \+(\d+) -(\d+)$/i.test(trimmed)) {
@@ -370,10 +366,10 @@
             dynamicMatch = dynamicMatch.replace(/^Canceled (.*)/, '已取消 $1');
             isDynamic = true;
         }
-        if (/^\d+(?:\.\d+)?% of the (?:customization )?budget is (?:available|used)[.。]?$/i.test(trimmed)) {
+        if (/^\d+(?:\.\d+)?% of the (?:customization )?budget is (?:available|used)\.?$/i.test(trimmed)) {
             dynamicMatch = dynamicMatch
-                .replace(/(\d+(?:\.\d+)?)% of the (?:customization )?budget is available[.。]?/i, '自定义额度尚有 $1% 可用。')
-                .replace(/(\d+(?:\.\d+)?)% of the (?:customization )?budget is used[.。]?/i, '已使用 $1% 的自定义额度。');
+                .replace(/(\d+(?:\.\d+)?)% of the (?:customization )?budget is available\.?/i, '自定义额度尚有 $1% 可用。')
+                .replace(/(\d+(?:\.\d+)?)% of the (?:customization )?budget is used\.?/i, '已使用 $1% 的自定义额度。');
             isDynamic = true;
         }
 
@@ -400,16 +396,18 @@
         }
 
         // 配额刷新提示句
-        if (/(?:You have used some of your|您已使用了部分).*(?:limit|限额)/i.test(trimmed)) {
+        if (/You have used some of your.*limit/i.test(trimmed)) {
             dynamicMatch = dynamicMatch
-                .replace(/^(?:You have used some of your|您已使用了部分)\s*(?:weekly|每周)\s*(?:limit|限额)?/i, '您已使用了部分每周限额')
-                .replace(/^(?:You have used some of your|您已使用了部分)\s*(?:5[- ]hour|five[- ]hour|5 小时|五小时)\s*(?:limit|限额)?/i, '您已使用了部分 5 小时限额')
-                .replace(/^(?:You have used some of your|您已使用了部分)\s*(?:hourly|每小时)\s*(?:limit|限额)?/i, '您已使用了部分每小时限额')
-                .replace(/^(?:You have used some of your|您已使用了部分)\s*(?:daily|每日)\s*(?:limit|限额)?/i, '您已使用了部分每日限额')
-                .replace(/(?:it will fully refresh in|它将在以下时间后完全刷新[：:]?)\s*/i, ' 它将在以下时间后完全刷新：')
+                .replace(/^You have used some of your\s*weekly\s*limit/i, '您已使用了部分每周限额')
+                .replace(/^You have used some of your\s*(?:5[- ]hour|five[- ]hour)\s*limit/i, '您已使用了部分 5 小时限额')
+                .replace(/^You have used some of your\s*hourly\s*limit/i, '您已使用了部分每小时限额')
+                .replace(/^You have used some of your\s*daily\s*limit/i, '您已使用了部分每日限额')
+                .replace(/it will fully refresh in\s*/i, ' 它将在以下时间后完全刷新：')
                 .replace(/(\d+)\s*days?/gi, ' $1 天')
                 .replace(/(\d+)\s*hours?/gi, ' $1 小时')
                 .replace(/(\d+)\s*minutes?\.?$/gi, ' $1 分钟')
+                .replace(/,\s*/g, '，')
+                .replace(/\.\s*$/, '。')
                 .replace(/\s+/g, ' ')
                 .trim();
             isDynamic = true;
@@ -477,14 +475,6 @@
             dynamicMatch = dynamicMatch.replace(/^Turn (\d+)$/i, '第 $1 回合');
             isDynamic = true;
         }
-        if (/^Task id "[^"]+" finished with result:$/i.test(trimmed)) {
-            dynamicMatch = dynamicMatch.replace(/^Task id "([^"]+)" finished with result:$/i, '任务 "$1" 执行完成：');
-            isDynamic = true;
-        }
-        if (/^Tool is running as a background task with task id: (.+)$/i.test(trimmed)) {
-            dynamicMatch = dynamicMatch.replace(/^Tool is running as a background task with task id: (.+)$/i, '工具正在后台运行 (任务ID: $1)');
-            isDynamic = true;
-        }
 
         // Version / Updated 词头过于通用（AI 输出常以二者开头），仅在受信任 UI 上下文翻译
         if (!strict && /^Version\s+(\d+.*)$/i.test(trimmed)) {
@@ -506,19 +496,19 @@
         }
 
         // 计划审核策略提示
-        if (/(?:Type|输入)\s*\/\s*(?:and|并|和)?\s*(?:select|选择)?\s*['"]?plan['"]?\s*to\s+have\s+the\s+agent\s+generate\s+a\s+plan[。.]?/i.test(trimmed)) {
-            dynamicMatch = /[。.]\s*$/.test(trimmed) ? '输入 / 并选择 plan 来让智能体生成计划。' : '输入 / 并选择 plan 来让智能体生成计划';
+        if (/Type\s*\/\s*(?:and\s+)?(?:select\s+)?['"]?plan['"]?\s+to\s+have\s+the\s+agent\s+generate\s+a\s+plan\.?/i.test(trimmed)) {
+            dynamicMatch = /\.\s*$/.test(trimmed) ? '输入 / 并选择 plan 来让智能体生成计划。' : '输入 / 并选择 plan 来让智能体生成计划';
             isDynamic = true;
         }
-        if (/^(?:to\s+)?have\s+the\s+agent\s+generate\s+a\s+plan[。.]?$/i.test(trimmed)) {
-            dynamicMatch = /[。.]\s*$/.test(trimmed) ? '来让智能体生成计划。' : '来让智能体生成计划';
+        if (/^(?:to\s+)?have\s+the\s+agent\s+generate\s+a\s+plan\.?$/i.test(trimmed)) {
+            dynamicMatch = /\.\s*$/.test(trimmed) ? '来让智能体生成计划。' : '来让智能体生成计划';
             isDynamic = true;
         }
-        if (/^plan\s+to\s+have\s+the\s+agent\s+generate\s+a\s+plan[。.]?$/i.test(trimmed)) {
-            dynamicMatch = /[。.]\s*$/.test(trimmed) ? 'plan 来让智能体生成计划。' : 'plan 来让智能体生成计划';
+        if (/^plan\s+to\s+have\s+the\s+agent\s+generate\s+a\s+plan\.?$/i.test(trimmed)) {
+            dynamicMatch = /\.\s*$/.test(trimmed) ? 'plan 来让智能体生成计划。' : 'plan 来让智能体生成计划';
             isDynamic = true;
         }
-        if (/^(?:Type|输入)\s*\/\s*(?:and|并|和)\s*$/i.test(trimmed)) {
+        if (/^Type\s*\/\s*(?:and)?\s*$/i.test(trimmed)) {
             dynamicMatch = '输入 / 并';
             isDynamic = true;
         }

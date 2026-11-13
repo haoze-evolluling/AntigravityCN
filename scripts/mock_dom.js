@@ -19,7 +19,10 @@ class MockElement extends MockNode {
   get classList() {
     const classes = this.className ? this.className.split(/\s+/).filter(Boolean) : [];
     return {
-      contains: (cls) => classes.includes(cls)
+      contains: (cls) => classes.includes(cls),
+      item: (index) => classes[index] ?? null,
+      get length() { return classes.length; },
+      [Symbol.iterator]: () => classes[Symbol.iterator]()
     };
   }
 
