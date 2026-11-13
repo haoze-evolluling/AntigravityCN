@@ -127,16 +127,6 @@ Google Antigravity 桌面客户端的简体中文汉化工具。提供 Windows �
 
 构建成功后，可执行文件位于 `build/bin/AntigravityCN.exe`。
 
-### 生成 Windows 安装包
-
-安装 NSIS 后，在项目根目录执行：
-
-```powershell
-.\scripts\build-installer.ps1
-```
-
-脚本会构建最新主程序并生成 `build/bin/AntigravityCN-Setup-4.0.0.exe`。如主程序已构建完成，可使用 `-SkipAppBuild` 跳过重复编译。
-
 ## 项目结构
 
 ```text
@@ -149,7 +139,7 @@ Google Antigravity 桌面客户端的简体中文汉化工具。提供 Windows �
 │  ├─ asar/               ASAR 解包与封装
 │  └─ patcher/            路径检测、备份还原与补丁注入
 ├─ patches/               汉化注入脚本与模块化词典
-├─ scripts/               构建、安装包与词典维护脚本
+├─ scripts/               构建与词典维护脚本
 └─ docs/                  README 界面预览资源
 ```
 
