@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"io/fs"
+	"os/exec"
 
 	"antigravity-cn/internal/patcher"
 	wailsRuntime "github.com/wailsapp/wails/v2/pkg/runtime"
@@ -14,6 +15,7 @@ type AppState struct {
 	AsarPath     string `json:"asarPath"`
 	AsarExists   bool   `json:"asarExists"`
 	BackupExists bool   `json:"backupExists"`
+	IsLocalized  bool   `json:"isLocalized"`
 	IsRunning    bool   `json:"isRunning"`
 }
 
@@ -69,6 +71,7 @@ func (a *App) RefreshStatus(asarPath string) AppState {
 		AsarPath:     asarPath,
 		AsarExists:   status.AsarExists,
 		BackupExists: status.BackupExists,
+		IsLocalized:  status.IsLocalized,
 		IsRunning:    status.IsRunning,
 	}
 }
@@ -144,4 +147,17 @@ func (a *App) OpenURL(url string) bool {
 		return true
 	}
 	return false
+}
+
+// OpenContainingFolder reveals the selected asar file in File Explorer.
+func (a *App) OpenContainingFolder(asarPath string) ActionResult {
+	if asarPath == "" {
+		return ActionResult{Success: false, Message: "尚未选择 app.asar 路径"}
+	}
+
+	if err := exec.Command("explorer.exe", "/select,", asarPath).Start(); err != nil {
+		return ActionResult{Success: false, Message: err.Error()}
+	}
+
+	return ActionResult{Success: true, Message: "已在文件资源管理器中打开"}
 }

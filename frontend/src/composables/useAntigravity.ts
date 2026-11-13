@@ -11,9 +11,10 @@ import {
   RestoreOriginal,
   CleanAppCache,
   LaunchAntigravity,
-  OpenURL
+  OpenURL,
+  OpenContainingFolder
 } from '@/../wailsjs/go/main/App'
-import { BrowserOpenURL } from '@/../wailsjs/runtime'
+import { BrowserOpenURL, ClipboardSetText } from '@/../wailsjs/runtime'
 
 const GITHUB_REPO_URL = 'https://github.com/haoze-evolluling/AntigravityCN'
 
@@ -22,6 +23,7 @@ const currentStatus = ref<AppState>({
   asarPath: '',
   asarExists: false,
   backupExists: false,
+  isLocalized: false,
   isRunning: false
 })
 const isLoading = ref(false)
@@ -38,6 +40,7 @@ export function useAntigravity() {
       asarPath: state.asarPath || '',
       asarExists: Boolean(state.asarExists),
       backupExists: Boolean(state.backupExists),
+      isLocalized: Boolean(state.isLocalized),
       isRunning: Boolean(state.isRunning)
     }
   }
@@ -170,6 +173,36 @@ export function useAntigravity() {
     )
   }
 
+  async function copyPath() {
+    if (!currentPath.value) {
+      showToast('尚未选择 app.asar 路径')
+      return
+    }
+
+    try {
+      await ClipboardSetText(currentPath.value)
+      showToast('路径已复制')
+    } catch {
+      showToast('复制路径失败')
+    }
+  }
+
+  async function openContainingFolder() {
+    if (!currentPath.value) {
+      showToast('尚未选择 app.asar 路径')
+      return
+    }
+
+    try {
+      const res = await OpenContainingFolder(currentPath.value)
+      if (!res.success) {
+        showToast(`无法打开所在文件夹: ${res.message}`)
+      }
+    } catch (err) {
+      appendLog(`[错误] 打开所在文件夹失败: ${err}`)
+    }
+  }
+
   function handleCancelConflict() {
     showConflictModal.value = false
     appendLog('[提示] 操作已取消（应用正在运行）')
@@ -216,6 +249,8 @@ export function useAntigravity() {
     handleRestore,
     handleLaunch,
     handleCleanCache,
+    copyPath,
+    openContainingFolder,
     handleCancelConflict,
     handleConfirmConflictAutoClose,
     openExternalUrl,

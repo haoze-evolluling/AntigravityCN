@@ -2,6 +2,7 @@ export interface AppState {
   asarPath: string
   asarExists: boolean
   backupExists: boolean
+  isLocalized: boolean
   isRunning: boolean
 }
 

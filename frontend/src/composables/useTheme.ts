@@ -14,6 +14,18 @@ const themeNames: Record<ThemeMode, string> = {
 export function useTheme() {
   const { showToast } = useToast()
 
+  function withTransitionGuard(update: () => void) {
+    const root = document.documentElement
+    root.classList.add('theme-transitioning')
+    update()
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        root.classList.remove('theme-transitioning')
+      })
+    })
+  }
+
   function applyThemeToDOM(mode: ThemeMode) {
     const isDarkOS = window.matchMedia('(prefers-color-scheme: dark)').matches
     let theme: 'light' | 'dark' = 'dark'
@@ -25,8 +37,10 @@ export function useTheme() {
     }
 
     effectiveTheme.value = theme
-    document.documentElement.setAttribute('data-theme', theme)
-    document.body.setAttribute('data-theme', theme)
+    withTransitionGuard(() => {
+      document.documentElement.setAttribute('data-theme', theme)
+      document.body.setAttribute('data-theme', theme)
+    })
   }
 
   function setThemeMode(mode: ThemeMode, showFeedback = true) {

@@ -1,0 +1,196 @@
+/* ==========================================================
+   AntigravityCN - Settings Page Components
+   ========================================================== */
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.theme-card {
+  background-color: var(--md-sys-color-surface-container-low);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  font: inherit;
+  color: inherit;
+  transition: background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+              border-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard),
+              box-shadow var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
+  min-height: 130px;
+}
+
+.theme-card:hover {
+  border-color: var(--md-sys-color-outline);
+}
+
+.theme-card.active {
+  border-color: var(--md-sys-color-primary);
+  box-shadow: inset 0 0 0 1px var(--md-sys-color-primary);
+}
+
+.theme-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.theme-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--md-sys-shape-corner-small);
+  background-color: var(--md-sys-color-surface-container-high);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--md-sys-color-primary);
+}
+
+.theme-card.active .theme-icon-wrap {
+  background-color: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+}
+
+.theme-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--md-sys-color-outline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.theme-card.active .theme-radio {
+  border-color: var(--md-sys-color-primary);
+}
+
+.theme-radio-inner {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--md-sys-color-primary);
+  transform: scale(0);
+  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.theme-card.active .theme-radio-inner {
+  transform: scale(1);
+}
+
+.theme-card-title {
+  font: var(--md-sys-typescale-title-small);
+  letter-spacing: var(--md-sys-typescale-title-small-tracking);
+  color: var(--md-sys-color-on-surface);
+}
+
+.theme-card-desc {
+  font: var(--md-sys-typescale-body-small);
+  letter-spacing: var(--md-sys-typescale-body-small-tracking);
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1.4;
+}
+
+.help-about-card {
+  padding-bottom: 16px;
+}
+
+.info-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 10px 2px;
+}
+
+.info-row + .info-row {
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.info-row-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.info-row-copy strong {
+  font: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+.info-row-copy p {
+  font: var(--md-sys-typescale-body-small);
+  line-height: 1.55;
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.info-row-copy code {
+  color: var(--md-sys-color-primary);
+}
+
+.about-project {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 4px;
+  padding-top: 13px;
+  border-top: 1px solid var(--md-sys-color-outline-variant);
+}
+
+.about-project-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.about-repo {
+  font: var(--md-sys-typescale-title-small);
+  color: var(--md-sys-color-on-surface);
+}
+
+.about-project-copy p {
+  font: var(--md-sys-typescale-body-small);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.about-url {
+  font: var(--md-sys-typescale-label-small);
+  font-family: var(--md-ref-typeface-mono);
+  color: var(--md-sys-color-primary);
+  overflow-wrap: anywhere;
+}
+
+.about-button {
+  flex-shrink: 0;
+}
+
+.selectable {
+  user-select: text;
+}
+
+@media (max-width: 900px) {
+  .theme-grid {
+    gap: 10px;
+  }
+
+  .about-project {
+    align-items: flex-start;
+  }
+}

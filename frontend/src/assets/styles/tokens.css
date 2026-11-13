@@ -242,7 +242,7 @@
   /* Button (md.comp.filled-button: 40px height, full shape,
      rest elevation 0 / hover elevation 1, leading/trailing space) */
   --md-comp-button-height: 40px;
-  --md-comp-button-height-large: 46px;
+  --md-comp-button-height-large: 42px;
   --md-comp-button-space: 20px;
   --md-comp-button-text-space: 12px;
   --md-comp-button-icon-size: 18px;
@@ -259,8 +259,8 @@
 
   /* Navigation Drawer (md.comp.navigation-drawer: 56px item,
      full-shape indicator, bold active label) */
-  --md-comp-navigation-drawer-width: 220px;
-  --md-comp-navigation-item-height: 56px;
+  --md-comp-navigation-drawer-width: 200px;
+  --md-comp-navigation-item-height: 52px;
 
   /* Top App Bar (custom window titlebar, desktop metric) */
   --md-comp-top-app-bar-height: 44px;

@@ -34,7 +34,8 @@ watch(
       <div class="terminal-actions">
         <MdIconButton
           variant="standard"
-          style="width: 28px; height: 28px;"
+          class="terminal-action-btn"
+          :disabled="logs.length === 0"
           title="复制全部运行日志"
           @click="copyLogs"
         >
@@ -43,7 +44,8 @@ watch(
 
         <MdIconButton
           variant="standard"
-          style="width: 28px; height: 28px;"
+          class="terminal-action-btn"
+          :disabled="logs.length === 0"
           title="清空运行日志"
           @click="clearLogs"
         >
@@ -53,6 +55,16 @@ watch(
     </div>
 
     <div id="terminal-body" class="terminal-body">
+      <div v-if="logs.length === 0" class="terminal-empty">
+        <div class="terminal-empty-icon">
+          <MdIcon name="info" :size="20" filled />
+        </div>
+        <div>
+          <strong>操作日志将在这里显示</strong>
+          <p>安装、还原或清理缓存后，可以查看完整执行步骤。</p>
+        </div>
+      </div>
+
       <div
         v-for="item in logs"
         :key="item.id"

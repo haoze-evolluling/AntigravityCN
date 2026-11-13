@@ -1,6 +1,7 @@
 package patcher
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -32,16 +33,16 @@ const (
 )
 
 type PROCESSENTRY32W struct {
-	Size              uint32
-	Usage             uint32
-	ProcessID         uint32
-	DefaultHeapID     uintptr
-	ModuleID          uint32
-	Threads           uint32
-	ParentProcessID   uint32
-	PriClassBase      int32
-	Flags             uint32
-	ExeFile           [260]uint16
+	Size            uint32
+	Usage           uint32
+	ProcessID       uint32
+	DefaultHeapID   uintptr
+	ModuleID        uint32
+	Threads         uint32
+	ParentProcessID uint32
+	PriClassBase    int32
+	Flags           uint32
+	ExeFile         [260]uint16
 }
 
 // FindAppAsar attempts to find the default app.asar installation path
@@ -145,6 +146,7 @@ func CloseAntigravityProcess() error {
 type AppStatus struct {
 	AsarExists   bool
 	BackupExists bool
+	IsLocalized  bool
 	IsRunning    bool
 }
 
@@ -153,6 +155,7 @@ func CheckStatus(asarPath string) AppStatus {
 	status := AppStatus{}
 	if fi, err := os.Stat(asarPath); err == nil && !fi.IsDir() {
 		status.AsarExists = true
+		status.IsLocalized = isLocalizedAsar(asarPath)
 	}
 	if fi, err := os.Stat(GetBackupPath(asarPath)); err == nil && !fi.IsDir() {
 		status.BackupExists = true
@@ -190,14 +193,47 @@ func ensureProcessClosed(logFn func(string), opts *PatchOptions) error {
 
 // isLocalizedAsar checks whether a given asar file already contains localization markers
 func isLocalizedAsar(filePath string) bool {
-	data, err := os.ReadFile(filePath)
+	file, err := os.Open(filePath)
 	if err != nil {
 		return false
 	}
-	content := string(data)
-	return strings.Contains(content, "// Antigravity 2.0 Chinese Localization Engine") ||
-		strings.Contains(content, "menuTranslationMap") ||
-		strings.Contains(content, "injectedMainWorldScript")
+	defer file.Close()
+
+	markers := [][]byte{
+		[]byte("// Antigravity 2.0 Chinese Localization Engine"),
+		[]byte("menuTranslationMap"),
+		[]byte("injectedMainWorldScript"),
+	}
+	const overlap = 128
+	buffer := make([]byte, 256*1024)
+	var tail []byte
+
+	for {
+		n, readErr := file.Read(buffer)
+		if n > 0 {
+			chunk := make([]byte, 0, len(tail)+n)
+			chunk = append(chunk, tail...)
+			chunk = append(chunk, buffer[:n]...)
+			for _, marker := range markers {
+				if bytes.Contains(chunk, marker) {
+					return true
+				}
+			}
+
+			keep := overlap
+			if len(chunk) < keep {
+				keep = len(chunk)
+			}
+			tail = append(tail[:0], chunk[len(chunk)-keep:]...)
+		}
+
+		if readErr == io.EOF {
+			return false
+		}
+		if readErr != nil {
+			return false
+		}
+	}
 }
 
 // CleanAppCache safely clears temporary rendering and bytecode caches

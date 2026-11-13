@@ -150,6 +150,33 @@ func TestCleanAppCache(t *testing.T) {
 	}
 }
 
+func TestCheckStatusDetectsLocalizedAsar(t *testing.T) {
+	tempDir := t.TempDir()
+	asarPath := filepath.Join(tempDir, "app.asar")
+
+	if err := os.WriteFile(asarPath, []byte("original package"), 0644); err != nil {
+		t.Fatalf("Failed to write original asar: %v", err)
+	}
+
+	status := CheckStatus(asarPath)
+	if !status.AsarExists {
+		t.Fatal("Expected asar file to be detected")
+	}
+	if status.IsLocalized {
+		t.Fatal("Original asar should not be marked as localized")
+	}
+
+	localizedContent := "// Antigravity 2.0 Chinese Localization Engine\npatched"
+	if err := os.WriteFile(asarPath, []byte(localizedContent), 0644); err != nil {
+		t.Fatalf("Failed to write localized asar: %v", err)
+	}
+
+	status = CheckStatus(asarPath)
+	if !status.IsLocalized {
+		t.Fatal("Expected localized asar marker to be detected")
+	}
+}
+
 func TestAsarPackAndExtractRoundtrip(t *testing.T) {
 	tempSrc, err := os.MkdirTemp("", "asar_test_src_*")
 	if err != nil {
@@ -159,10 +186,10 @@ func TestAsarPackAndExtractRoundtrip(t *testing.T) {
 
 	// Populate test source files
 	testFiles := map[string]string{
-		"index.js":                  "console.log('hello asar');",
-		"package.json":              `{"name": "test-asar", "version": "1.0.0"}`,
-		"sub/nested/file.txt":       "nested content text",
-		"sub/deep/empty.txt":        "",
+		"index.js":                "console.log('hello asar');",
+		"package.json":            `{"name": "test-asar", "version": "1.0.0"}`,
+		"sub/nested/file.txt":     "nested content text",
+		"sub/deep/empty.txt":      "",
 		"sub/deep/chinese_中文.txt": "测试中文字符与内容写入",
 	}
 

@@ -18,6 +18,7 @@ export namespace main {
 	    asarPath: string;
 	    asarExists: boolean;
 	    backupExists: boolean;
+	    isLocalized: boolean;
 	    isRunning: boolean;
 	
 	    static createFrom(source: any = {}) {
@@ -29,6 +30,7 @@ export namespace main {
 	        this.asarPath = source["asarPath"];
 	        this.asarExists = source["asarExists"];
 	        this.backupExists = source["backupExists"];
+	        this.isLocalized = source["isLocalized"];
 	        this.isRunning = source["isRunning"];
 	    }
 	}

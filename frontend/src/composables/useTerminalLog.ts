@@ -2,16 +2,9 @@ import { ref, nextTick } from 'vue'
 import type { LogItem, LogType } from '@/types'
 import { useToast } from './useToast'
 
-const logs = ref<LogItem[]>([
-  {
-    id: 1,
-    time: new Date().toLocaleTimeString(),
-    text: '汉化工具已就绪。',
-    type: 'system'
-  }
-])
+const logs = ref<LogItem[]>([])
 
-let nextLogId = 2
+let nextLogId = 1
 
 export function useTerminalLog() {
   const { showToast } = useToast()

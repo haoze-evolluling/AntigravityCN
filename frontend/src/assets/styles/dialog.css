@@ -64,9 +64,9 @@
    ---------------------------------------------------------- */
 .md-snackbar {
   position: fixed;
+  right: 24px;
   bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
+  max-width: min(420px, calc(100vw - 48px));
   min-height: 44px;
   background-color: var(--md-sys-color-inverse-surface);
   color: var(--md-sys-color-inverse-on-surface);
@@ -80,4 +80,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  pointer-events: none;
+  overflow-wrap: anywhere;
 }

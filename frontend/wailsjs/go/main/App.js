@@ -18,6 +18,10 @@ export function LaunchAntigravity(arg1) {
   return window['go']['main']['App']['LaunchAntigravity'](arg1);
 }
 
+export function OpenContainingFolder(arg1) {
+  return window['go']['main']['App']['OpenContainingFolder'](arg1);
+}
+
 export function OpenURL(arg1) {
   return window['go']['main']['App']['OpenURL'](arg1);
 }
