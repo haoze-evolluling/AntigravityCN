@@ -25,7 +25,7 @@ const emit = defineEmits<{
           <span class="brand-title">AntigravityCN</span>
           <div class="brand-subtitle-row">
             <span class="brand-subtitle">汉化工具</span>
-            <MdBadge class="version-badge">v3.0</MdBadge>
+            <MdBadge class="version-badge">v4.0</MdBadge>
           </div>
         </div>
       </div>
